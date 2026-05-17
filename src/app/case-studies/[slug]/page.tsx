@@ -18,12 +18,12 @@ import {
   caseStudies,
   getCaseStudyBySlug,
   getRelatedCaseStudies
-} from "@/content/case-studies";
+} from "@/content/site";
 
 type PageProps = {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 };
 
 export function generateStaticParams() {
@@ -32,8 +32,9 @@ export function generateStaticParams() {
   }));
 }
 
-export function generateMetadata({ params }: PageProps): Metadata {
-  const study = getCaseStudyBySlug(params.slug);
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const study = getCaseStudyBySlug(slug);
 
   if (!study) {
     return {
@@ -47,8 +48,9 @@ export function generateMetadata({ params }: PageProps): Metadata {
   };
 }
 
-export default function CaseStudyDetailPage({ params }: PageProps) {
-  const study = getCaseStudyBySlug(params.slug);
+export default async function CaseStudyDetailPage({ params }: PageProps) {
+  const { slug } = await params;
+  const study = getCaseStudyBySlug(slug);
 
   if (!study) {
     notFound();
@@ -231,7 +233,7 @@ export default function CaseStudyDetailPage({ params }: PageProps) {
                       key={metric.label}
                       sx={{
                         border: "1px solid rgba(16,20,19,0.12)",
-                        borderBottom: "4px solid #B8F100",
+                        borderBottom: "4px solid #7FBF8E",
                         borderRadius: "18px",
                         p: { xs: 2, md: 2.4 },
                         bgcolor: "#FFFFFF"
@@ -272,10 +274,7 @@ export default function CaseStudyDetailPage({ params }: PageProps) {
                   body={study.solution}
                 />
 
-                <CaseStudyTextSection
-                  title="Result"
-                  body={study.result}
-                />
+                <CaseStudyTextSection title="Result" body={study.result} />
 
                 {study.quote ? (
                   <Box
@@ -395,12 +394,16 @@ export default function CaseStudyDetailPage({ params }: PageProps) {
                     mt: 3,
                     height: 48,
                     borderRadius: 999,
-                    bgcolor: "#101413",
-                    color: "#FFFDF8",
+                    bgcolor: "primary.main",
+                    color: "#fff !important",
                     textTransform: "none",
                     fontWeight: 850,
+                    "& .MuiButton-endIcon, & .MuiSvgIcon-root": {
+                      color: "#fff !important"
+                    },
                     "&:hover": {
-                      bgcolor: "#1C3A2F"
+                      bgcolor: "primary.dark",
+                      color: "#fff !important"
                     }
                   }}
                 >
@@ -477,7 +480,8 @@ export default function CaseStudyDetailPage({ params }: PageProps) {
                   xs: "1fr",
                   md: "repeat(3, minmax(0, 1fr))"
                 },
-                gap: 2.4
+                gap: 2.4,
+                alignItems: "stretch"
               }}
             >
               {relatedStudies.slice(0, 3).map((related) => (
@@ -486,7 +490,11 @@ export default function CaseStudyDetailPage({ params }: PageProps) {
                     component={Link}
                     href={`/case-studies/${related.slug}`}
                     sx={{
-                      display: "block",
+                      height: 370,
+                      minHeight: 370,
+                      maxHeight: 370,
+                      display: "flex",
+                      flexDirection: "column",
                       textDecoration: "none",
                       color: "inherit",
                       bgcolor: "#FFFDF8",
@@ -501,18 +509,57 @@ export default function CaseStudyDetailPage({ params }: PageProps) {
                     }}
                   >
                     <Box
-                      component="img"
-                      src={related.imageUrl}
-                      alt={related.title}
                       sx={{
+                        position: "relative",
                         width: "100%",
                         height: 185,
-                        objectFit: "cover",
-                        display: "block"
+                        minHeight: 185,
+                        maxHeight: 185,
+                        flex: "0 0 185px",
+                        overflow: "hidden",
+                        bgcolor: "rgba(28,58,47,0.06)"
                       }}
-                    />
+                    >
+                      <Box
+                        component="img"
+                        src={related.imageUrl}
+                        alt={related.title}
+                        loading="lazy"
+                        sx={{
+                          position: "absolute",
+                          inset: 0,
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
+                          objectPosition: "center",
+                          display: "block"
+                        }}
+                      />
 
-                    <Box sx={{ p: 2.2 }}>
+                      <Box
+                        sx={{
+                          position: "absolute",
+                          inset: 0,
+                          pointerEvents: "none",
+                          background:
+                            "linear-gradient(180deg, rgba(0,0,0,0.02) 0%, rgba(0,0,0,0.08) 45%, rgba(0,0,0,0.38) 100%)"
+                        }}
+                      />
+                    </Box>
+
+                    <Box
+                      sx={{
+                        p: 2.2,
+                        height: 185,
+                        minHeight: 185,
+                        maxHeight: 185,
+                        flex: "1 1 auto",
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "flex-end",
+                        overflow: "hidden"
+                      }}
+                    >
                       <Typography
                         sx={{
                           color: "#1C3A2F",
@@ -520,7 +567,11 @@ export default function CaseStudyDetailPage({ params }: PageProps) {
                           letterSpacing: "0.1em",
                           textTransform: "uppercase",
                           fontWeight: 900,
-                          mb: 0.9
+                          mb: 0.75,
+                          display: "-webkit-box",
+                          WebkitLineClamp: 1,
+                          WebkitBoxOrient: "vertical",
+                          overflow: "hidden"
                         }}
                       >
                         {related.domain}
@@ -531,11 +582,39 @@ export default function CaseStudyDetailPage({ params }: PageProps) {
                           fontSize: "1.18rem",
                           lineHeight: 1.2,
                           letterSpacing: "-0.035em",
-                          fontWeight: 850
+                          fontWeight: 850,
+                          display: "-webkit-box",
+                          WebkitLineClamp: 2,
+                          WebkitBoxOrient: "vertical",
+                          overflow: "hidden"
                         }}
                       >
                         {related.title}
                       </Typography>
+
+                      <Button
+                        component="span"
+                        endIcon={<ArrowForwardIcon />}
+                        sx={{
+                          mt: 1.1,
+                          alignSelf: "flex-start",
+                          px: 0,
+                          minHeight: 0,
+                          color: "#101413",
+                          fontSize: "0.82rem",
+                          fontWeight: 850,
+                          textTransform: "none",
+                          "& .MuiButton-endIcon": {
+                            ml: 0.55
+                          },
+                          "&:hover": {
+                            bgcolor: "transparent",
+                            color: "#1C3A2F"
+                          }
+                        }}
+                      >
+                        Read case study
+                      </Button>
                     </Box>
                   </Box>
                 </SectionReveal>

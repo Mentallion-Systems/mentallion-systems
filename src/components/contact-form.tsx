@@ -20,7 +20,7 @@ export function ContactForm() {
       `Name: ${form.name}\nEmail: ${form.email}\n\nWhat we are trying to build or fix:\n${form.brief}`
     );
 
-    window.location.href = `mailto:${site.email}?subject=${subject}&body=${body}`;
+    window.location.href = `mailto:${site.emails.inquiries}?subject=${subject}&body=${body}`;
   };
 
   return (

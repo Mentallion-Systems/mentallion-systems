@@ -2,15 +2,13 @@
 
 import * as React from "react";
 import Link from "next/link";
-import {
-  Box,
-  Button,
-  Chip,
-  Stack,
-  Typography
-} from "@mui/material";
+import { Box, Button, Chip, Stack, Typography } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import { site, type CaseStudy, type CaseStudyFilterTag } from "@/content/site";
+import {
+  site,
+  type CaseStudy,
+  type CaseStudyFilterTag
+} from "@/content/site";
 
 const filters = [
   { key: "all", label: "All" },
@@ -22,16 +20,90 @@ const filters = [
 
 type FilterKey = (typeof filters)[number]["key"];
 
-const badgeStyles: Record<
+type CaseStudyWithImageControls = CaseStudy & {
+  thumbnailUrl?: string;
+  thumbnailPosition?: string;
+  imagePosition?: string;
+};
+
+/**
+ * Fixed image section height for every card.
+ * The image will always stay inside this exact gradient/badge area.
+ */
+const CARD_IMAGE_HEIGHT = {
+  xs: 190,
+  sm: 205,
+  md: 215
+};
+
+const categoryStyles: Record<
   CaseStudy["category"],
   { label: string; bg: string; fg: string }
 > = {
-  Automation: { label: "Automation", bg: "#F0EADF", fg: "#40372D" },
-  "AI Agents": { label: "AI / Agentic", bg: "#E7F1FB", fg: "#0B4778" },
-  SaaS: { label: "SaaS", bg: "#EFEEFF", fg: "#3C3489" },
-  Healthcare: { label: "Healthcare", bg: "#FAECE7", fg: "#712B13" },
-  Data: { label: "Data systems", bg: "#E3F5EE", fg: "#085041" }
+  Automation: {
+    label: "Workflow Automation",
+    bg: "#F0EADF",
+    fg: "#40372D"
+  },
+  "AI Agents": {
+    label: "AI Agents & Intelligent Automation",
+    bg: "#E7F1FB",
+    fg: "#0B4778"
+  },
+  SaaS: {
+    label: "SaaS Platforms",
+    bg: "#EFEEFF",
+    fg: "#3C3489"
+  },
+  Healthcare: {
+    label: "Healthcare Technology",
+    bg: "#FAECE7",
+    fg: "#712B13"
+  },
+  Data: {
+    label: "Data & Knowledge Systems",
+    bg: "#E3F5EE",
+    fg: "#085041"
+  }
 };
+
+/**
+ * These are tighter, dashboard/workspace-style images.
+ * They crop better inside the case-study card image area.
+ */
+const categoryCardImages: Record<CaseStudy["category"], string> = {
+  "AI Agents":
+    "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=1000&q=80",
+  Automation:
+    "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1000&q=80",
+  SaaS:
+    "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1000&q=80",
+  Healthcare:
+    "https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=1000&q=80",
+  Data:
+    "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1000&q=80"
+};
+
+const categoryImagePositions: Record<CaseStudy["category"], string> = {
+  "AI Agents": "center",
+  Automation: "center",
+  SaaS: "center top",
+  Healthcare: "center",
+  Data: "center"
+};
+
+function getCardImage(item: CaseStudyWithImageControls) {
+  return item.thumbnailUrl ?? categoryCardImages[item.category] ?? item.imageUrl;
+}
+
+function getCardImagePosition(item: CaseStudyWithImageControls) {
+  return (
+    item.thumbnailPosition ??
+    item.imagePosition ??
+    categoryImagePositions[item.category] ??
+    "center"
+  );
+}
 
 export function CaseStudiesGrid() {
   const [activeFilter, setActiveFilter] = React.useState<FilterKey>("all");
@@ -89,14 +161,22 @@ export function CaseStudiesGrid() {
             md: "repeat(2, minmax(0, 1fr))",
             xl: "repeat(3, minmax(0, 1fr))"
           },
-          gap: { xs: 2.4, md: 3 }
+          gap: { xs: 2.4, md: 3 },
+          alignItems: "stretch"
         }}
       >
-        {visibleItems.map((item) => {
-          const badge = badgeStyles[item.category];
-          const metrics = item.metrics ?? [
-            { value: item.metric, label: "Key outcome" }
-          ];
+        {visibleItems.map((rawItem) => {
+          const item = rawItem as CaseStudyWithImageControls;
+          const badge = categoryStyles[item.category];
+
+          const metrics =
+            item.metrics && item.metrics.length > 0
+              ? item.metrics
+              : [{ value: item.metric, label: "Key outcome" }];
+
+          const domainLabel = item.domain ?? badge.label;
+          const imageSource = getCardImage(item);
+          const imagePosition = getCardImagePosition(item);
 
           return (
             <Box
@@ -104,39 +184,58 @@ export function CaseStudiesGrid() {
               component="article"
               sx={{
                 height: "100%",
+                minHeight: { xs: 555, md: 585 },
                 display: "flex",
                 flexDirection: "column",
-                bgcolor: "#FFFDF8",
-                border: "1px solid rgba(20, 28, 25, 0.1)",
-                borderRadius: "26px",
                 overflow: "hidden",
-                boxShadow: "0 18px 50px rgba(18, 24, 22, 0.07)",
+                borderRadius: "24px",
+                border: "1px solid rgba(20, 28, 25, 0.1)",
+                bgcolor: "#FFFDF8",
+                boxShadow: "0 18px 50px rgba(18, 24, 22, 0.08)",
                 transition:
                   "transform .25s ease, box-shadow .25s ease, border-color .25s ease",
                 "&:hover": {
                   transform: "translateY(-5px)",
-                  borderColor: "rgba(28,58,47,0.24)",
-                  boxShadow: "0 30px 80px rgba(18, 24, 22, 0.12)"
+                  borderColor: "rgba(28,58,47,0.22)",
+                  boxShadow: "0 30px 80px rgba(18, 24, 22, 0.13)"
                 }
               }}
             >
               <Box
                 sx={{
                   position: "relative",
-                  height: 250,
-                  bgcolor: "rgba(28,58,47,0.06)"
+                  width: "100%",
+                  height: CARD_IMAGE_HEIGHT,
+                  minHeight: CARD_IMAGE_HEIGHT,
+                  maxHeight: CARD_IMAGE_HEIGHT,
+                  flex: "0 0 auto",
+                  overflow: "hidden",
+                  bgcolor: "rgba(28,58,47,0.06)",
+                  borderTopLeftRadius: "24px",
+                  borderTopRightRadius: "24px",
+                  isolation: "isolate"
                 }}
               >
-                {item.imageUrl ? (
+                {imageSource ? (
                   <Box
                     component="img"
-                    src={item.imageUrl}
+                    src={imageSource}
                     alt={item.title}
+                    loading="lazy"
                     sx={{
-                      width: "100%",
-                      height: "100%",
+                      position: "absolute",
+                      inset: 0,
+                      zIndex: 1,
+                      width: "100% !important",
+                      height: "100% !important",
+                      minWidth: "100%",
+                      minHeight: "100%",
+                      maxWidth: "100%",
+                      maxHeight: "100%",
+                      display: "block",
                       objectFit: "cover",
-                      display: "block"
+                      objectPosition: imagePosition,
+                      transform: "scale(1.01)"
                     }}
                   />
                 ) : null}
@@ -145,71 +244,60 @@ export function CaseStudiesGrid() {
                   sx={{
                     position: "absolute",
                     inset: 0,
+                    zIndex: 2,
+                    pointerEvents: "none",
                     background:
-                      "linear-gradient(180deg, rgba(0,0,0,0.02) 0%, rgba(0,0,0,0.48) 100%)"
+                      "linear-gradient(180deg, rgba(0,0,0,0.02) 0%, rgba(0,0,0,0.08) 40%, rgba(0,0,0,0.55) 100%)"
                   }}
                 />
 
                 <Chip
-                  label={badge.label}
+                  label={domainLabel}
                   sx={{
                     position: "absolute",
-                    left: 18,
-                    bottom: 18,
-                    height: 32,
+                    zIndex: 3,
+                    left: 16,
+                    bottom: 14,
+                    maxWidth: "calc(100% - 32px)",
+                    height: 28,
                     borderRadius: 999,
-                    bgcolor: badge.bg,
-                    color: badge.fg,
-                    fontWeight: 800
+                    bgcolor: "rgba(255,253,249,0.96)",
+                    color: "#101413",
+                    fontSize: "0.66rem",
+                    fontWeight: 850,
+                    letterSpacing: "-0.01em",
+                    boxShadow: "0 10px 24px rgba(0,0,0,0.16)",
+                    "& .MuiChip-label": {
+                      px: 1.1,
+                      overflow: "hidden",
+                      textOverflow: "ellipsis"
+                    }
                   }}
                 />
               </Box>
 
               <Box
                 sx={{
-                  p: { xs: 2.3, md: 2.7 },
+                  p: { xs: 2.1, sm: 2.3, md: 2.5 },
                   display: "flex",
                   flexDirection: "column",
-                  flex: 1
+                  flex: 1,
+                  minHeight: 0
                 }}
               >
-                <Stack
-                  direction="row"
-                  justifyContent="space-between"
-                  spacing={2}
-                  sx={{ mb: 1.4 }}
-                >
-                  <Typography
-                    sx={{
-                      fontSize: "0.76rem",
-                      fontWeight: 850,
-                      color: "#1C3A2F",
-                      letterSpacing: "0.09em",
-                      textTransform: "uppercase"
-                    }}
-                  >
-                    {item.engagement}
-                  </Typography>
-
-                  <Typography
-                    sx={{
-                      fontSize: "0.8rem",
-                      color: "text.secondary",
-                      whiteSpace: "nowrap"
-                    }}
-                  >
-                    {item.timeline ?? "Production build"}
-                  </Typography>
-                </Stack>
-
                 <Typography
                   component="h3"
                   sx={{
-                    fontSize: { xs: "1.35rem", md: "1.52rem" },
+                    fontSize: { xs: "1.18rem", md: "1.28rem" },
                     lineHeight: 1.12,
-                    fontWeight: 850,
-                    letterSpacing: "-0.04em",
-                    mb: 1.2
+                    fontWeight: 900,
+                    letterSpacing: "-0.045em",
+                    mb: 0.85,
+                    color: "#101413",
+                    display: "-webkit-box",
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: "vertical",
+                    overflow: "hidden"
                   }}
                 >
                   {item.title}
@@ -218,9 +306,13 @@ export function CaseStudiesGrid() {
                 <Typography
                   sx={{
                     color: "text.secondary",
-                    fontSize: "0.95rem",
-                    lineHeight: 1.68,
-                    mb: 2
+                    fontSize: "0.86rem",
+                    lineHeight: 1.55,
+                    mb: 1.65,
+                    display: "-webkit-box",
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: "vertical",
+                    overflow: "hidden"
                   }}
                 >
                   {item.summary}
@@ -231,24 +323,30 @@ export function CaseStudiesGrid() {
                     display: "grid",
                     gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
                     gap: 1,
-                    mb: 2.2
+                    mb: 1.75
                   }}
                 >
                   {metrics.slice(0, 2).map((metric) => (
                     <Box
                       key={`${item.slug}-${metric.label}`}
                       sx={{
-                        p: 1.35,
-                        borderRadius: "16px",
-                        border: "1px solid rgba(28,58,47,0.09)",
-                        bgcolor: "rgba(28,58,47,0.035)"
+                        p: 1.2,
+                        borderRadius: "12px",
+                        border: "1px solid rgba(28,58,47,0.1)",
+                        bgcolor: "rgba(28,58,47,0.035)",
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        textAlign: "center"
                       }}
                     >
                       <Typography
                         sx={{
-                          fontSize: "1.05rem",
-                          fontWeight: 850,
-                          lineHeight: 1.15
+                          fontSize: "0.98rem",
+                          fontWeight: 900,
+                          lineHeight: 1.1,
+                          color: "#101413"
                         }}
                       >
                         {metric.value}
@@ -256,10 +354,14 @@ export function CaseStudiesGrid() {
 
                       <Typography
                         sx={{
-                          mt: 0.35,
-                          fontSize: "0.74rem",
-                          lineHeight: 1.35,
-                          color: "text.secondary"
+                          mt: 0.3,
+                          fontSize: "0.66rem",
+                          lineHeight: 1.25,
+                          color: "text.secondary",
+                          display: "-webkit-box",
+                          WebkitLineClamp: 1,
+                          WebkitBoxOrient: "vertical",
+                          overflow: "hidden"
                         }}
                       >
                         {metric.label}
@@ -268,54 +370,37 @@ export function CaseStudiesGrid() {
                   ))}
                 </Box>
 
-                <Stack spacing={1.1} sx={{ mb: 2.4 }}>
-                  <Point label="Problem" value={item.problem ?? item.summary} />
-                  <Point label="Built" value={item.build ?? item.summary} />
+                <Stack spacing={1} sx={{ mb: 1.85 }}>
+                  <Point
+                    value={item.challenge ?? item.problem ?? item.summary}
+                  />
+                  <Point value={item.solution ?? item.build ?? item.summary} />
+                  <Point value={item.result ?? item.results ?? item.outcome} />
                 </Stack>
 
-                <Stack
-                  direction="row"
-                  spacing={0.7}
-                  useFlexGap
-                  flexWrap="wrap"
-                  sx={{ mb: 2.4 }}
+                <Button
+                  component={Link}
+                  href={`/case-studies/${item.slug}`}
+                  endIcon={<ArrowForwardIcon />}
+                  sx={{
+                    mt: "auto",
+                    alignSelf: "flex-start",
+                    px: 0,
+                    color: "#101413",
+                    fontSize: "0.82rem",
+                    fontWeight: 900,
+                    textTransform: "none",
+                    "& .MuiButton-endIcon": {
+                      ml: 0.55
+                    },
+                    "&:hover": {
+                      bgcolor: "transparent",
+                      color: "#1C3A2F"
+                    }
+                  }}
                 >
-                  {(item.tags ?? [item.category]).slice(0, 3).map((tag) => (
-                    <Chip
-                      key={`${item.slug}-${tag}`}
-                      label={tag}
-                      variant="outlined"
-                      sx={{
-                        height: 25,
-                        borderRadius: 999,
-                        fontSize: "0.72rem",
-                        color: "text.secondary",
-                        borderColor: "rgba(28,58,47,0.16)",
-                        bgcolor: "rgba(255,255,255,0.54)"
-                      }}
-                    />
-                  ))}
-                </Stack>
-
-                <Box sx={{ mt: "auto" }}>
-                  <Button
-                    component={Link}
-                    href={`/case-studies/${item.slug}`}
-                    endIcon={<ArrowForwardIcon />}
-                    sx={{
-                      px: 0,
-                      color: "#101413",
-                      fontWeight: 850,
-                      textTransform: "none",
-                      "&:hover": {
-                        bgcolor: "transparent",
-                        color: "#1C3A2F"
-                      }
-                    }}
-                  >
-                    Read case study
-                  </Button>
-                </Box>
+                  Read case study
+                </Button>
               </Box>
             </Box>
           );
@@ -325,26 +410,24 @@ export function CaseStudiesGrid() {
   );
 }
 
-function Point({ label, value }: { label: string; value: string }) {
+function Point({ value }: { value: string }) {
   return (
-    <Box>
-      <Typography
+    <Stack direction="row" spacing={0.8} alignItems="flex-start">
+      <Box
         sx={{
-          mb: 0.35,
-          fontSize: "0.68rem",
-          fontWeight: 850,
-          letterSpacing: "0.08em",
-          textTransform: "uppercase",
-          color: "text.secondary"
+          width: 4,
+          height: 4,
+          mt: "0.48rem",
+          borderRadius: "50%",
+          bgcolor: "#1C3A2F",
+          flexShrink: 0
         }}
-      >
-        {label}
-      </Typography>
+      />
 
       <Typography
         sx={{
-          fontSize: "0.86rem",
-          lineHeight: 1.55,
+          fontSize: "0.76rem",
+          lineHeight: 1.45,
           color: "text.secondary",
           display: "-webkit-box",
           WebkitLineClamp: 2,
@@ -354,6 +437,6 @@ function Point({ label, value }: { label: string; value: string }) {
       >
         {value}
       </Typography>
-    </Box>
+    </Stack>
   );
 }
