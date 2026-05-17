@@ -18,7 +18,7 @@ import { SectionReveal } from "@/components/section-reveal";
 import { site } from "@/content/site";
 
 export default function HomePage() {
-  const selectedWork = site.caseStudies.slice(0, 3);
+  const selectedCaseStudies = site.caseStudies.slice(0, 3);
 
   return (
     <SiteShell>
@@ -269,17 +269,17 @@ export default function HomePage() {
               sx={{ mb: 4 }}
             >
               <Box>
-                <Typography sx={{ color: "primary.main", mb: 1.5 }}>Selected work</Typography>
+                <Typography sx={{ color: "primary.main", mb: 1.5 }}>Selected case studies</Typography>
                 <Typography variant="h2" sx={{ fontSize: { xs: "2.4rem", md: "3.6rem" } }}>
                   Problems solved. Not demos shipped.
                 </Typography>
               </Box>
-              <Button component={Link} href="/work" endIcon={<SouthEastIcon fontSize="small" />}>
+              <Button component={Link} href="/case-studies" endIcon={<SouthEastIcon fontSize="small" />}>
                 View all case studies
               </Button>
             </Stack>
             <Grid container spacing={3}>
-              {selectedWork.map((item) => (
+              {selectedCaseStudies.map((item) => (
                 <Grid key={item.slug} size={{ xs: 12, md: 4 }}>
                   <Card sx={{ height: "100%", borderRadius: 3, transition: "transform 0.2s ease, border-color 0.2s ease", "&:hover": { transform: "translateY(-4px)", borderColor: "primary.main" } }}>
                     {item.imageUrl ? (

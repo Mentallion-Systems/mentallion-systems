@@ -38,14 +38,50 @@ export type Service = {
   tags: string[];
 };
 
-const caseStudyImagePool = [
-  "https://images.pexels.com/photos/4623354/pexels-photo-4623354.jpeg?cs=srgb&dl=pexels-ketut-subiyanto-4623354.jpg&fm=jpg",
-  "https://images.pexels.com/photos/7988087/pexels-photo-7988087.jpeg?cs=srgb&dl=pexels-mikhail-nilov-7988087.jpg&fm=jpg",
-  "https://images.pexels.com/photos/5882592/pexels-photo-5882592.jpeg?cs=srgb&dl=pexels-karolina-grabowska-5882592.jpg&fm=jpg",
-  "https://picsum.photos/id/1060/1200/800",
-  "https://picsum.photos/id/180/1200/800",
-  "https://picsum.photos/id/48/1200/800"
-] as const;
+const caseStudyImages: Record<string, string> = {
+  "legaltech-research-pipeline":
+    "https://images.pexels.com/photos/4968561/pexels-photo-4968561.jpeg?cs=srgb&dl=pexels-karola-g-4968561.jpg&fm=jpg",
+  "retail-record-digitization":
+    "https://images.pexels.com/photos/7731373/pexels-photo-7731373.jpeg?cs=srgb&dl=pexels-mikhail-nilov-7731373.jpg&fm=jpg",
+  "edtech-grading-automation":
+    "https://images.pexels.com/photos/5831662/pexels-photo-5831662.jpeg?cs=srgb&dl=pexels-alphatradezone-5831662.jpg&fm=jpg",
+  "healthcare-hipaa-platform":
+    "https://images.pexels.com/photos/5407252/pexels-photo-5407252.jpeg?cs=srgb&dl=pexels-tima-miroshnichenko-5407252.jpg&fm=jpg",
+  "hotel-booking-optimization":
+    "https://images.pexels.com/photos/29502375/pexels-photo-29502375.jpeg?cs=srgb&dl=pexels-julio-lopez-75309646-29502375.jpg&fm=jpg",
+  "personality-saas-rescue":
+    "https://images.pexels.com/photos/12899158/pexels-photo-12899158.jpeg?cs=srgb&dl=pexels-mizunokozuki-12899158.jpg&fm=jpg",
+  "document-automation-prism":
+    "https://images.pexels.com/photos/7731402/pexels-photo-7731402.jpeg?cs=srgb&dl=pexels-mikhail-nilov-7731402.jpg&fm=jpg",
+  "operations-ai-manager":
+    "https://images.pexels.com/photos/16094042/pexels-photo-16094042.jpeg?cs=srgb&dl=pexels-bertellifotografia-16094042.jpg&fm=jpg",
+  "founder-workflow-saas":
+    "https://images.pexels.com/photos/12899158/pexels-photo-12899158.jpeg?cs=srgb&dl=pexels-mizunokozuki-12899158.jpg&fm=jpg",
+  "autonomous-brand-audit-platform":
+    "https://images.pexels.com/photos/5831662/pexels-photo-5831662.jpeg?cs=srgb&dl=pexels-alphatradezone-5831662.jpg&fm=jpg",
+  "visual-marketplace-listing-tool":
+    "https://images.pexels.com/photos/7667442/pexels-photo-7667442.jpeg?cs=srgb&dl=pexels-mart-production-7667442.jpg&fm=jpg",
+  "estate-sales-resale-marketplace":
+    "https://images.pexels.com/photos/7621355/pexels-photo-7621355.jpeg?cs=srgb&dl=pexels-ivan-s-7621355.jpg&fm=jpg",
+  "used-item-price-identification":
+    "https://images.pexels.com/photos/5831662/pexels-photo-5831662.jpeg?cs=srgb&dl=pexels-alphatradezone-5831662.jpg&fm=jpg",
+  "marketplace-item-upload-automation":
+    "https://images.pexels.com/photos/7621352/pexels-photo-7621352.jpeg?cs=srgb&dl=pexels-ivan-s-7621352.jpg&fm=jpg",
+  "subscription-lifecycle-management":
+    "https://images.pexels.com/photos/7887822/pexels-photo-7887822.jpeg?cs=srgb&dl=pexels-leeloothefirst-7887822.jpg&fm=jpg",
+  "digital-twin-persona-system":
+    "https://images.pexels.com/photos/16094042/pexels-photo-16094042.jpeg?cs=srgb&dl=pexels-bertellifotografia-16094042.jpg&fm=jpg",
+  "enterprise-document-directory-platform":
+    "https://images.pexels.com/photos/8428063/pexels-photo-8428063.jpeg?cs=srgb&dl=pexels-kampus-8428063.jpg&fm=jpg",
+  "quranic-reference-chatbot":
+    "https://images.pexels.com/photos/16094042/pexels-photo-16094042.jpeg?cs=srgb&dl=pexels-bertellifotografia-16094042.jpg&fm=jpg",
+  "crypto-prediction-community-platform":
+    "https://images.pexels.com/photos/5831662/pexels-photo-5831662.jpeg?cs=srgb&dl=pexels-alphatradezone-5831662.jpg&fm=jpg",
+  "doctor-booking-marketplace":
+    "https://images.pexels.com/photos/7800532/pexels-photo-7800532.jpeg?cs=srgb&dl=pexels-nadezhda-moryak-7800532.jpg&fm=jpg",
+  "property-price-prediction-engine":
+    "https://images.pexels.com/photos/5831662/pexels-photo-5831662.jpeg?cs=srgb&dl=pexels-alphatradezone-5831662.jpg&fm=jpg"
+};
 
 const caseStudies = [
     {
@@ -486,7 +522,7 @@ export const site = {
   heroImageUrl:
     "https://images.pexels.com/photos/4623354/pexels-photo-4623354.jpeg?cs=srgb&dl=pexels-ketut-subiyanto-4623354.jpg&fm=jpg",
   nav: [
-    { href: "/work", label: "Case Studies" },
+    { href: "/case-studies", label: "Case Studies" },
     { href: "/services", label: "Services" },
     { href: "/about", label: "About" },
     { href: "/contact", label: "Contact" }
@@ -503,9 +539,9 @@ export const site = {
     { value: "7+", label: "Industries automated" },
     { value: "95%", label: "Average manual work reduced" }
   ] satisfies Stat[],
-  caseStudies: caseStudies.map((study, index) => ({
+  caseStudies: caseStudies.map((study) => ({
     ...study,
-    imageUrl: study.imageUrl ?? caseStudyImagePool[index % caseStudyImagePool.length]
+    imageUrl: caseStudyImages[study.slug] ?? study.imageUrl
   })),
   services: [
     {

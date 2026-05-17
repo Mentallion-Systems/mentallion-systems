@@ -84,6 +84,50 @@ export default function AboutPage() {
         </SectionReveal>
 
         <SectionReveal>
+          <Box
+            sx={{
+              mt: { xs: 5, md: 7 },
+              p: { xs: 3, md: 4 },
+              borderRadius: 4,
+              border: "1px solid",
+              borderColor: "primary.dark",
+              bgcolor: "primary.main",
+              color: "primary.contrastText",
+              width: "100%"
+            }}
+          >
+            <Typography sx={{ color: "rgba(247,245,242,0.78)", mb: 1.25 }}>Why the name fits</Typography>
+            <Typography variant="h4" sx={{ mb: 1.75, maxWidth: 680 }}>
+              Mentallion Systems was meant to sound like what we actually build.
+            </Typography>
+            <Typography paragraph sx={{ color: "rgba(247,245,242,0.82)" }}>
+              Our name reflects the three principles behind our work.
+            </Typography>
+            <Typography paragraph sx={{ color: "rgba(247,245,242,0.82)" }}>
+              <Box component="span" sx={{ fontWeight: 700, color: "primary.contrastText" }}>
+                Mental
+              </Box>{" "}
+              represents intelligence — the ability to reason, automate, analyze, and solve complex business problems through AI, data, and software engineering.
+            </Typography>
+            <Typography paragraph sx={{ color: "rgba(247,245,242,0.82)" }}>
+              <Box component="span" sx={{ fontWeight: 700, color: "primary.contrastText" }}>
+                Allion
+              </Box>{" "}
+              represents alliance — our belief that great systems are built through deep collaboration, strategic alignment, and long-term technical partnership.
+            </Typography>
+            <Typography paragraph sx={{ color: "rgba(247,245,242,0.82)" }}>
+              <Box component="span" sx={{ fontWeight: 700, color: "primary.contrastText" }}>
+                Systems
+              </Box>{" "}
+              represents execution — the engineering discipline required to build reliable, scalable, and production-ready platforms, automations, AI agents, and digital infrastructure.
+            </Typography>
+            <Typography sx={{ color: "rgba(247,245,242,0.82)" }}>
+              Together, Mentallion Systems stands for intelligent engineering partnerships that turn complex operations into dependable software systems.
+            </Typography>
+          </Box>
+        </SectionReveal>
+
+        <SectionReveal>
           <Grid container spacing={3} sx={{ mt: { xs: 5, md: 7 } }}>
             {beliefs.map((belief) => (
               <Grid key={belief.title} size={{ xs: 12, md: 6 }}>
