@@ -16,6 +16,7 @@ import { SiteShell } from "@/components/site-shell";
 import { SectionReveal } from "@/components/section-reveal";
 import {
   caseStudies,
+  getCaseStudyVisual,
   getCaseStudyBySlug,
   getRelatedCaseStudies
 } from "@/content/site";
@@ -72,28 +73,46 @@ export default async function CaseStudyDetailPage({ params }: PageProps) {
             minHeight: { xs: 660, md: 760 },
             display: "flex",
             alignItems: "flex-end",
-            overflow: "hidden"
+            overflow: "hidden",
+            bgcolor: "#0F1413"
           }}
         >
           <Box
-            component="img"
-            src={study.bannerImageUrl}
-            alt={study.title}
             sx={{
               position: "absolute",
               inset: 0,
-              width: "100%",
-              height: "100%",
-              objectFit: "cover"
+              display: "flex",
+              alignItems: "center",
+              justifyContent: { xs: "center", lg: "flex-end" },
+              px: { xs: 2, md: 4, lg: 6 },
+              py: { xs: 4, md: 5 }
             }}
-          />
+          >
+            <Box
+              component="img"
+              src={study.bannerImageUrl}
+              alt={study.title}
+              sx={{
+                width: "100%",
+                maxWidth: { xs: 620, md: 760, lg: 880 },
+                height: { xs: "72%", md: "78%" },
+                objectFit: "contain",
+                objectPosition: study.imagePosition,
+                display: "block",
+                ml: { lg: "auto" },
+                opacity: 0.94,
+                filter:
+                  "drop-shadow(0 18px 48px rgba(0,0,0,0.2))"
+              }}
+            />
+          </Box>
 
           <Box
             sx={{
               position: "absolute",
               inset: 0,
               background:
-                "linear-gradient(90deg, rgba(8,12,11,0.94) 0%, rgba(8,12,11,0.7) 42%, rgba(8,12,11,0.22) 100%), linear-gradient(180deg, rgba(8,12,11,0.1) 0%, rgba(8,12,11,0.92) 100%)"
+                "linear-gradient(90deg, rgba(8,12,11,0.92) 0%, rgba(8,12,11,0.7) 34%, rgba(8,12,11,0.28) 62%, rgba(8,12,11,0.08) 100%), linear-gradient(180deg, rgba(8,12,11,0.14) 0%, rgba(8,12,11,0.44) 58%, rgba(8,12,11,0.78) 100%)"
             }}
           />
 
@@ -484,7 +503,10 @@ export default async function CaseStudyDetailPage({ params }: PageProps) {
                 alignItems: "stretch"
               }}
             >
-              {relatedStudies.slice(0, 3).map((related) => (
+              {relatedStudies.slice(0, 3).map((related) => {
+                const image = getCaseStudyVisual(related);
+
+                return (
                 <SectionReveal key={related.slug}>
                   <Box
                     component={Link}
@@ -522,7 +544,7 @@ export default async function CaseStudyDetailPage({ params }: PageProps) {
                     >
                       <Box
                         component="img"
-                        src={related.imageUrl}
+                        src={image.src}
                         alt={related.title}
                         loading="lazy"
                         sx={{
@@ -530,8 +552,8 @@ export default async function CaseStudyDetailPage({ params }: PageProps) {
                           inset: 0,
                           width: "100%",
                           height: "100%",
-                          objectFit: "cover",
-                          objectPosition: "center",
+                          objectFit: "fit",
+                          objectPosition: image.position,
                           display: "block"
                         }}
                       />
@@ -618,7 +640,8 @@ export default async function CaseStudyDetailPage({ params }: PageProps) {
                     </Box>
                   </Box>
                 </SectionReveal>
-              ))}
+                );
+              })}
             </Box>
           </Container>
         </Box>

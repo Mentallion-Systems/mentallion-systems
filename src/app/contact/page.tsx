@@ -1,7 +1,21 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
-import { Box, Button, Card, CardContent, Container, Grid, Stack, Typography } from "@mui/material";
+import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
+import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
+import WhatsAppIcon from "@mui/icons-material/WhatsApp";
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Chip,
+  Container,
+  Divider,
+  Grid,
+  Stack,
+  Typography
+} from "@mui/material";
 import { SiteShell } from "@/components/site-shell";
 import { SectionReveal } from "@/components/section-reveal";
 import { ContactForm } from "@/components/contact-form";
@@ -9,82 +23,315 @@ import { site } from "@/content/site";
 
 export const metadata: Metadata = {
   title: "Contact",
-  description: "Tell us what you're working on. We'll read it, think about it, and get back to you honestly."
+  description:
+    "Tell us what you're working on. We'll read it, think about it, and get back to you honestly."
 };
 
 export default function ContactPage() {
   return (
     <SiteShell>
-      <Container maxWidth="lg" sx={{ py: { xs: 7, md: 10 } }}>
-        <SectionReveal>
-          <Grid container spacing={{ xs: 4, md: 5 }} alignItems="start">
-            <Grid size={{ xs: 12, md: 5.2 }}>
-              <Typography sx={{ color: "primary.main", mb: 1.5 }}>Get in touch</Typography>
-              <Typography variant="h1" sx={{ fontSize: { xs: "3.2rem", md: "5rem" }, maxWidth: 640 }}>
-                Tell us what you&apos;re working on.
-              </Typography>
-              <Box sx={{ mt: 3, maxWidth: 560 }}>
-                <Typography paragraph color="text.secondary">
-                  You&apos;ve found the right team. Whether you have a fully scoped project or just a frustrating problem you have not solved yet, reach out.
-                </Typography>
-                <Typography paragraph color="text.secondary">
-                  We will read what you write, have an actual conversation about it, and tell you honestly what we think.
-                </Typography>
-                <Typography color="text.secondary">
-                  No sales process. No automated follow-up sequence. Just two engineers who will read your message and get back to you.
-                </Typography>
-              </Box>
-            </Grid>
+      <Box
+        sx={{
+          position: "relative",
+          overflow: "hidden",
+          bgcolor: "background.default",
+          "&:before": {
+            content: '""',
+            position: "absolute",
+            width: 520,
+            height: 520,
+            borderRadius: "50%",
+            top: -180,
+            right: -160,
+            background:
+              "radial-gradient(circle, rgba(28, 58, 47, 0.18) 0%, transparent 68%)",
+            pointerEvents: "none"
+          },
+          "&:after": {
+            content: '""',
+            position: "absolute",
+            width: 420,
+            height: 420,
+            borderRadius: "50%",
+            bottom: -180,
+            left: -140,
+            background:
+              "radial-gradient(circle, rgba(28, 58, 47, 0.1) 0%, transparent 70%)",
+            pointerEvents: "none"
+          }
+        }}
+      >
+        <Container
+          maxWidth="lg"
+          sx={{
+            position: "relative",
+            zIndex: 1,
+            py: { xs: 7, md: 11 }
+          }}
+        >
+          <SectionReveal>
+            <Grid container spacing={{ xs: 4, md: 5 }} alignItems="stretch">
+              <Grid size={{ xs: 12, md: 5.1 }}>
+                <Stack
+                  spacing={3}
+                  sx={{
+                    height: "100%",
+                    justifyContent: "space-between"
+                  }}
+                >
+                  <Box>
+                    <Chip
+                      label="Get in touch"
+                      color="primary"
+                      variant="outlined"
+                      sx={{
+                        mb: 2,
+                        borderRadius: 999,
+                        fontWeight: 700,
+                        bgcolor: "rgba(255,255,255,0.65)",
+                        backdropFilter: "blur(14px)"
+                      }}
+                    />
 
-            <Grid size={{ xs: 12, md: 6.8 }}>
-              <Card sx={{ borderRadius: 3 }}>
-                <CardContent sx={{ p: { xs: 3, md: 4 } }}>
-                  <ContactForm />
-                </CardContent>
-              </Card>
-            </Grid>
-          </Grid>
-        </SectionReveal>
-
-        <SectionReveal>
-          <Card sx={{ mt: { xs: 4, md: 5 }, bgcolor: "rgba(255,253,249,0.8)", borderRadius: 3 }}>
-            <CardContent sx={{ p: { xs: 3, md: 4 } }}>
-              <Grid container spacing={{ xs: 2.5, md: 3 }} alignItems="center">
-                <Grid size={{ xs: 12, md: 4.2 }}>
-                  <Typography variant="h4" sx={{ maxWidth: 320 }}>
-                    {site.availability}
-                  </Typography>
-                </Grid>
-                <Grid size={{ xs: 12, md: 3.8 }}>
-                  <Stack spacing={0.75}>
-                    <Typography color="text.secondary">General: {site.emails.hello}</Typography>
-                    <Typography color="text.secondary">Project inquiries: {site.emails.inquiries}</Typography>
-                    <Typography color="text.secondary">Support: {site.emails.support}</Typography>
-                    <Typography color="text.secondary">Location: {site.location} | UTC+5</Typography>
-                  </Stack>
-                </Grid>
-                <Grid size={{ xs: 12, md: 4 }}>
-                  <Stack spacing={1.2} sx={{ maxWidth: 360, ml: { md: "auto" } }}>
-                    <Button
-                      component={Link}
-                      href={site.whatsapp}
-                      target="_blank"
-                      rel="noreferrer"
-                      endIcon={<ArrowOutwardIcon fontSize="small" />}
-                      sx={{ alignSelf: "flex-start" }}
+                    <Typography
+                      variant="h1"
+                      sx={{
+                        fontSize: {
+                          xs: "3rem",
+                          sm: "3.8rem",
+                          md: "5.2rem"
+                        },
+                        lineHeight: 0.95,
+                        letterSpacing: "-0.07em",
+                        maxWidth: 680
+                      }}
                     >
-                      WhatsApp is best for quick questions
-                    </Button>
-                    <Typography color="text.secondary">
-                      Not ready to start a project yet? Send a WhatsApp message and ask the rough question first.
+                      Tell us what you&apos;re working on.
                     </Typography>
-                  </Stack>
-                </Grid>
+
+                    <Box sx={{ mt: 3, maxWidth: 570 }}>
+                      <Typography
+                        color="text.secondary"
+                        sx={{
+                          fontSize: { xs: "1.02rem", md: "1.08rem" },
+                          lineHeight: 1.85
+                        }}
+                      >
+                        Whether you have a fully scoped project or just a frustrating
+                        problem you have not solved yet, reach out. We will read your
+                        message carefully and tell you honestly what we think.
+                      </Typography>
+                    </Box>
+                  </Box>
+
+                  <Card
+                    sx={{
+                      borderRadius: 1.5,
+                      border: "1px solid",
+                      borderColor: "divider",
+                      bgcolor: "rgba(255,255,255,0.72)",
+                      backdropFilter: "blur(18px)",
+                      boxShadow: "none"
+                    }}
+                  >
+                    <CardContent sx={{ p: { xs: 2.5, md: 3 } }}>
+                      <Stack spacing={2.4}>
+                        <Box>
+                          <Typography
+                            variant="h5"
+                            sx={{
+                              mb: 0.8,
+                              fontWeight: 800,
+                              letterSpacing: "-0.03em"
+                            }}
+                          >
+                            Direct, engineer-led communication.
+                          </Typography>
+
+                          <Typography color="text.secondary" sx={{ lineHeight: 1.75 }}>
+                            No sales process. No automated follow-up sequence. Just a real
+                            conversation about the problem, the constraints, and the best
+                            way forward.
+                          </Typography>
+                        </Box>
+
+                        <Divider />
+
+                        <Stack spacing={1.5}>
+                          <Stack direction="row" spacing={1.5} alignItems="flex-start">
+                            <Box
+                              sx={{
+                                width: 22,
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                minHeight: 28,
+                                flexShrink: 0
+                              }}
+                            >
+                              <EmailOutlinedIcon color="primary" fontSize="small" />
+                            </Box>
+                            <Box sx={{ pt: "0.02rem" }}>
+                              <Typography sx={{ fontWeight: 700, lineHeight: 1.35 }}>
+                                Project inquiries
+                              </Typography>
+                              <Typography color="text.secondary" sx={{ mt: 0.35 }}>
+                                {site.emails.inquiries}
+                              </Typography>
+                            </Box>
+                          </Stack>
+
+                          <Stack direction="row" spacing={1.5} alignItems="flex-start">
+                            <Box
+                              sx={{
+                                width: 22,
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                minHeight: 28,
+                                flexShrink: 0
+                              }}
+                            >
+                              <LocationOnOutlinedIcon color="primary" fontSize="small" />
+                            </Box>
+                            <Box sx={{ pt: "0.02rem" }}>
+                              <Typography sx={{ fontWeight: 700, lineHeight: 1.35 }}>
+                                Location
+                              </Typography>
+                              <Typography color="text.secondary" sx={{ mt: 0.35 }}>
+                                {site.location} | UTC+5
+                              </Typography>
+                            </Box>
+                          </Stack>
+                        </Stack>
+                      </Stack>
+                    </CardContent>
+                  </Card>
+                </Stack>
               </Grid>
-            </CardContent>
-          </Card>
-        </SectionReveal>
-      </Container>
+
+              <Grid size={{ xs: 12, md: 6.9 }}>
+                <Card
+                  sx={{
+                    height: "100%",
+                    borderRadius: 1.5,
+                    border: "1px solid",
+                    borderColor: "divider",
+                    bgcolor: "rgba(255,255,255,0.82)",
+                    backdropFilter: "blur(22px)",
+                    boxShadow: "0 28px 90px rgba(0, 0, 0, 0.08)"
+                  }}
+                >
+                  <CardContent sx={{ p: { xs: 3, sm: 4, md: 4.5 } }}>
+                    <ContactForm />
+                  </CardContent>
+                </Card>
+              </Grid>
+            </Grid>
+          </SectionReveal>
+
+          <SectionReveal>
+            <Card
+              sx={{
+                mt: { xs: 4, md: 5 },
+                borderRadius: 1.5,
+                overflow: "hidden",
+                border: "1px solid",
+                borderColor: "rgba(28,58,47,0.12)",
+                bgcolor: "rgba(28,58,47,0.08)",
+                boxShadow: "none"
+              }}
+            >
+              <CardContent sx={{ p: { xs: 3, md: 4 } }}>
+                <Grid container spacing={{ xs: 3, md: 4 }} alignItems="center">
+                  <Grid size={{ xs: 12, md: 4.2 }}>
+                    <Typography
+                      variant="h4"
+                      sx={{
+                        maxWidth: 360,
+                        fontWeight: 800,
+                        letterSpacing: "-0.04em",
+                        lineHeight: 1.08,
+                        color: "primary.main"
+                      }}
+                    >
+                      {site.availability}
+                    </Typography>
+                  </Grid>
+
+                  <Grid size={{ xs: 12, md: 4 }}>
+                    <Stack spacing={1.15}>
+                      <Typography color="text.secondary">
+                        General:{" "}
+                        <Box component="span" sx={{ color: "text.primary" }}>
+                          {site.emails.hello}
+                        </Box>
+                      </Typography>
+
+                      <Typography color="text.secondary">
+                        Project inquiries:{" "}
+                        <Box component="span" sx={{ color: "text.primary" }}>
+                          {site.emails.inquiries}
+                        </Box>
+                      </Typography>
+
+                      <Typography color="text.secondary">
+                        Support:{" "}
+                        <Box component="span" sx={{ color: "text.primary" }}>
+                          {site.emails.support}
+                        </Box>
+                      </Typography>
+                    </Stack>
+                  </Grid>
+
+                  <Grid size={{ xs: 12, md: 3.8 }}>
+                    <Stack
+                      spacing={1.4}
+                      sx={{
+                        maxWidth: 380,
+                        ml: { md: "auto" },
+                        alignItems: { xs: "flex-start", md: "flex-end" },
+                        textAlign: { xs: "left", md: "right" }
+                      }}
+                    >
+                      <Button
+                        component={Link}
+                        href={site.whatsapp}
+                        target="_blank"
+                        rel="noreferrer"
+                        variant="outlined"
+                        startIcon={<WhatsAppIcon fontSize="small" />}
+                        endIcon={<ArrowOutwardIcon fontSize="small" />}
+                        sx={{
+                          borderRadius: 999,
+                          px: 2.4,
+                          py: 1.1,
+                          fontWeight: 800,
+                          color: "primary.main",
+                          borderColor: "rgba(28,58,47,0.18)",
+                          "& .MuiSvgIcon-root": {
+                            color: "primary.main"
+                          },
+                          "&:hover": {
+                            borderColor: "primary.main",
+                            bgcolor: "rgba(28,58,47,0.08)"
+                          }
+                        }}
+                      >
+                        WhatsApp us
+                      </Button>
+
+                      <Typography color="text.secondary" sx={{ lineHeight: 1.75 }}>
+                        Not ready to start a project yet? Send a rough question first.
+                      </Typography>
+                    </Stack>
+                  </Grid>
+                </Grid>
+              </CardContent>
+            </Card>
+          </SectionReveal>
+        </Container>
+      </Box>
     </SiteShell>
   );
 }

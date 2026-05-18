@@ -12,23 +12,12 @@ import {
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { SiteShell } from "@/components/site-shell";
 import { SectionReveal } from "@/components/section-reveal";
-import { site } from "@/content/site";
+import { caseStudies, getCaseStudyVisual } from "@/content/case-studies";
 
 export const metadata: Metadata = {
   title: "Case Studies | Mentallion Systems",
   description:
     "Explore Mentallion Systems case studies across AI agents, automation workflows, SaaS platforms, document intelligence, marketplaces, and custom software systems."
-};
-
-type PageCaseStudy = (typeof site.caseStudies)[number] & {
-  thumbnailUrl?: string;
-  thumbnailPosition?: string;
-  imagePosition?: string;
-};
-
-type ResolvedImage = {
-  src: string;
-  position: string;
 };
 
 const CARD_IMAGE_HEIGHT = {
@@ -37,197 +26,8 @@ const CARD_IMAGE_HEIGHT = {
   md: 215
 };
 
-/**
- * Unique image map by slug.
- * Keep every src different.
- */
-const caseStudyCardImages: Record<string, ResolvedImage> = {
-  "estate-sale-marketplace-automation": {
-    src: "/images/case-studies/estate-sale-marketplace.webp",
-    position: "center"
-  },
-  "used-item-price-identification": {
-    src: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1000&q=80",
-    position: "center"
-  },
-  "marketplace-listing-rpa": {
-    src: "https://images.unsplash.com/photo-1556740758-90de374c12ad?auto=format&fit=crop&w=1000&q=80",
-    position: "center"
-  },
-  "subscription-management-app": {
-    src: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1000&q=80",
-    position: "center"
-  },
-  "ai-persona-system": {
-    src: "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=1000&q=80",
-    position: "center"
-  },
-  "document-management-directory-platform": {
-    src: "https://images.unsplash.com/photo-1554224154-26032ffc0d07?auto=format&fit=crop&w=1000&q=80",
-    position: "center"
-  },
-  "ai-powered-quran-chatbot": {
-    src: "https://images.unsplash.com/photo-1584286595398-a59f21d61b56?auto=format&fit=crop&w=1000&q=80",
-    position: "center"
-  },
-  "legaltech-research-pipeline": {
-    src: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=1000&q=80",
-    position: "center"
-  },
-  "retail-paper-record-digitization": {
-    src: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1000&q=80",
-    position: "center"
-  },
-  "edtech-grading-dashboard": {
-    src: "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=1000&q=80",
-    position: "center"
-  },
-  "healthcare-document-intelligence": {
-    src: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=1000&q=80",
-    position: "center"
-  },
-  "hotel-booking-optimization-layer": {
-    src: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1000&q=80",
-    position: "center"
-  },
-  "saas-platform-development": {
-    src: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=1000&q=80",
-    position: "center"
-  },
-  "ocr-invoice-extraction": {
-    src: "https://images.unsplash.com/photo-1556740758-90de374c12ad?auto=format&fit=crop&w=1000&q=80",
-    position: "center"
-  },
-  "business-directory-platform": {
-    src: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1000&q=80",
-    position: "center"
-  }
-};
-
-/**
- * Fallback unique image pool.
- * This guarantees uniqueness even when:
- * - slug does not match
- * - multiple case studies have the same domain
- * - multiple title rules match the same image
- * - original imageUrl is repeated in case-studies.ts
- */
-const uniqueFallbackImages: ResolvedImage[] = [
-  {
-    src: "https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&w=1000&q=80",
-    position: "center"
-  },
-  {
-    src: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1000&q=80",
-    position: "center"
-  },
-  {
-    src: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1000&q=80",
-    position: "center top"
-  },
-  {
-    src: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1000&q=80",
-    position: "center"
-  },
-  {
-    src: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1000&q=80",
-    position: "center"
-  },
-  {
-    src: "https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&w=1000&q=80",
-    position: "center"
-  },
-  {
-    src: "https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=1000&q=80",
-    position: "center"
-  },
-  {
-    src: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=1000&q=80",
-    position: "center"
-  },
-  {
-    src: "https://images.unsplash.com/photo-1554224155-1696413565d3?auto=format&fit=crop&w=1000&q=80",
-    position: "center"
-  },
-  {
-    src: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1000&q=80",
-    position: "center"
-  },
-  {
-    src: "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=1000&q=80",
-    position: "center"
-  },
-  {
-    src: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1000&q=80",
-    position: "center"
-  },
-  {
-    src: "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1000&q=80",
-    position: "center"
-  },
-  {
-    src: "https://images.unsplash.com/photo-1531498860502-7c67cf02f657?auto=format&fit=crop&w=1000&q=80",
-    position: "center"
-  },
-  {
-    src: "https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=1000&q=80",
-    position: "center"
-  },
-  {
-    src: "https://images.unsplash.com/photo-1553484771-371a605b060b?auto=format&fit=crop&w=1000&q=80",
-    position: "center"
-  }
-];
-
-function getPreferredImage(study: PageCaseStudy): ResolvedImage | null {
-  if (study.thumbnailUrl) {
-    return {
-      src: study.thumbnailUrl,
-      position: study.thumbnailPosition ?? study.imagePosition ?? "center"
-    };
-  }
-
-  if (caseStudyCardImages[study.slug]) {
-    return caseStudyCardImages[study.slug];
-  }
-
-  if (study.imageUrl) {
-    return {
-      src: study.imageUrl,
-      position: study.imagePosition ?? "center"
-    };
-  }
-
-  return null;
-}
-
-function resolveUniqueImages(studies: PageCaseStudy[]) {
-  const usedImages = new Set<string>();
-  const resolved = new Map<string, ResolvedImage>();
-
-  studies.forEach((study, index) => {
-    const preferred = getPreferredImage(study);
-
-    if (preferred && !usedImages.has(preferred.src)) {
-      usedImages.add(preferred.src);
-      resolved.set(study.slug, preferred);
-      return;
-    }
-
-    const fallback =
-      uniqueFallbackImages.find((image) => !usedImages.has(image.src)) ??
-      uniqueFallbackImages[index % uniqueFallbackImages.length];
-
-    usedImages.add(fallback.src);
-    resolved.set(study.slug, fallback);
-  });
-
-  return resolved;
-}
-
 export default function CaseStudiesPage() {
-  const pageCaseStudies = site.caseStudies as PageCaseStudy[];
-  const resolvedImages = resolveUniqueImages(pageCaseStudies);
+  const pageCaseStudies = caseStudies;
 
   return (
     <SiteShell>
@@ -328,8 +128,8 @@ export default function CaseStudiesPage() {
               >
                 <Box
                   component="img"
-                  src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1200&q=90"
-                  alt="Mentallion Systems team working on AI and software systems"
+                  src="/images/case-studies-banner.webp"
+                  alt="Mentallion Systems case studies banner"
                   sx={{
                     position: "absolute",
                     top: 0,
@@ -482,7 +282,7 @@ export default function CaseStudiesPage() {
             }}
           >
             {pageCaseStudies.map((study, index) => {
-              const image = resolvedImages.get(study.slug);
+              const image = getCaseStudyVisual(study);
 
               return (
                 <SectionReveal key={study.slug}>
@@ -722,16 +522,17 @@ export default function CaseStudiesPage() {
                             key={point}
                             direction="row"
                             spacing={1}
-                            alignItems="flex-start"
+                            alignItems="center"
                           >
                             <Box
                               sx={{
-                                mt: "0.52rem",
                                 width: 5,
                                 height: 5,
                                 borderRadius: "50%",
                                 bgcolor: "#1C3A2F",
-                                flexShrink: 0
+                                flexShrink: 0,
+                                alignSelf: "flex-start",
+                                mt: "0.38rem"
                               }}
                             />
 

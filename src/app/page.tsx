@@ -15,50 +15,11 @@ import {
 } from "@mui/material";
 import { SiteShell } from "@/components/site-shell";
 import { SectionReveal } from "@/components/section-reveal";
+import { caseStudies, getCaseStudyVisual } from "@/content/case-studies";
 import { site } from "@/content/site";
 
-const smallCaseStudyImages: Record<string, string> = {
-  "AI Agents":
-    "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=900&q=80",
-  Automation:
-    "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=900&q=80",
-  SaaS:
-    "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=900&q=80",
-  Healthcare:
-    "https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=900&q=80",
-  Data:
-    "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=900&q=80"
-};
-
-const smallCaseStudyImagePositions: Record<string, string> = {
-  "AI Agents": "center",
-  Automation: "center",
-  SaaS: "center top",
-  Healthcare: "center",
-  Data: "center"
-};
-
-type HomeCaseStudy = (typeof site.caseStudies)[number] & {
-  thumbnailUrl?: string;
-  thumbnailPosition?: string;
-  imagePosition?: string;
-};
-
-function getSmallCaseStudyImage(item: HomeCaseStudy) {
-  return item.thumbnailUrl ?? smallCaseStudyImages[item.category] ?? item.imageUrl;
-}
-
-function getSmallCaseStudyImagePosition(item: HomeCaseStudy) {
-  return (
-    item.thumbnailPosition ??
-    item.imagePosition ??
-    smallCaseStudyImagePositions[item.category] ??
-    "center"
-  );
-}
-
 export default function HomePage() {
-  const selectedCaseStudies = site.caseStudies.slice(0, 6) as HomeCaseStudy[];
+  const selectedCaseStudies = caseStudies.slice(0, 6);
 
   return (
     <SiteShell>
@@ -308,7 +269,7 @@ export default function HomePage() {
             sx={{
               mt: { xs: 6, md: 8 },
               p: { xs: 3, md: 3.5 },
-              borderRadius: 3,
+              borderRadius: 1.5,
               border: "1px solid",
               borderColor: "divider",
               bgcolor: "rgba(255,253,249,0.72)"
@@ -452,8 +413,7 @@ export default function HomePage() {
               >
                 {[...selectedCaseStudies, ...selectedCaseStudies].map(
                   (item, index) => {
-                    const imageSource = getSmallCaseStudyImage(item);
-                    const imagePosition = getSmallCaseStudyImagePosition(item);
+                    const image = getCaseStudyVisual(item);
 
                     return (
                       <Card
@@ -498,10 +458,10 @@ export default function HomePage() {
                             bgcolor: "rgba(28,58,47,0.06)"
                           }}
                         >
-                          {imageSource ? (
+                          {image.src ? (
                             <Box
                               component="img"
-                              src={imageSource}
+                              src={image.src}
                               alt={item.title}
                               loading="lazy"
                               sx={{
@@ -510,8 +470,8 @@ export default function HomePage() {
                                 width: "100%",
                                 height: "100%",
                                 display: "block",
-                                objectFit: "cover",
-                                objectPosition: imagePosition
+                                objectFit: "contain",
+                                objectPosition: image.position
                               }}
                             />
                           ) : null}
@@ -690,7 +650,7 @@ export default function HomePage() {
                 ]
               ].map(([step, title, copy]) => (
                 <Grid key={step} size={{ xs: 12, md: 6, lg: 4 }}>
-                  <Card sx={{ height: "100%", borderRadius: 3 }}>
+                  <Card sx={{ height: "100%", borderRadius: 1.5 }}>
                     <CardContent sx={{ p: 3.5 }}>
                       <Typography
                         variant="h3"
@@ -721,7 +681,7 @@ export default function HomePage() {
             sx={{
               mt: { xs: 8, md: 12 },
               p: { xs: 4, md: 5 },
-              borderRadius: 3,
+              borderRadius: 1.5,
               bgcolor: "primary.main",
               color: "primary.contrastText"
             }}

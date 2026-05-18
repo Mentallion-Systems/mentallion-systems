@@ -10,7 +10,7 @@ export function Footer() {
         <Box
           sx={{
             p: { xs: 4, md: 5 },
-            borderRadius: 3,
+            borderRadius: 1.5,
             border: "1px solid",
             borderColor: "divider",
             bgcolor: "rgba(255,253,249,0.8)"

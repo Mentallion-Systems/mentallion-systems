@@ -1,5 +1,6 @@
 import {
   caseStudies,
+  getCaseStudyVisual,
   getCaseStudyBySlug,
   getRelatedCaseStudies,
   type CaseStudy,
@@ -33,7 +34,7 @@ export type SiteEmails = {
 };
 
 export type { CaseStudy, CaseStudyFilterTag };
-export { caseStudies, getCaseStudyBySlug, getRelatedCaseStudies };
+export { caseStudies, getCaseStudyBySlug, getRelatedCaseStudies, getCaseStudyVisual };
 
 const emails = {
   hello: "hello@mentallionsystems.com",

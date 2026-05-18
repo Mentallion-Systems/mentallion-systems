@@ -5,10 +5,11 @@ import Link from "next/link";
 import { Box, Button, Chip, Stack, Typography } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import {
-  site,
+  caseStudies,
+  getCaseStudyVisual,
   type CaseStudy,
   type CaseStudyFilterTag
-} from "@/content/site";
+} from "@/content/case-studies";
 
 const filters = [
   { key: "all", label: "All" },
@@ -19,12 +20,6 @@ const filters = [
 ] as const;
 
 type FilterKey = (typeof filters)[number]["key"];
-
-type CaseStudyWithImageControls = CaseStudy & {
-  thumbnailUrl?: string;
-  thumbnailPosition?: string;
-  imagePosition?: string;
-};
 
 /**
  * Fixed image section height for every card.
@@ -67,51 +62,13 @@ const categoryStyles: Record<
   }
 };
 
-/**
- * These are tighter, dashboard/workspace-style images.
- * They crop better inside the case-study card image area.
- */
-const categoryCardImages: Record<CaseStudy["category"], string> = {
-  "AI Agents":
-    "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=1000&q=80",
-  Automation:
-    "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1000&q=80",
-  SaaS:
-    "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1000&q=80",
-  Healthcare:
-    "https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=1000&q=80",
-  Data:
-    "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1000&q=80"
-};
-
-const categoryImagePositions: Record<CaseStudy["category"], string> = {
-  "AI Agents": "center",
-  Automation: "center",
-  SaaS: "center top",
-  Healthcare: "center",
-  Data: "center"
-};
-
-function getCardImage(item: CaseStudyWithImageControls) {
-  return item.thumbnailUrl ?? categoryCardImages[item.category] ?? item.imageUrl;
-}
-
-function getCardImagePosition(item: CaseStudyWithImageControls) {
-  return (
-    item.thumbnailPosition ??
-    item.imagePosition ??
-    categoryImagePositions[item.category] ??
-    "center"
-  );
-}
-
 export function CaseStudiesGrid() {
   const [activeFilter, setActiveFilter] = React.useState<FilterKey>("all");
 
   const visibleItems =
     activeFilter === "all"
-      ? site.caseStudies
-      : site.caseStudies.filter((item) =>
+      ? caseStudies
+      : caseStudies.filter((item) =>
           item.filterTags?.some(
             (tag) => tag === (activeFilter as CaseStudyFilterTag)
           )
@@ -165,8 +122,7 @@ export function CaseStudiesGrid() {
           alignItems: "stretch"
         }}
       >
-        {visibleItems.map((rawItem) => {
-          const item = rawItem as CaseStudyWithImageControls;
+        {visibleItems.map((item) => {
           const badge = categoryStyles[item.category];
 
           const metrics =
@@ -175,8 +131,7 @@ export function CaseStudiesGrid() {
               : [{ value: item.metric, label: "Key outcome" }];
 
           const domainLabel = item.domain ?? badge.label;
-          const imageSource = getCardImage(item);
-          const imagePosition = getCardImagePosition(item);
+          const image = getCaseStudyVisual(item);
 
           return (
             <Box
@@ -216,10 +171,10 @@ export function CaseStudiesGrid() {
                   isolation: "isolate"
                 }}
               >
-                {imageSource ? (
+                {image.src ? (
                   <Box
                     component="img"
-                    src={imageSource}
+                    src={image.src}
                     alt={item.title}
                     loading="lazy"
                     sx={{
@@ -234,7 +189,7 @@ export function CaseStudiesGrid() {
                       maxHeight: "100%",
                       display: "block",
                       objectFit: "cover",
-                      objectPosition: imagePosition,
+                      objectPosition: image.position,
                       transform: "scale(1.01)"
                     }}
                   />

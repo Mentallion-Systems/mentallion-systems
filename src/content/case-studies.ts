@@ -33,7 +33,7 @@ type SourceCaseStudy = {
   build?: string;
   results?: string;
   metrics?: CaseStudyMetric[];
-  imageUrl?: string;
+  imagePosition?: string;
 };
 
 export type CaseStudy = {
@@ -46,6 +46,7 @@ export type CaseStudy = {
   clientType: string;
   summary: string;
   imageUrl: string;
+  imagePosition: string;
   bannerImageUrl: string;
   services: string[];
   techStack: string[];
@@ -75,50 +76,7 @@ export type CaseStudy = {
   results?: string;
 };
 
-const caseStudyImages: Record<string, string> = {
-  "legaltech-research-pipeline":
-    "https://images.pexels.com/photos/7988087/pexels-photo-7988087.jpeg?cs=srgb&dl=pexels-mikhail-nilov-7988087.jpg&fm=jpg",
-  "retail-record-digitization":
-    "https://images.pexels.com/photos/5882592/pexels-photo-5882592.jpeg?cs=srgb&dl=pexels-karolina-grabowska-5882592.jpg&fm=jpg",
-  "edtech-grading-automation":
-    "https://images.pexels.com/photos/4623354/pexels-photo-4623354.jpeg?cs=srgb&dl=pexels-ketut-subiyanto-4623354.jpg&fm=jpg",
-  "healthcare-hipaa-platform":
-    "https://images.pexels.com/photos/5407252/pexels-photo-5407252.jpeg?cs=srgb&dl=pexels-tima-miroshnichenko-5407252.jpg&fm=jpg",
-  "hotel-booking-optimization":
-    "https://images.pexels.com/photos/29502375/pexels-photo-29502375.jpeg?cs=srgb&dl=pexels-julio-lopez-75309646-29502375.jpg&fm=jpg",
-  "personality-saas-rescue":
-    "https://images.pexels.com/photos/12899158/pexels-photo-12899158.jpeg?cs=srgb&dl=pexels-mizunokozuki-12899158.jpg&fm=jpg",
-  "document-automation-prism":
-    "https://images.pexels.com/photos/7731402/pexels-photo-7731402.jpeg?cs=srgb&dl=pexels-mikhail-nilov-7731402.jpg&fm=jpg",
-  "operations-ai-manager":
-    "https://images.pexels.com/photos/16094042/pexels-photo-16094042.jpeg?cs=srgb&dl=pexels-bertellifotografia-16094042.jpg&fm=jpg",
-  "founder-workflow-saas":
-    "https://images.pexels.com/photos/12899158/pexels-photo-12899158.jpeg?cs=srgb&dl=pexels-mizunokozuki-12899158.jpg&fm=jpg",
-  "autonomous-brand-audit-platform":
-    "https://images.pexels.com/photos/5831662/pexels-photo-5831662.jpeg?cs=srgb&dl=pexels-alphatradezone-5831662.jpg&fm=jpg",
-  "visual-marketplace-listing-tool":
-    "https://images.pexels.com/photos/7667442/pexels-photo-7667442.jpeg?cs=srgb&dl=pexels-mart-production-7667442.jpg&fm=jpg",
-  "estate-sales-resale-marketplace":
-    "https://images.pexels.com/photos/7621355/pexels-photo-7621355.jpeg?cs=srgb&dl=pexels-ivan-s-7621355.jpg&fm=jpg",
-  "used-item-price-identification":
-    "https://images.pexels.com/photos/5831662/pexels-photo-5831662.jpeg?cs=srgb&dl=pexels-alphatradezone-5831662.jpg&fm=jpg",
-  "marketplace-item-upload-automation":
-    "https://images.pexels.com/photos/7621352/pexels-photo-7621352.jpeg?cs=srgb&dl=pexels-ivan-s-7621352.jpg&fm=jpg",
-  "subscription-lifecycle-management":
-    "https://images.pexels.com/photos/7887822/pexels-photo-7887822.jpeg?cs=srgb&dl=pexels-leeloothefirst-7887822.jpg&fm=jpg",
-  "digital-twin-persona-system":
-    "https://images.pexels.com/photos/16094042/pexels-photo-16094042.jpeg?cs=srgb&dl=pexels-bertellifotografia-16094042.jpg&fm=jpg",
-  "enterprise-document-directory-platform":
-    "https://images.pexels.com/photos/8428063/pexels-photo-8428063.jpeg?cs=srgb&dl=pexels-kampus-8428063.jpg&fm=jpg",
-  "quranic-reference-chatbot":
-    "https://images.pexels.com/photos/16094042/pexels-photo-16094042.jpeg?cs=srgb&dl=pexels-bertellifotografia-16094042.jpg&fm=jpg",
-  "crypto-prediction-community-platform":
-    "https://images.pexels.com/photos/5831662/pexels-photo-5831662.jpeg?cs=srgb&dl=pexels-alphatradezone-5831662.jpg&fm=jpg",
-  "doctor-booking-marketplace":
-    "https://images.pexels.com/photos/7800532/pexels-photo-7800532.jpeg?cs=srgb&dl=pexels-nadezhda-moryak-7800532.jpg&fm=jpg",
-  "property-price-prediction-engine":
-    "https://images.pexels.com/photos/5831662/pexels-photo-5831662.jpeg?cs=srgb&dl=pexels-alphatradezone-5831662.jpg&fm=jpg"
-};
+const caseStudyImageBasePath = "/images";
 
 const sourceCaseStudies = [
   {
@@ -547,31 +505,6 @@ const sourceCaseStudies = [
     ]
   },
   {
-    slug: "quranic-reference-chatbot",
-    title: "AI-powered Quranic reference chatbot",
-    summary:
-      "Created a citation-backed chatbot that answers natural-language questions with grounded Quranic references.",
-    metric: "Instant source-cited answers",
-    outcome:
-      "Users could access guidance faster while preserving trust through traceable references.",
-    category: "AI Agents",
-    engagement: "Greenfield build",
-    client: "Islamic education platform | Source-cited answers",
-    timeline: "6 weeks",
-    tags: ["RAG", "NLP", "Citation engine", "Conversational AI"],
-    filterTags: ["ai", "saas"],
-    problem:
-      "Users needed trustworthy Quranic references for specific questions without spending long periods manually cross-referencing texts.",
-    build:
-      "We built a grounded chatbot that responds in natural language while returning precise source citations for verification.",
-    results:
-      "The platform made guidance faster to access without asking users to sacrifice trust.",
-    metrics: [
-      { value: "Instant", label: "Cited answers" },
-      { value: "Trusted", label: "Source traceability" }
-    ]
-  },
-  {
     slug: "crypto-prediction-community-platform",
     title: "Crypto prediction and community ranking platform",
     summary:
@@ -696,11 +629,11 @@ const serviceByCategory: Record<CaseStudyCategory, string[]> = {
 };
 
 function getImageUrl(study: SourceCaseStudy) {
-  return (
-    caseStudyImages[study.slug] ??
-    study.imageUrl ??
-    "https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?cs=srgb&dl=pexels-fauxels-3184465.jpg&fm=jpg"
-  );
+  return `${caseStudyImageBasePath}/${study.slug}.webp`;
+}
+
+function getImagePosition(study: SourceCaseStudy) {
+  return study.imagePosition ?? "center";
 }
 
 function getIndustry(study: SourceCaseStudy) {
@@ -719,6 +652,73 @@ function getTechStack(study: SourceCaseStudy) {
   }
 
   return [study.category, study.engagement];
+}
+
+function ensureSentence(value: string) {
+  const trimmed = value.trim();
+
+  if (!trimmed) return trimmed;
+
+  return /[.!?]$/.test(trimmed) ? trimmed : `${trimmed}.`;
+}
+
+function lowerFirst(value: string) {
+  if (!value) return value;
+
+  return value.charAt(0).toLowerCase() + value.slice(1);
+}
+
+function joinSentences(parts: Array<string | undefined>) {
+  return parts
+    .filter(Boolean)
+    .map((part) => ensureSentence(part as string))
+    .join(" ");
+}
+
+function getClientContext(study: SourceCaseStudy) {
+  return study.client?.split("|")[0].trim() ?? "the client team";
+}
+
+function buildOverview(study: SourceCaseStudy) {
+  return joinSentences([
+    study.summary,
+    `This ${study.engagement.toLowerCase()} for ${getClientContext(
+      study
+    )} focused on ${domainByCategory[study.category].toLowerCase()} and was delivered over ${
+      study.timeline ?? "a production-focused engagement"
+    }`,
+    `The work was shaped around a clear operating goal: ${lowerFirst(
+      study.outcome
+    )}`
+  ]);
+}
+
+function buildChallenge(study: SourceCaseStudy) {
+  return joinSentences([
+    study.problem ?? study.summary,
+    `That friction was slowing the workflow down, increasing manual effort, and making the process harder to trust at scale`,
+    `For ${getClientContext(
+      study
+    )}, the challenge was not only getting the work done, but doing it in a way that was repeatable and operationally reliable`
+  ]);
+}
+
+function buildSolution(study: SourceCaseStudy) {
+  return joinSentences([
+    study.build ?? study.summary,
+    `The implementation stayed close to the existing workflow so the system could reduce unnecessary steps without forcing the team into a disconnected process`,
+    `The goal was to turn the underlying idea into a production-ready setup that fit the engagement shape, the business context, and the day-to-day reality of how the team already worked`
+  ]);
+}
+
+function buildResult(study: SourceCaseStudy) {
+  return joinSentences([
+    study.results ?? study.outcome,
+    `The measurable shift was ${lowerFirst(study.metric)}, and the broader outcome was that ${lowerFirst(
+      study.outcome
+    )}`,
+    `In practice, that meant a workflow that was faster, easier to operate, and better aligned with the work the team actually needed to focus on`
+  ]);
 }
 
 function getMainPoints(study: SourceCaseStudy) {
@@ -752,6 +752,7 @@ function getRelatedSlugs(study: SourceCaseStudy) {
 
 export const caseStudies: CaseStudy[] = sourceCaseStudies.map((study) => {
   const imageUrl = getImageUrl(study);
+  const imagePosition = getImagePosition(study);
 
   return {
     ...study,
@@ -761,6 +762,7 @@ export const caseStudies: CaseStudy[] = sourceCaseStudies.map((study) => {
     timeline: study.timeline ?? "Production build",
     clientType: study.client ?? "Client project",
     imageUrl,
+    imagePosition,
     bannerImageUrl: imageUrl,
     services: serviceByCategory[study.category],
     techStack: getTechStack(study),
@@ -769,15 +771,22 @@ export const caseStudies: CaseStudy[] = sourceCaseStudies.map((study) => {
         ? study.metrics
         : [{ value: study.metric, label: "Key outcome" }],
     mainPoints: getMainPoints(study),
-    overview: study.summary,
-    challenge: study.problem ?? study.summary,
-    solution: study.build ?? study.summary,
-    result: study.results ?? study.outcome,
+    overview: buildOverview(study),
+    challenge: buildChallenge(study),
+    solution: buildSolution(study),
+    result: buildResult(study),
     quote: study.outcome,
     quoteBy: "Project outcome",
     relatedSlugs: getRelatedSlugs(study)
   };
 });
+
+export function getCaseStudyVisual(study: Pick<CaseStudy, "imageUrl" | "imagePosition">) {
+  return {
+    src: study.imageUrl,
+    position: study.imagePosition
+  };
+}
 
 export function getCaseStudyBySlug(slug: string) {
   return caseStudies.find((study) => study.slug === slug);
