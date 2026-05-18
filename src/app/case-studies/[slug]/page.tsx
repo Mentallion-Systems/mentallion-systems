@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import { RelatedCaseStudiesCarousel } from "@/components/related-case-studies-carousel";
 import { SiteShell } from "@/components/site-shell";
 import { SectionReveal } from "@/components/section-reveal";
 import {
@@ -58,6 +59,19 @@ export default async function CaseStudyDetailPage({ params }: PageProps) {
   }
 
   const relatedStudies = getRelatedCaseStudies(study.relatedSlugs);
+  const relatedStudyCards = relatedStudies.slice(0, 6).map((related) => {
+    const image = getCaseStudyVisual(related);
+
+    return {
+      slug: related.slug,
+      title: related.title,
+      domain: related.domain,
+      image: {
+        src: image.src,
+        position: image.position
+      }
+    };
+  });
 
   return (
     <SiteShell>
@@ -70,7 +84,7 @@ export default async function CaseStudyDetailPage({ params }: PageProps) {
         <Box
           sx={{
             position: "relative",
-            minHeight: { xs: 660, md: 760 },
+            minHeight: { xs: 560, md: 760 },
             display: "flex",
             alignItems: "flex-end",
             overflow: "hidden",
@@ -175,7 +189,7 @@ export default async function CaseStudyDetailPage({ params }: PageProps) {
                 <Typography
                   component="h1"
                   sx={{
-                    fontSize: { xs: "3rem", sm: "4.4rem", md: "6.3rem" },
+                    fontSize: { xs: "2.45rem", sm: "3.8rem", md: "6.3rem" },
                     lineHeight: 0.9,
                     letterSpacing: "-0.075em",
                     fontWeight: 850,
@@ -492,157 +506,9 @@ export default async function CaseStudyDetailPage({ params }: PageProps) {
               </Stack>
             </SectionReveal>
 
-            <Box
-              sx={{
-                display: "grid",
-                gridTemplateColumns: {
-                  xs: "1fr",
-                  md: "repeat(3, minmax(0, 1fr))"
-                },
-                gap: 2.4,
-                alignItems: "stretch"
-              }}
-            >
-              {relatedStudies.slice(0, 3).map((related) => {
-                const image = getCaseStudyVisual(related);
-
-                return (
-                <SectionReveal key={related.slug}>
-                  <Box
-                    component={Link}
-                    href={`/case-studies/${related.slug}`}
-                    sx={{
-                      height: 370,
-                      minHeight: 370,
-                      maxHeight: 370,
-                      display: "flex",
-                      flexDirection: "column",
-                      textDecoration: "none",
-                      color: "inherit",
-                      bgcolor: "#FFFDF8",
-                      borderRadius: "22px",
-                      overflow: "hidden",
-                      border: "1px solid rgba(16,20,19,0.08)",
-                      transition: "transform .25s ease, box-shadow .25s ease",
-                      "&:hover": {
-                        transform: "translateY(-4px)",
-                        boxShadow: "0 24px 70px rgba(16,20,19,0.1)"
-                      }
-                    }}
-                  >
-                    <Box
-                      sx={{
-                        position: "relative",
-                        width: "100%",
-                        height: 185,
-                        minHeight: 185,
-                        maxHeight: 185,
-                        flex: "0 0 185px",
-                        overflow: "hidden",
-                        bgcolor: "rgba(28,58,47,0.06)"
-                      }}
-                    >
-                      <Box
-                        component="img"
-                        src={image.src}
-                        alt={related.title}
-                        loading="lazy"
-                        sx={{
-                          position: "absolute",
-                          inset: 0,
-                          width: "100%",
-                          height: "100%",
-                          objectFit: "fit",
-                          objectPosition: image.position,
-                          display: "block"
-                        }}
-                      />
-
-                      <Box
-                        sx={{
-                          position: "absolute",
-                          inset: 0,
-                          pointerEvents: "none",
-                          background:
-                            "linear-gradient(180deg, rgba(0,0,0,0.02) 0%, rgba(0,0,0,0.08) 45%, rgba(0,0,0,0.38) 100%)"
-                        }}
-                      />
-                    </Box>
-
-                    <Box
-                      sx={{
-                        p: 2.2,
-                        height: 185,
-                        minHeight: 185,
-                        maxHeight: 185,
-                        flex: "1 1 auto",
-                        display: "flex",
-                        flexDirection: "column",
-                        justifyContent: "flex-end",
-                        overflow: "hidden"
-                      }}
-                    >
-                      <Typography
-                        sx={{
-                          color: "#1C3A2F",
-                          fontSize: "0.72rem",
-                          letterSpacing: "0.1em",
-                          textTransform: "uppercase",
-                          fontWeight: 900,
-                          mb: 0.75,
-                          display: "-webkit-box",
-                          WebkitLineClamp: 1,
-                          WebkitBoxOrient: "vertical",
-                          overflow: "hidden"
-                        }}
-                      >
-                        {related.domain}
-                      </Typography>
-
-                      <Typography
-                        sx={{
-                          fontSize: "1.18rem",
-                          lineHeight: 1.2,
-                          letterSpacing: "-0.035em",
-                          fontWeight: 850,
-                          display: "-webkit-box",
-                          WebkitLineClamp: 2,
-                          WebkitBoxOrient: "vertical",
-                          overflow: "hidden"
-                        }}
-                      >
-                        {related.title}
-                      </Typography>
-
-                      <Button
-                        component="span"
-                        endIcon={<ArrowForwardIcon />}
-                        sx={{
-                          mt: 1.1,
-                          alignSelf: "flex-start",
-                          px: 0,
-                          minHeight: 0,
-                          color: "#101413",
-                          fontSize: "0.82rem",
-                          fontWeight: 850,
-                          textTransform: "none",
-                          "& .MuiButton-endIcon": {
-                            ml: 0.55
-                          },
-                          "&:hover": {
-                            bgcolor: "transparent",
-                            color: "#1C3A2F"
-                          }
-                        }}
-                      >
-                        Read case study
-                      </Button>
-                    </Box>
-                  </Box>
-                </SectionReveal>
-                );
-              })}
-            </Box>
+            <SectionReveal>
+              <RelatedCaseStudiesCarousel items={relatedStudyCards} />
+            </SectionReveal>
           </Container>
         </Box>
       ) : null}

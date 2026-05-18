@@ -67,7 +67,7 @@ export default function CaseStudiesPage() {
                 <Typography
                   component="h1"
                   sx={{
-                    fontSize: { xs: "3rem", sm: "4.2rem", md: "5.8rem" },
+                    fontSize: { xs: "2.5rem", sm: "3.6rem", md: "5.8rem" },
                     lineHeight: 0.92,
                     letterSpacing: "-0.07em",
                     fontWeight: 800,
@@ -290,7 +290,7 @@ export default function CaseStudiesPage() {
                     component="article"
                     sx={{
                       height: "100%",
-                      minHeight: { xs: 560, md: 590 },
+                      minHeight: { xs: "auto", md: 590 },
                       display: "flex",
                       flexDirection: "column",
                       bgcolor: "#FFFDF8",

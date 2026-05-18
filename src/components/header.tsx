@@ -54,15 +54,43 @@ export function Header() {
         }}
       >
         <Container maxWidth="lg">
-          <Toolbar disableGutters sx={{ minHeight: 82 }}>
-            <Typography
+          <Toolbar disableGutters sx={{ minHeight: { xs: 74, md: 82 } }}>
+            <Stack
               component={Link}
               href="/"
-              variant="h4"
-              sx={{ color: "inherit", flexGrow: 1 }}
+              direction="row"
+              spacing={1.4}
+              alignItems="center"
+              sx={{
+                color: "inherit",
+                flexGrow: 1,
+                textDecoration: "none",
+                minWidth: 0
+              }}
             >
-              {site.name}
-            </Typography>
+              <Box
+                component="img"
+                src="/images/logo/logo-v2.png"
+                alt={`${site.name} logo`}
+                sx={{
+                  width: { xs: 42, md: 46 },
+                  height: { xs: 42, md: 46 },
+                  objectFit: "contain",
+                  flexShrink: 0
+                }}
+              />
+              <Typography
+                variant="h4"
+                sx={{
+                  color: "inherit",
+                  lineHeight: 1,
+                  whiteSpace: { xs: "normal", sm: "nowrap" },
+                  fontSize: { xs: "1.15rem", sm: "1.4rem", md: "1.65rem" }
+                }}
+              >
+                {site.name}
+              </Typography>
+            </Stack>
             <Stack direction="row" spacing={3} alignItems="center" sx={{ display: { xs: "none", md: "flex" } }}>
               {site.nav.map((item) => (
                 <Typography
@@ -127,9 +155,31 @@ export function Header() {
         </Container>
       </AppBar>
       <Drawer anchor="right" open={mobileOpen} onClose={() => setMobileOpen(false)}>
-        <Box sx={{ width: 300, p: 3 }}>
-          <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 5 }}>
-            <Typography variant="h5">{site.name}</Typography>
+        <Box sx={{ width: { xs: "min(86vw, 320px)", sm: 320 }, p: { xs: 2.5, sm: 3 } }}>
+          <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 4.5, gap: 1.5 }}>
+            <Stack
+              component={Link}
+              href="/"
+              direction="row"
+              spacing={1.2}
+              alignItems="center"
+              sx={{ color: "inherit", textDecoration: "none", minWidth: 0, flex: 1 }}
+            >
+              <Box
+                component="img"
+                src="/images/logo/logo-v2.png"
+                alt={`${site.name} logo`}
+                sx={{
+                  width: 38,
+                  height: 38,
+                  objectFit: "contain",
+                  flexShrink: 0
+                }}
+              />
+              <Typography variant="h5" sx={{ fontSize: { xs: "1.15rem", sm: "1.35rem" } }}>
+                {site.name}
+              </Typography>
+            </Stack>
             <IconButton aria-label="Close navigation" onClick={() => setMobileOpen(false)}>
               <CloseIcon />
             </IconButton>

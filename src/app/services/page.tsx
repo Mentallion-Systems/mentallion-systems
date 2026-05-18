@@ -184,7 +184,7 @@ export default function ServicesPage() {
                   <Typography
                     variant="h1"
                     sx={{
-                      fontSize: { xs: "3.15rem", md: "5.25rem" },
+                      fontSize: { xs: "2.5rem", sm: "3.35rem", md: "5.25rem" },
                       lineHeight: 0.93,
                       letterSpacing: "-0.07em",
                       maxWidth: 720
@@ -333,7 +333,7 @@ export default function ServicesPage() {
               <Box
                 sx={{
                   position: "relative",
-                  minHeight: { xs: 460, md: 620, lg: 650 },
+                  minHeight: { xs: 360, sm: 430, md: 620, lg: 650 },
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
@@ -359,7 +359,7 @@ export default function ServicesPage() {
                     top: { xs: 0, lg: 22 },
                     right: { xs: 0, lg: 22 },
                     width: { xs: "100%", lg: "78%" },
-                    height: { xs: 280, sm: 350, md: 430, lg: 470 },
+                    height: { xs: 220, sm: 290, md: 430, lg: 470 },
                     objectFit: "cover",
                     borderRadius: "34px",
                     boxShadow: "0 30px 90px rgba(16,20,19,0.14)"
@@ -373,7 +373,7 @@ export default function ServicesPage() {
                     right: { xs: 16, md: "auto" },
                     bottom: { xs: 0, md: 18, lg: 42 },
                     width: { xs: "auto", md: "52%" },
-                    p: { xs: 2.4, md: 3.1 },
+                    p: { xs: 2, md: 3.1 },
                     borderRadius: "26px",
                     bgcolor: "#1C3A2F",
                     color: "primary.contrastText",
@@ -421,14 +421,15 @@ export default function ServicesPage() {
                 <Box
                   sx={{
                     position: "absolute",
-                    top: { xs: 18, md: 24, lg: 54 },
-                    left: { xs: 18, lg: 0 },
+                    top: { sm: 18, md: 24, lg: 54 },
+                    left: { sm: 18, lg: 0 },
                     px: 1.7,
                     py: 1.3,
                     borderRadius: "18px",
                     bgcolor: "rgba(255,253,249,0.92)",
                     border: "1px solid rgba(16,20,19,0.08)",
-                    boxShadow: "0 12px 36px rgba(16,20,19,0.08)"
+                    boxShadow: "0 12px 36px rgba(16,20,19,0.08)",
+                    display: { xs: "none", sm: "block" }
                   }}
                 >
                   <Typography

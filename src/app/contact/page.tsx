@@ -97,8 +97,8 @@ export default function ContactPage() {
                       variant="h1"
                       sx={{
                         fontSize: {
-                          xs: "3rem",
-                          sm: "3.8rem",
+                          xs: "2.5rem",
+                          sm: "3.4rem",
                           md: "5.2rem"
                         },
                         lineHeight: 0.95,
@@ -263,21 +263,21 @@ export default function ContactPage() {
                     <Stack spacing={1.15}>
                       <Typography color="text.secondary">
                         General:{" "}
-                        <Box component="span" sx={{ color: "text.primary" }}>
+                        <Box component="span" sx={{ color: "text.primary", wordBreak: "break-word" }}>
                           {site.emails.hello}
                         </Box>
                       </Typography>
 
                       <Typography color="text.secondary">
                         Project inquiries:{" "}
-                        <Box component="span" sx={{ color: "text.primary" }}>
+                        <Box component="span" sx={{ color: "text.primary", wordBreak: "break-word" }}>
                           {site.emails.inquiries}
                         </Box>
                       </Typography>
 
                       <Typography color="text.secondary">
                         Support:{" "}
-                        <Box component="span" sx={{ color: "text.primary" }}>
+                        <Box component="span" sx={{ color: "text.primary", wordBreak: "break-word" }}>
                           {site.emails.support}
                         </Box>
                       </Typography>

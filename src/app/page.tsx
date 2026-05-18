@@ -27,7 +27,10 @@ export default function HomePage() {
         <Box
           sx={{
             position: "relative",
-            minHeight: { xs: "calc(100vh - 82px)", md: "calc(100vh - 82px)" },
+            minHeight: {
+              xs: "max(620px, calc(100vh - 74px))",
+              md: "calc(100vh - 82px)"
+            },
             display: "flex",
             alignItems: "stretch",
             overflow: "hidden"
@@ -97,7 +100,7 @@ export default function HomePage() {
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
-              py: { xs: 8, md: 10 }
+              py: { xs: 7, md: 10 }
             }}
           >
             <Grid container spacing={5} alignItems="end">
@@ -106,7 +109,7 @@ export default function HomePage() {
                   sx={{
                     color: "rgba(247,245,242,0.78)",
                     mb: 2,
-                    fontSize: "0.9rem",
+                    fontSize: { xs: "0.78rem", sm: "0.9rem" },
                     letterSpacing: "0.06em",
                     textTransform: "uppercase"
                   }}
@@ -117,7 +120,8 @@ export default function HomePage() {
                 <Typography
                   variant="h1"
                   sx={{
-                    fontSize: { xs: "3.4rem", md: "6.15rem" },
+                    fontSize: { xs: "2.6rem", sm: "3.6rem", md: "6.15rem" },
+                    lineHeight: { xs: 0.98, md: 0.96 },
                     maxWidth: 860,
                     color: "primary.contrastText"
                   }}
@@ -176,10 +180,11 @@ export default function HomePage() {
                 <Stack spacing={2} alignItems="stretch">
                   <Card
                     sx={{
-                      maxWidth: 280,
+                      maxWidth: { xs: "100%", sm: 320, md: 280 },
                       borderRadius: 2,
                       bgcolor: "rgba(255,253,249,0.9)",
-                      animation: "heroFloat 5.5s ease-in-out infinite"
+                      animation: "heroFloat 5.5s ease-in-out infinite",
+                      alignSelf: { xs: "stretch", md: "flex-start" }
                     }}
                   >
                     <CardContent sx={{ p: 2.5 }}>
@@ -202,7 +207,7 @@ export default function HomePage() {
                       display: "grid",
                       gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
                       gap: 1.25,
-                      alignSelf: "flex-end",
+                      alignSelf: { xs: "stretch", md: "flex-end" },
                       width: { xs: "100%", md: 340 },
                       animation: "heroDrift 6.5s ease-in-out infinite"
                     }}
@@ -421,12 +426,12 @@ export default function HomePage() {
                         component={Link}
                         href={`/case-studies/${item.slug}`}
                         sx={{
-                          width: { xs: 258, sm: 278, md: 300 },
-                          minWidth: { xs: 258, sm: 278, md: 300 },
-                          maxWidth: { xs: 258, sm: 278, md: 300 },
-                          height: 420,
-                          minHeight: 420,
-                          maxHeight: 420,
+                          width: { xs: 238, sm: 278, md: 300 },
+                          minWidth: { xs: 238, sm: 278, md: 300 },
+                          maxWidth: { xs: 238, sm: 278, md: 300 },
+                          height: { xs: 396, md: 420 },
+                          minHeight: { xs: 396, md: 420 },
+                          maxHeight: { xs: 396, md: 420 },
                           flex: "0 0 auto",
                           display: "flex",
                           flexDirection: "column",
@@ -450,10 +455,10 @@ export default function HomePage() {
                           sx={{
                             position: "relative",
                             width: "100%",
-                            height: 138,
-                            minHeight: 138,
-                            maxHeight: 138,
-                            flex: "0 0 138px",
+                            height: { xs: 124, md: 138 },
+                            minHeight: { xs: 124, md: 138 },
+                            maxHeight: { xs: 124, md: 138 },
+                            flex: { xs: "0 0 124px", md: "0 0 138px" },
                             overflow: "hidden",
                             bgcolor: "rgba(28,58,47,0.06)"
                           }}
@@ -511,9 +516,9 @@ export default function HomePage() {
                         <CardContent
                           sx={{
                             p: 2.35,
-                            height: 282,
-                            minHeight: 282,
-                            maxHeight: 282,
+                            height: { xs: 272, md: 282 },
+                            minHeight: { xs: 272, md: 282 },
+                            maxHeight: { xs: 272, md: 282 },
                             flex: "1 1 auto",
                             display: "flex",
                             flexDirection: "column",
@@ -556,9 +561,9 @@ export default function HomePage() {
                             sx={{
                               mt: "auto",
                               p: 1.35,
-                              height: 96,
-                              minHeight: 96,
-                              maxHeight: 96,
+                              height: { xs: 92, md: 96 },
+                              minHeight: { xs: 92, md: 96 },
+                              maxHeight: { xs: 92, md: 96 },
                               borderRadius: 1,
                               bgcolor: "rgba(28,58,47,0.045)",
                               border: "1px solid rgba(28,58,47,0.1)",

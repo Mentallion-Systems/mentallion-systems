@@ -23,6 +23,33 @@ export function Footer() {
             alignItems={{ xs: "flex-start", md: "center" }}
           >
             <Box>
+              <Stack
+                direction="row"
+                spacing={1.2}
+                alignItems="center"
+                sx={{ mb: 1.6 }}
+              >
+                <Box
+                  component="img"
+                  src="/images/logo/logo-v2.png"
+                  alt={`${site.name} logo`}
+                  sx={{
+                    width: 34,
+                    height: 34,
+                    objectFit: "contain",
+                    flexShrink: 0
+                  }}
+                />
+                <Typography
+                  sx={{
+                    fontWeight: 800,
+                    letterSpacing: "-0.02em",
+                    color: "#101413"
+                  }}
+                >
+                  {site.name}
+                </Typography>
+              </Stack>
               <Typography variant="h3" sx={{ mb: 1.5, maxWidth: 520 }}>
                 We build AI systems that replace manual work.
               </Typography>
@@ -35,6 +62,7 @@ export function Footer() {
               href="/contact#contact-form"
               variant="contained"
               endIcon={<ArrowOutwardIcon fontSize="small" />}
+              sx={{ alignSelf: { xs: "stretch", sm: "flex-start", md: "center" } }}
             >
               Tell us what you&apos;re building
             </Button>
@@ -48,7 +76,7 @@ export function Footer() {
             <Typography color="text.secondary">
               {site.availability}
             </Typography>
-            <Stack direction="row" spacing={2.5} flexWrap="wrap">
+            <Stack direction="row" spacing={2.5} flexWrap="wrap" useFlexGap>
               {site.nav.map((item) => (
                 <Typography key={item.href} component={Link} href={item.href} color="text.secondary">
                   {item.label}

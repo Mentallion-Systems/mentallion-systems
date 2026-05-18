@@ -12,14 +12,14 @@ export const theme = createTheme({
       contrastText: "#f7f5f2"
     },
     secondary: {
-      main: "#b9a98f"
+      main: "#c6a15b"
     },
     background: {
       default: "#f7f5f2",
       paper: "#fffdf9"
     },
     text: {
-      primary: "#1a1a1a",
+      primary: "#111d18",
       secondary: "#5f625d"
     },
     divider: "rgba(28, 58, 47, 0.14)"

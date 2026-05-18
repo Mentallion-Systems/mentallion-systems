@@ -22,6 +22,11 @@ export const metadata: Metadata = {
   },
   description:
     "Mentallion Systems builds AI automation systems and production-grade software for businesses that want real results, not demos.",
+  icons: {
+    icon: "/images/logo/logo-v2.png",
+    shortcut: "/images/logo/logo-v2.png",
+    apple: "/images/logo/logo-v2.png"
+  },
   openGraph: {
     title: "Mentallion Systems",
     description:
