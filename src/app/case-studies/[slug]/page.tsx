@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { BackToCaseStudiesButton } from "@/components/back-to-case-studies-button";
+import { CaseStudyMobileHeroFocus } from "@/components/case-study-mobile-hero-focus";
 import { RelatedCaseStudiesCarousel } from "@/components/related-case-studies-carousel";
 import { StructuredData } from "@/components/structured-data";
 import { SiteShell } from "@/components/site-shell";
@@ -116,6 +117,7 @@ export default async function CaseStudyDetailPage({ params }: PageProps) {
   return (
     <SiteShell>
       <StructuredData id={`case-study-schema-${study.slug}`} data={caseStudySchema} />
+      <CaseStudyMobileHeroFocus targetId="case-study-hero-content" />
       <Box
         sx={{
           bgcolor: "#0B0F0E",
@@ -140,7 +142,7 @@ export default async function CaseStudyDetailPage({ params }: PageProps) {
               alignItems: "center",
               justifyContent: { xs: "center", lg: "flex-end" },
               px: { xs: 2, md: 4, lg: 6 },
-              py: { xs: 4, md: 5 }
+              py: { xs: 5, md: 5 }
             }}
           >
             <Box
@@ -179,11 +181,12 @@ export default async function CaseStudyDetailPage({ params }: PageProps) {
             sx={{
               position: "relative",
               zIndex: 1,
-              pb: { xs: 6, md: 9 }
+              py: { xs: 7, md: 0 },
+              pb: { xs: 7, md: 9 }
             }}
           >
             <SectionReveal>
-              <Box sx={{ maxWidth: 880 }}>
+              <Box id="case-study-hero-content" sx={{ maxWidth: 880 }}>
                 <BackToCaseStudiesButton />
 
                 <Stack
