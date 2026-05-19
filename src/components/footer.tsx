@@ -102,7 +102,7 @@ export function Footer() {
             sx={{ mt: 5, pt: 3, borderTop: "1px solid", borderColor: "divider" }}
           >
             <Typography color="text.secondary">
-              Copyright {copyrightYear} {site.name}. All rights reserved.
+              © 2026 MentallionSystems. All rights reserved.
             </Typography>
             <Stack direction="row" spacing={2.5} flexWrap="wrap" useFlexGap>
               {site.nav.map((item) => (
