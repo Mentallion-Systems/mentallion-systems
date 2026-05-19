@@ -13,14 +13,34 @@ import {
   Stack,
   Typography
 } from "@mui/material";
+import { StructuredData } from "@/components/structured-data";
 import { SiteShell } from "@/components/site-shell";
 import { SectionReveal } from "@/components/section-reveal";
 import { site } from "@/content/site";
+import { absoluteUrl } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Services",
   description:
-    "Business process automation, AI agent systems, custom SaaS, and AI integration. Built for production, not proof of concept."
+    "Business process automation, AI agent systems, custom SaaS, and AI integration. Built for production, not proof of concept.",
+  alternates: {
+    canonical: "/services"
+  },
+  openGraph: {
+    title: "Services | Mentallion Systems",
+    description:
+      "Explore business process automation, AI agent systems, custom SaaS development, and AI integration services built for production.",
+    url: absoluteUrl("/services"),
+    type: "website",
+    images: [absoluteUrl(site.ogImage)]
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Services | Mentallion Systems",
+    description:
+      "Explore business process automation, AI agent systems, custom SaaS development, and AI integration services built for production.",
+    images: [absoluteUrl(site.ogImage)]
+  }
 };
 
 const servicesBannerImage = "/images/service-banner.webp";
@@ -92,8 +112,31 @@ const serviceCardAccents = [
 ] as const;
 
 export default function ServicesPage() {
+  const servicesPageSchema = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "Services | Mentallion Systems",
+    url: absoluteUrl("/services"),
+    description: metadata.description,
+    hasPart: site.services.map((service) => ({
+      "@type": "Service",
+      name: service.title,
+      description: service.outcome,
+      audience: {
+        "@type": "Audience",
+        audienceType: service.audience
+      },
+      provider: {
+        "@type": "Organization",
+        name: site.name,
+        url: site.url
+      }
+    }))
+  };
+
   return (
     <SiteShell>
+      <StructuredData id="services-page-schema" data={servicesPageSchema} />
       <SectionReveal>
         <Box
           sx={{
@@ -333,20 +376,24 @@ export default function ServicesPage() {
               <Box
                 sx={{
                   position: "relative",
-                  minHeight: { xs: 360, sm: 430, md: 620, lg: 650 },
+                  minHeight: { xs: "auto", md: 620, lg: 650 },
                   display: "flex",
+                  flexDirection: { xs: "column", md: "row" },
                   alignItems: "center",
                   justifyContent: "center",
-                  px: { xs: 0, lg: 2 }
+                  px: { xs: 0, lg: 2 },
+                  pt: { xs: 1, md: 0 },
+                  pb: { xs: 0.5, md: 0 }
                 }}
               >
                 <Box
                   sx={{
                     position: "absolute",
-                    inset: { xs: "14px 0 26px 0", lg: "26px 18px 34px 52px" },
+                    inset: { md: "14px 0 26px 0", lg: "26px 18px 34px 52px" },
                     borderRadius: "36px",
                     bgcolor: "rgba(255,255,255,0.35)",
-                    border: "1px solid rgba(16,20,19,0.06)"
+                    border: "1px solid rgba(16,20,19,0.06)",
+                    display: { xs: "none", md: "block" }
                   }}
                 />
 
@@ -355,25 +402,34 @@ export default function ServicesPage() {
                   src={servicesBannerImage}
                   alt="Team collaborating around product and systems planning"
                   sx={{
-                    position: "absolute",
-                    top: { xs: 0, lg: 22 },
-                    right: { xs: 0, lg: 22 },
-                    width: { xs: "100%", lg: "78%" },
-                    height: { xs: 220, sm: 290, md: 430, lg: 470 },
+                    position: { xs: "relative", md: "absolute" },
+                    top: { md: 0, lg: 22 },
+                    right: { md: 0, lg: 22 },
+                    width: {
+                      xs: "calc(100% - 24px)",
+                      sm: "calc(100% - 32px)",
+                      md: "100%",
+                      lg: "78%"
+                    },
+                    height: { xs: 240, sm: 320, md: 430, lg: 470 },
                     objectFit: "cover",
-                    borderRadius: "34px",
-                    boxShadow: "0 30px 90px rgba(16,20,19,0.14)"
+                    borderRadius: { xs: "28px", md: "34px" },
+                    boxShadow: "0 30px 90px rgba(16,20,19,0.14)",
+                    display: "block",
+                    mx: { xs: "auto", md: 0 }
                   }}
                 />
 
                 <Box
                   sx={{
-                    position: "absolute",
-                    left: { xs: 16, md: 0, lg: 10 },
-                    right: { xs: 16, md: "auto" },
-                    bottom: { xs: 0, md: 18, lg: 42 },
-                    width: { xs: "auto", md: "52%" },
-                    p: { xs: 2, md: 3.1 },
+                    position: { xs: "relative", md: "absolute" },
+                    left: { md: 0, lg: 10 },
+                    right: { md: "auto" },
+                    bottom: { md: 18, lg: 42 },
+                    width: { xs: "calc(100% - 24px)", sm: "calc(100% - 32px)", md: "52%" },
+                    mx: { xs: "auto", md: 0 },
+                    mt: { xs: 2, md: 0 },
+                    p: { xs: 2.2, md: 3.1 },
                     borderRadius: "26px",
                     bgcolor: "#1C3A2F",
                     color: "primary.contrastText",
@@ -429,7 +485,7 @@ export default function ServicesPage() {
                     bgcolor: "rgba(255,253,249,0.92)",
                     border: "1px solid rgba(16,20,19,0.08)",
                     boxShadow: "0 12px 36px rgba(16,20,19,0.08)",
-                    display: { xs: "none", sm: "block" }
+                    display: { xs: "none", md: "block" }
                   }}
                 >
                   <Typography
@@ -728,34 +784,36 @@ export default function ServicesPage() {
                             Typical delivery focus
                           </Typography>
 
-                          <Stack spacing={1.15}>
+                          <Box
+                            component="ul"
+                            sx={{
+                              pl: 2.1,
+                              display: "grid",
+                              gap: 1,
+                              color: accent.chipColor
+                            }}
+                          >
                             {service.bullets.map((bullet) => (
-                              <Stack
+                              <Box
+                                component="li"
                                 key={bullet}
-                                direction="row"
-                                spacing={1.05}
-                                alignItems="center"
+                                sx={{
+                                  pl: 0.15,
+                                  "&::marker": {
+                                    fontSize: "0.9rem"
+                                  }
+                                }}
                               >
-                                <Box
-                                  sx={{
-                                    width: 7,
-                                    height: 7,
-                                    borderRadius: "50%",
-                                    bgcolor: accent.chipColor,
-                                    flexShrink: 0,
-                                    alignSelf: "flex-start",
-                                    mt: "0.42rem"
-                                  }}
-                                />
                                 <Typography
+                                  component="span"
                                   color="text.secondary"
                                   sx={{ lineHeight: 1.58 }}
                                 >
                                   {bullet}
                                 </Typography>
-                              </Stack>
+                              </Box>
                             ))}
-                          </Stack>
+                          </Box>
                         </Box>
 
                         <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>

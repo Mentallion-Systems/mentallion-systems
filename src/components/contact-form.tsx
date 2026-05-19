@@ -11,19 +11,53 @@ export function ContactForm() {
     email: "",
     brief: ""
   });
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [status, setStatus] = React.useState<{
+    type: "success" | "error";
+    message: string;
+  } | null>(null);
 
-  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const subject = encodeURIComponent(
-      `Project inquiry from ${form.name || "Website visitor"}`
-    );
+    setIsSubmitting(true);
+    setStatus(null);
 
-    const body = encodeURIComponent(
-      `Name: ${form.name}\nEmail: ${form.email}\n\nWhat we are trying to build or fix:\n${form.brief}`
-    );
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(form)
+      });
 
-    window.location.href = `mailto:${site.emails.inquiries}?subject=${subject}&body=${body}`;
+      const data = (await response.json()) as { error?: string };
+
+      if (!response.ok) {
+        throw new Error(data.error || "Something went wrong.");
+      }
+
+      setForm({
+        name: "",
+        email: "",
+        brief: ""
+      });
+      setStatus({
+        type: "success",
+        message: `Your message was sent to ${site.emails.inquiry}.`
+      });
+    } catch (error) {
+      setStatus({
+        type: "error",
+        message:
+          error instanceof Error
+            ? error.message
+            : "Something went wrong while sending your message."
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const fieldSx = {
@@ -52,9 +86,7 @@ export function ContactForm() {
           <Typography
             variant="h4"
             sx={{
-              mb: 1,
-              fontWeight: 800,
-              letterSpacing: "-0.04em"
+              mb: 1
             }}
           >
             Start the conversation
@@ -81,6 +113,7 @@ export function ContactForm() {
                 placeholder="Who should we be talking to?"
                 required
                 fullWidth
+                disabled={isSubmitting}
                 value={form.name}
                 onChange={(event) =>
                   setForm((current) => ({
@@ -109,6 +142,7 @@ export function ContactForm() {
                 placeholder="Where can we reach you?"
                 required
                 fullWidth
+                disabled={isSubmitting}
                 value={form.email}
                 onChange={(event) =>
                   setForm((current) => ({
@@ -138,6 +172,7 @@ export function ContactForm() {
                 fullWidth
                 multiline
                 minRows={7}
+                disabled={isSubmitting}
                 value={form.brief}
                 onChange={(event) =>
                   setForm((current) => ({
@@ -171,6 +206,7 @@ export function ContactForm() {
             variant="contained"
             size="large"
             endIcon={<SendOutlinedIcon fontSize="small" />}
+            disabled={isSubmitting}
             sx={{
               borderRadius: 999,
               px: 3,
@@ -181,7 +217,7 @@ export function ContactForm() {
                 `0 18px 45px ${alpha(theme.palette.primary.main, 0.28)}`
             }}
           >
-            Send message
+            {isSubmitting ? "Sending..." : "Send message"}
           </Button>
 
           <Typography
@@ -195,6 +231,18 @@ export function ContactForm() {
             We reply within a few hours. Usually faster.
           </Typography>
         </Stack>
+
+        {status ? (
+          <Typography
+            sx={{
+              color: status.type === "success" ? "primary.main" : "error.main",
+              fontSize: "0.95rem",
+              lineHeight: 1.6
+            }}
+          >
+            {status.message}
+          </Typography>
+        ) : null}
 
         <Box
           sx={{
@@ -218,7 +266,7 @@ export function ContactForm() {
             Helpful to include
           </Typography>
 
-          <Grid container spacing={1.1}>
+          <Grid container spacing={0.3}>
             {[
               "What the workflow or product is supposed to do",
               "What is blocked, manual, or unreliable right now",
@@ -226,29 +274,30 @@ export function ContactForm() {
             ].map((item) => (
               <Grid key={item} size={{ xs: 12, sm: 4 }}>
                 <Box
+                  component="ul"
                   sx={{
-                    display: "grid",
-                    gridTemplateColumns: "8px minmax(0, 1fr)",
-                    columnGap: 0.75,
-                    alignItems: "start"
+                    m: 0,
+                    pl: 2.1,
+                    color: "primary.main"
                   }}
                 >
                   <Box
+                    component="li"
                     sx={{
-                      width: 6,
-                      height: 6,
-                      borderRadius: "50%",
-                      bgcolor: "primary.main",
-                      flexShrink: 0,
-                      mt: "0.46rem"
+                      pl: 0.1,
+                      "&::marker": {
+                        fontSize: "0.88rem"
+                      }
                     }}
-                  />
-                  <Typography
-                    color="text.secondary"
-                    sx={{ fontSize: "0.9rem", lineHeight: 1.55 }}
                   >
-                    {item}
-                  </Typography>
+                    <Typography
+                      component="span"
+                      color="text.secondary"
+                      sx={{ fontSize: "0.9rem", lineHeight: 1.55 }}
+                    >
+                      {item}
+                    </Typography>
+                  </Box>
                 </Box>
               </Grid>
             ))}

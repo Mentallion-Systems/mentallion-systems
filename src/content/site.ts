@@ -28,7 +28,7 @@ export type Service = {
 
 export type SiteEmails = {
   hello: string;
-  inquiries: string;
+  inquiry: string;
   support: string;
   careers: string;
 };
@@ -38,7 +38,7 @@ export { caseStudies, getCaseStudyBySlug, getRelatedCaseStudies, getCaseStudyVis
 
 const emails = {
   hello: "hello@mentallionsystems.com",
-  inquiries: "inquiries@mentallionsystems.com",
+  inquiry: "inquiry@mentallionsystems.com",
   support: "support@mentallionsystems.com",
   careers: "careers@mentallionsystems.com"
 } satisfies SiteEmails;
@@ -46,7 +46,11 @@ const emails = {
 export const site = {
   name: "Mentallion Systems",
   tagline: "We automate the work. You run the business.",
-  location: "Islamabad, Pakistan",
+  description:
+    "Mentallion Systems builds AI automation systems, workflow software, and production-grade platforms for businesses that want real results, not demos.",
+  url: process.env.NEXT_PUBLIC_SITE_URL || "https://mentallionsystems.com",
+  ogImage: "/opengraph-image",
+  location: "Remote",
   email: emails.hello,
   emails,
   whatsapp: "https://wa.me/923001234567",
@@ -59,7 +63,7 @@ export const site = {
     { href: "/about", label: "About" },
     { href: "/contact", label: "Contact" }
   ] satisfies NavItem[],
-  trustStrip: "Trusted by founders and business owners across Pakistan, the United States, the United Kingdom, and the Gulf.",
+  trustStrip: "Serving businesses globally across industries, including the US, UK, and Gulf.",
   hero: {
     title: "Your team is spending hours every week on work that software could handle in seconds.",
     body:
@@ -143,7 +147,7 @@ export const site = {
     {
       quote:
         "What we thought would take a dedicated person weeks is now handled in hours of processing time. We have not looked back.",
-      source: "Operations Manager, Islamabad retail business"
+      source: "Operations Manager, retail business"
     },
     {
       quote:

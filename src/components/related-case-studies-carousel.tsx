@@ -218,11 +218,10 @@ export function RelatedCaseStudiesCarousel({
                 </Typography>
 
                 <Typography
+                  variant="h4"
                   sx={{
                     fontSize: "1.18rem",
                     lineHeight: 1.2,
-                    letterSpacing: "-0.035em",
-                    fontWeight: 850,
                     display: "-webkit-box",
                     WebkitLineClamp: 2,
                     WebkitBoxOrient: "vertical",

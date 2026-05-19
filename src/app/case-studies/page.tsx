@@ -10,14 +10,36 @@ import {
   Typography
 } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import { CaseStudyMobileDetails } from "@/components/case-study-mobile-details";
+import { StructuredData } from "@/components/structured-data";
 import { SiteShell } from "@/components/site-shell";
 import { SectionReveal } from "@/components/section-reveal";
 import { caseStudies, getCaseStudyVisual } from "@/content/case-studies";
+import { site } from "@/content/site";
+import { absoluteUrl } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Case Studies | Mentallion Systems",
   description:
-    "Explore Mentallion Systems case studies across AI agents, automation workflows, SaaS platforms, document intelligence, marketplaces, and custom software systems."
+    "Explore Mentallion Systems case studies across AI agents, automation workflows, SaaS platforms, document intelligence, marketplaces, and custom software systems.",
+  alternates: {
+    canonical: "/case-studies"
+  },
+  openGraph: {
+    title: "Case Studies | Mentallion Systems",
+    description:
+      "Explore real client work across AI systems, workflow automation, SaaS platforms, OCR systems, and production software delivery.",
+    url: absoluteUrl("/case-studies"),
+    type: "website",
+    images: [absoluteUrl(site.ogImage)]
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Case Studies | Mentallion Systems",
+    description:
+      "Explore real client work across AI systems, workflow automation, SaaS platforms, OCR systems, and production software delivery.",
+    images: [absoluteUrl(site.ogImage)]
+  }
 };
 
 const CARD_IMAGE_HEIGHT = {
@@ -28,9 +50,30 @@ const CARD_IMAGE_HEIGHT = {
 
 export default function CaseStudiesPage() {
   const pageCaseStudies = caseStudies;
+  const caseStudiesPageSchema = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "Case Studies | Mentallion Systems",
+    url: absoluteUrl("/case-studies"),
+    description: metadata.description,
+    mainEntity: {
+      "@type": "ItemList",
+      itemListElement: pageCaseStudies.map((study, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        url: absoluteUrl(`/case-studies/${study.slug}`),
+        name: study.title,
+        description: study.summary
+      }))
+    }
+  };
 
   return (
     <SiteShell>
+      <StructuredData
+        id="case-studies-page-schema"
+        data={caseStudiesPageSchema}
+      />
       <Box
         sx={{
           bgcolor: "#0B0F0E",
@@ -65,12 +108,12 @@ export default function CaseStudiesPage() {
                 </Typography>
 
                 <Typography
+                  variant="h1"
                   component="h1"
                   sx={{
                     fontSize: { xs: "2.5rem", sm: "3.6rem", md: "5.8rem" },
                     lineHeight: 0.92,
                     letterSpacing: "-0.07em",
-                    fontWeight: 800,
                     maxWidth: 820
                   }}
                 >
@@ -168,14 +211,14 @@ export default function CaseStudiesPage() {
                     How we present work
                   </Typography>
 
-                  <Typography
-                    sx={{
-                      fontSize: "1.55rem",
-                      lineHeight: 1.14,
-                      fontWeight: 800,
-                      letterSpacing: "-0.04em"
-                    }}
-                  >
+                <Typography
+                  variant="h4"
+                  sx={{
+                    fontSize: "1.55rem",
+                    lineHeight: 1.14,
+                    letterSpacing: "-0.04em"
+                  }}
+                >
                     Problem, build, outcome — clearly shown.
                   </Typography>
 
@@ -242,12 +285,12 @@ export default function CaseStudiesPage() {
                 </Typography>
 
                 <Typography
+                  variant="h2"
                   component="h2"
                   sx={{
                     fontSize: { xs: "2.25rem", md: "3.6rem" },
                     lineHeight: 0.98,
                     letterSpacing: "-0.055em",
-                    fontWeight: 800
                   }}
                 >
                   Case studies with the real work visible.
@@ -288,9 +331,11 @@ export default function CaseStudiesPage() {
                 <SectionReveal key={study.slug}>
                   <Box
                     component="article"
+                    data-case-study-card={study.slug}
                     sx={{
                       height: "100%",
                       minHeight: { xs: "auto", md: 590 },
+                      scrollMarginTop: { xs: "92px", md: "110px" },
                       display: "flex",
                       flexDirection: "column",
                       bgcolor: "#FFFDF8",
@@ -386,6 +431,7 @@ export default function CaseStudiesPage() {
                     <Box
                       sx={{
                         p: { xs: 2.4, md: 3 },
+                        pb: { xs: 1.35, md: 3 },
                         display: "flex",
                         flexDirection: "column",
                         flex: 1,
@@ -394,7 +440,6 @@ export default function CaseStudiesPage() {
                     >
                       <Stack
                         direction="row"
-                        justifyContent="space-between"
                         alignItems="center"
                         spacing={2}
                         sx={{ mb: 1.4 }}
@@ -414,25 +459,15 @@ export default function CaseStudiesPage() {
                         >
                           {study.eyebrow}
                         </Typography>
-
-                        <Typography
-                          sx={{
-                            color: "text.secondary",
-                            fontSize: "0.8rem",
-                            whiteSpace: "nowrap"
-                          }}
-                        >
-                          {study.timeline}
-                        </Typography>
                       </Stack>
 
                       <Typography
+                        variant="h4"
                         component="h3"
                         sx={{
                           fontSize: { xs: "1.36rem", md: "1.48rem" },
-                          lineHeight: 1.12,
+                          lineHeight: 1.24,
                           letterSpacing: "-0.04em",
-                          fontWeight: 850,
                           mb: 1.2,
                           display: "-webkit-box",
                           WebkitLineClamp: 2,
@@ -448,7 +483,7 @@ export default function CaseStudiesPage() {
                           color: "text.secondary",
                           lineHeight: 1.58,
                           fontSize: "0.9rem",
-                          mb: 1.8,
+                          mb: { xs: 1.2, md: 1.8 },
                           display: "-webkit-box",
                           WebkitLineClamp: 2,
                           WebkitBoxOrient: "vertical",
@@ -460,7 +495,7 @@ export default function CaseStudiesPage() {
 
                       <Box
                         sx={{
-                          display: "grid",
+                          display: { xs: "none", md: "grid" },
                           gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
                           gap: 1,
                           mb: 2
@@ -516,27 +551,35 @@ export default function CaseStudiesPage() {
                         ))}
                       </Box>
 
-                      <Stack spacing={1} sx={{ mb: 2.2 }}>
-                        {study.mainPoints.slice(0, 3).map((point) => (
-                          <Stack
-                            key={point}
-                            direction="row"
-                            spacing={1}
-                            alignItems="center"
-                          >
-                            <Box
-                              sx={{
-                                width: 5,
-                                height: 5,
-                                borderRadius: "50%",
-                                bgcolor: "#1C3A2F",
-                                flexShrink: 0,
-                                alignSelf: "flex-start",
-                                mt: "0.38rem"
-                              }}
-                            />
+                      <CaseStudyMobileDetails
+                        slug={study.slug}
+                        metrics={study.metrics}
+                        mainPoints={study.mainPoints}
+                      />
 
+                      <Box
+                        component="ul"
+                        sx={{
+                          display: { xs: "none", md: "grid" },
+                          mb: 2.2,
+                          pl: 2.1,
+                          gap: 0.5,
+                          color: "#1C3A2F"
+                        }}
+                      >
+                        {study.mainPoints.slice(0, 3).map((point) => (
+                          <Box
+                            component="li"
+                            key={point}
+                            sx={{
+                              pl: 0.2,
+                              "&::marker": {
+                                fontSize: "0.9rem"
+                              }
+                            }}
+                          >
                             <Typography
+                              component="span"
                               sx={{
                                 color: "text.secondary",
                                 lineHeight: 1.45,
@@ -544,20 +587,22 @@ export default function CaseStudiesPage() {
                                 display: "-webkit-box",
                                 WebkitLineClamp: 2,
                                 WebkitBoxOrient: "vertical",
-                                overflow: "hidden"
+                                overflow: "hidden",
+                                minWidth: 0
                               }}
                             >
                               {point}
                             </Typography>
-                          </Stack>
+                          </Box>
                         ))}
-                      </Stack>
+                      </Box>
 
                       <Button
                         component={Link}
                         href={`/case-studies/${study.slug}`}
                         endIcon={<ArrowForwardIcon />}
                         sx={{
+                          display: { xs: "none", md: "inline-flex" },
                           mt: "auto",
                           alignSelf: "flex-start",
                           px: 0,

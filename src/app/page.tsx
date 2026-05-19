@@ -1,6 +1,7 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
-import SouthEastIcon from "@mui/icons-material/SouthEast";
+import NorthEastIcon from "@mui/icons-material/NorthEast";
 import {
   Box,
   Button,
@@ -13,16 +14,69 @@ import {
   Stack,
   Typography
 } from "@mui/material";
+import { StructuredData } from "@/components/structured-data";
 import { SiteShell } from "@/components/site-shell";
 import { SectionReveal } from "@/components/section-reveal";
 import { caseStudies, getCaseStudyVisual } from "@/content/case-studies";
 import { site } from "@/content/site";
+import { absoluteUrl, seo } from "@/lib/seo";
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: "/"
+  },
+  openGraph: {
+    title: "Mentallion Systems | AI systems that replace manual work",
+    description: site.description,
+    url: absoluteUrl("/"),
+    type: "website",
+    images: [absoluteUrl(site.ogImage)]
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Mentallion Systems | AI systems that replace manual work",
+    description: site.description,
+    images: [absoluteUrl(site.ogImage)]
+  }
+};
 
 export default function HomePage() {
   const selectedCaseStudies = caseStudies.slice(0, 6);
+  const marketRowLoopCount = 6;
+  const globalMarketRows = [
+    [
+      ["us", "United States"],
+      ["gb", "United Kingdom"],
+      ["sa", "Saudi Arabia"],
+      ["ae", "UAE"]
+    ],
+    [
+      ["sg", "Singapore"],
+      ["fr", "France"],
+      ["pt", "Portugal"],
+      ["de", "Germany"],
+      ["id", "Indonesia"]
+    ],
+    [
+      ["hu", "Hungary"],
+      ["za", "South Africa"],
+      ["om", "Oman"],
+      ["qa", "Qatar"]
+    ]
+  ] as const;
+  const homePageSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: seo.defaultTitle,
+    url: seo.siteUrl,
+    description: site.description,
+    about: site.services.map((service) => service.title),
+    primaryImageOfPage: absoluteUrl(site.ogImage)
+  };
 
   return (
     <SiteShell>
+      <StructuredData id="home-page-schema" data={homePageSchema} />
       <SectionReveal>
         <Box
           sx={{
@@ -54,7 +108,7 @@ export default function HomePage() {
             <source src="/videos/Gen AI Pg 5.mp4" type="video/mp4" />
           </Box>
 
-          <Box
+          {/* <Box
             component="video"
             autoPlay
             muted
@@ -72,7 +126,7 @@ export default function HomePage() {
             }}
           >
             <source src="/videos/City Scape 5 sec.mp4" type="video/mp4" />
-          </Box>
+          </Box> */}
 
           <Box
             sx={{
@@ -268,6 +322,206 @@ export default function HomePage() {
         </Box>
       </SectionReveal>
 
+      <SectionReveal>
+        <Box
+          sx={{
+            position: "relative",
+            overflow: "hidden",
+            borderTop: "1px solid rgba(28,58,47,0.08)",
+            borderBottom: "1px solid rgba(28,58,47,0.08)",
+            bgcolor: "rgba(127,191,142,0.12)",
+            py: { xs: 2.2, md: 2.8 },
+            "&::before, &::after": {
+              content: '""',
+              position: "absolute",
+              top: 0,
+              zIndex: 2,
+              width: { xs: 26, md: 70 },
+              height: "100%",
+              pointerEvents: "none"
+            },
+            "&::before": {
+              left: 0,
+              background:
+                "linear-gradient(90deg, rgba(236,246,238,1) 0%, rgba(236,246,238,0.96) 18%, rgba(236,246,238,0.72) 42%, rgba(236,246,238,0) 100%)"
+            },
+            "&::after": {
+              right: 0,
+              background:
+                "linear-gradient(270deg, rgba(236,246,238,1) 0%, rgba(236,246,238,0.96) 18%, rgba(236,246,238,0.72) 42%, rgba(236,246,238,0) 100%)"
+            },
+            "@keyframes globalFlagsMarqueeA": {
+              "0%": {
+                transform: "translate3d(0, 0, 0)"
+              },
+              "100%": {
+                transform: "translate3d(-50%, 0, 0)"
+              }
+            },
+            "@keyframes globalFlagsMarqueeB": {
+              "0%": {
+                transform: "translate3d(-50%, 0, 0)"
+              },
+              "100%": {
+                transform: "translate3d(0, 0, 0)"
+              }
+            },
+            "&:hover .global-flags-track": {
+              animationPlayState: "paused"
+            }
+          }}
+        >
+          <Box sx={{ position: "relative", zIndex: 1, width: "100%" }}>
+            <Container maxWidth="lg">
+              <Box sx={{ px: { xs: 0.5, md: 0.75 }, pb: 1.1 }}>
+                <Typography
+                  sx={{
+                    color: "primary.main",
+                    fontSize: { xs: "0.74rem", md: "0.79rem" },
+                    letterSpacing: "0.18em",
+                    textTransform: "uppercase",
+                    fontWeight: 800,
+                    mb: 0.65
+                  }}
+                >
+                  Markets we&apos;ve worked across
+                </Typography>
+
+                <Typography
+                  sx={{
+                    color: "text.secondary",
+                    fontSize: { xs: "0.92rem", md: "0.98rem" },
+                    maxWidth: 620,
+                    lineHeight: 1.6
+                  }}
+                >
+                  Delivery experience across global markets, teams, and
+                  operating environments.
+                </Typography>
+              </Box>
+            </Container>
+
+            <Container maxWidth="lg">
+              <Stack spacing={{ xs: 1.35, md: 1.55 }}>
+                {globalMarketRows.map((row, rowIndex) => (
+                  <Box
+                    key={`market-row-${rowIndex}`}
+                    sx={{
+                      position: "relative",
+                      overflow: "hidden",
+                      mx: { xs: -2, md: -4 },
+                      px: { xs: 2, md: 4 },
+                      borderRadius: { md: "999px" },
+                      "&::before, &::after": {
+                        content: '""',
+                        position: "absolute",
+                        top: 0,
+                        zIndex: 2,
+                        width: { xs: 54, md: 128 },
+                        height: "100%",
+                        pointerEvents: "none"
+                      },
+                      "&::before": {
+                        left: 0,
+                        background:
+                          "linear-gradient(90deg, rgba(236,246,238,1) 0%, rgba(236,246,238,0.98) 18%, rgba(236,246,238,0.88) 36%, rgba(236,246,238,0.62) 58%, rgba(236,246,238,0.24) 78%, rgba(236,246,238,0) 100%)"
+                      },
+                      "&::after": {
+                        right: 0,
+                        background:
+                          "linear-gradient(270deg, rgba(236,246,238,1) 0%, rgba(236,246,238,0.98) 18%, rgba(236,246,238,0.88) 36%, rgba(236,246,238,0.62) 58%, rgba(236,246,238,0.24) 78%, rgba(236,246,238,0) 100%)"
+                      }
+                    }}
+                  >
+                    <Box
+                      className="global-flags-track"
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        width: "max-content",
+                        gap: { xs: 1.1, md: 1.7 },
+                        willChange: "transform",
+                        transform: "translate3d(0, 0, 0)",
+                        backfaceVisibility: "hidden",
+                        opacity: rowIndex === 1 ? 1 : 0.92,
+                        animation:
+                          rowIndex === 0
+                            ? "globalFlagsMarqueeA 40s linear infinite"
+                            : rowIndex === 1
+                              ? "globalFlagsMarqueeB 40s linear infinite"
+                              : "globalFlagsMarqueeA 40s linear infinite"
+                      }}
+                    >
+                      {Array.from({ length: marketRowLoopCount }).flatMap(() => row).map(([countryCode, label], index) => (
+                        <Stack
+                          key={`${label}-${index}`}
+                          direction="row"
+                          spacing={1}
+                          alignItems="center"
+                          sx={{
+                            flex: "0 0 auto",
+                            px: { xs: 1.4, md: 1.9 },
+                            py: { xs: 0.86, md: 0.98 },
+                            borderRadius: 999,
+                            bgcolor:
+                              rowIndex === 1
+                                ? "rgba(255,255,255,0.9)"
+                                : "rgba(255,255,255,0.84)",
+                            border: "1px solid rgba(28,58,47,0.07)",
+                            boxShadow:
+                              rowIndex === 1
+                                ? "0 10px 24px rgba(16,20,19,0.05)"
+                                : "0 9px 22px rgba(16,20,19,0.045)",
+                            backdropFilter: "blur(10px)"
+                          }}
+                        >
+                          <Box
+                            sx={{
+                              width: { xs: 28, md: 34 },
+                              height: { xs: 28, md: 34 },
+                              borderRadius: "50%",
+                              display: "grid",
+                              placeItems: "center",
+                              bgcolor: "rgba(28,58,47,0.05)",
+                              border: "1px solid rgba(28,58,47,0.06)",
+                              flexShrink: 0,
+                              overflow: "hidden"
+                            }}
+                          >
+                            <Box
+                              component="img"
+                              src={`https://flagcdn.com/w40/${countryCode}.png`}
+                              alt={`${label} flag`}
+                              loading="lazy"
+                              sx={{
+                                width: "100%",
+                                height: "100%",
+                                objectFit: "cover",
+                                display: "block"
+                              }}
+                            />
+                          </Box>
+                          <Typography
+                            sx={{
+                              fontSize: { xs: "0.82rem", md: "0.93rem" },
+                              color: "text.primary",
+                              fontWeight: 600,
+                              whiteSpace: "nowrap"
+                            }}
+                          >
+                            {label}
+                          </Typography>
+                        </Stack>
+                      ))}
+                    </Box>
+                  </Box>
+                ))}
+              </Stack>
+            </Container>
+          </Box>
+        </Box>
+      </SectionReveal>
+
       <Container maxWidth="lg" sx={{ pb: { xs: 7, md: 12 } }}>
         <SectionReveal>
           <Box
@@ -361,7 +615,18 @@ export default function HomePage() {
               <Button
                 component={Link}
                 href="/case-studies"
-                endIcon={<SouthEastIcon fontSize="small" />}
+                endIcon={<NorthEastIcon fontSize="small" />}
+                sx={{
+                  alignSelf: "flex-start",
+                  px: 1.6,
+                  py: 0.8,
+                  minWidth: "auto",
+                  borderRadius: 1.5,
+                  textTransform: "none",
+                  "&:hover": {
+                    borderRadius: 1.5
+                  }
+                }}
               >
                 View all case studies
               </Button>

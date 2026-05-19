@@ -10,11 +10,13 @@ import {
   Stack,
   Typography
 } from "@mui/material";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import { BackToCaseStudiesButton } from "@/components/back-to-case-studies-button";
 import { RelatedCaseStudiesCarousel } from "@/components/related-case-studies-carousel";
+import { StructuredData } from "@/components/structured-data";
 import { SiteShell } from "@/components/site-shell";
 import { SectionReveal } from "@/components/section-reveal";
+import { absoluteUrl } from "@/lib/seo";
 import {
   caseStudies,
   getCaseStudyVisual,
@@ -46,7 +48,23 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   return {
     title: `${study.title} | Mentallion Systems`,
-    description: study.summary
+    description: study.summary,
+    alternates: {
+      canonical: `/case-studies/${study.slug}`
+    },
+    openGraph: {
+      title: `${study.title} | Mentallion Systems`,
+      description: study.summary,
+      url: absoluteUrl(`/case-studies/${study.slug}`),
+      type: "article",
+      images: [absoluteUrl(study.bannerImageUrl)]
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${study.title} | Mentallion Systems`,
+      description: study.summary,
+      images: [absoluteUrl(study.bannerImageUrl)]
+    }
   };
 }
 
@@ -72,9 +90,32 @@ export default async function CaseStudyDetailPage({ params }: PageProps) {
       }
     };
   });
+  const caseStudySchema = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: study.title,
+    description: study.summary,
+    url: absoluteUrl(`/case-studies/${study.slug}`),
+    image: absoluteUrl(study.bannerImageUrl),
+    author: {
+      "@type": "Organization",
+      name: "Mentallion Systems"
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "Mentallion Systems",
+      logo: {
+        "@type": "ImageObject",
+        url: absoluteUrl("/images/logo/logo-v2.png")
+      }
+    },
+    about: [study.industry, study.domain, ...study.services],
+    articleSection: "Case Studies"
+  };
 
   return (
     <SiteShell>
+      <StructuredData id={`case-study-schema-${study.slug}`} data={caseStudySchema} />
       <Box
         sx={{
           bgcolor: "#0B0F0E",
@@ -126,7 +167,10 @@ export default async function CaseStudyDetailPage({ params }: PageProps) {
               position: "absolute",
               inset: 0,
               background:
-                "linear-gradient(90deg, rgba(8,12,11,0.92) 0%, rgba(8,12,11,0.7) 34%, rgba(8,12,11,0.28) 62%, rgba(8,12,11,0.08) 100%), linear-gradient(180deg, rgba(8,12,11,0.14) 0%, rgba(8,12,11,0.44) 58%, rgba(8,12,11,0.78) 100%)"
+                {
+                  xs: "linear-gradient(90deg, rgba(8,12,11,0.76) 0%, rgba(8,12,11,0.52) 36%, rgba(8,12,11,0.18) 66%, rgba(8,12,11,0.04) 100%), linear-gradient(180deg, rgba(8,12,11,0.08) 0%, rgba(8,12,11,0.28) 58%, rgba(8,12,11,0.58) 100%)",
+                  md: "linear-gradient(90deg, rgba(8,12,11,0.84) 0%, rgba(8,12,11,0.6) 34%, rgba(8,12,11,0.22) 62%, rgba(8,12,11,0.06) 100%), linear-gradient(180deg, rgba(8,12,11,0.1) 0%, rgba(8,12,11,0.34) 58%, rgba(8,12,11,0.68) 100%)"
+                }
             }}
           />
 
@@ -140,24 +184,7 @@ export default async function CaseStudyDetailPage({ params }: PageProps) {
           >
             <SectionReveal>
               <Box sx={{ maxWidth: 880 }}>
-                <Button
-                  component={Link}
-                  href="/case-studies"
-                  startIcon={<ArrowBackIcon />}
-                  sx={{
-                    color: "rgba(255,253,248,0.8)",
-                    textTransform: "none",
-                    px: 0,
-                    mb: 3,
-                    fontWeight: 700,
-                    "&:hover": {
-                      bgcolor: "transparent",
-                      color: "#FFFDF8"
-                    }
-                  }}
-                >
-                  Back to case studies
-                </Button>
+                <BackToCaseStudiesButton />
 
                 <Stack
                   direction="row"
@@ -187,12 +214,12 @@ export default async function CaseStudyDetailPage({ params }: PageProps) {
                 </Stack>
 
                 <Typography
+                  variant="h1"
                   component="h1"
                   sx={{
                     fontSize: { xs: "2.45rem", sm: "3.8rem", md: "6.3rem" },
                     lineHeight: 0.9,
                     letterSpacing: "-0.075em",
-                    fontWeight: 850,
                     maxWidth: 940
                   }}
                 >
@@ -229,12 +256,12 @@ export default async function CaseStudyDetailPage({ params }: PageProps) {
             <SectionReveal>
               <Box>
                 <Typography
+                  variant="h2"
                   component="h2"
                   sx={{
                     fontSize: { xs: "2rem", md: "2.8rem" },
                     lineHeight: 1,
                     letterSpacing: "-0.055em",
-                    fontWeight: 850,
                     mb: 2
                   }}
                 >
@@ -266,7 +293,8 @@ export default async function CaseStudyDetailPage({ params }: PageProps) {
                       key={metric.label}
                       sx={{
                         border: "1px solid rgba(16,20,19,0.12)",
-                        borderBottom: "4px solid #7FBF8E",
+                        borderBottom: "4px solid",
+                        borderBottomColor: "secondary.main",
                         borderRadius: "18px",
                         p: { xs: 2, md: 2.4 },
                         bgcolor: "#FFFFFF"
@@ -359,8 +387,6 @@ export default async function CaseStudyDetailPage({ params }: PageProps) {
               >
                 <InfoBlock label="Client type" value={study.clientType} />
                 <InfoBlock label="Industry" value={study.industry} />
-                <InfoBlock label="Timeline" value={study.timeline} />
-
                 <Divider sx={{ my: 2.4 }} />
 
                 <Typography
@@ -474,12 +500,12 @@ export default async function CaseStudyDetailPage({ params }: PageProps) {
                   </Typography>
 
                   <Typography
+                    variant="h2"
                     component="h2"
                     sx={{
                       fontSize: { xs: "2rem", md: "3rem" },
                       lineHeight: 1,
                       letterSpacing: "-0.055em",
-                      fontWeight: 850
                     }}
                   >
                     Related case studies
@@ -526,12 +552,12 @@ function CaseStudyTextSection({
   return (
     <Box sx={{ mt: { xs: 4, md: 5 }, maxWidth: 850 }}>
       <Typography
+        variant="h3"
         component="h2"
         sx={{
           fontSize: { xs: "1.75rem", md: "2.25rem" },
           lineHeight: 1.08,
           letterSpacing: "-0.045em",
-          fontWeight: 850,
           mb: 1.5
         }}
       >

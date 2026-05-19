@@ -21,21 +21,14 @@ import { site } from "@/content/site";
 export function Header() {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [solid, setSolid] = React.useState(false);
-  const lastY = React.useRef(0);
 
   React.useEffect(() => {
     const onScroll = () => {
       const currentY = window.scrollY;
-      const goingUp = currentY < lastY.current;
-
-      setSolid(currentY > 12 && goingUp);
-      if (currentY === 0) {
-        setSolid(false);
-      }
-
-      lastY.current = currentY;
+      setSolid(currentY > 12);
     };
 
+    onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
@@ -46,9 +39,11 @@ export function Header() {
         position="sticky"
         elevation={0}
         sx={{
-          bgcolor: solid ? "rgba(255,253,249,0.95)" : "transparent",
-          backdropFilter: solid ? "blur(12px)" : "none",
-          borderBottom: solid ? "1px solid rgba(28,58,47,0.1)" : "1px solid transparent",
+          bgcolor: solid ? "rgba(255,253,249,0.96)" : "rgba(255,253,249,0.72)",
+          backdropFilter: "blur(14px)",
+          borderBottom: solid
+            ? "1px solid rgba(28,58,47,0.1)"
+            : "1px solid rgba(28,58,47,0.06)",
           color: "text.primary",
           transition: "all 0.25s ease"
         }}
@@ -83,7 +78,7 @@ export function Header() {
                 variant="h4"
                 sx={{
                   color: "inherit",
-                  lineHeight: 1,
+                  lineHeight: 0.98,
                   whiteSpace: { xs: "normal", sm: "nowrap" },
                   fontSize: { xs: "1.15rem", sm: "1.4rem", md: "1.65rem" }
                 }}
@@ -98,8 +93,11 @@ export function Header() {
                   component={Link}
                   href={item.href}
                   sx={{
+                    fontFamily: "var(--font-serif), serif",
                     color: "text.primary",
-                    fontWeight: 500,
+                    fontWeight: 400,
+                    fontSize: "1.02rem",
+                    letterSpacing: "-0.02em",
                     position: "relative",
                     pb: 0.5,
                     "&::after": {
@@ -154,7 +152,16 @@ export function Header() {
           </Toolbar>
         </Container>
       </AppBar>
-      <Drawer anchor="right" open={mobileOpen} onClose={() => setMobileOpen(false)}>
+      <Drawer
+        anchor="right"
+        open={mobileOpen}
+        onClose={() => setMobileOpen(false)}
+        ModalProps={{
+          keepMounted: true,
+          disableScrollLock: true,
+          disableRestoreFocus: true
+        }}
+      >
         <Box sx={{ width: { xs: "min(86vw, 320px)", sm: 320 }, p: { xs: 2.5, sm: 3 } }}>
           <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 4.5, gap: 1.5 }}>
             <Stack
@@ -176,7 +183,10 @@ export function Header() {
                   flexShrink: 0
                 }}
               />
-              <Typography variant="h5" sx={{ fontSize: { xs: "1.15rem", sm: "1.35rem" } }}>
+              <Typography
+                variant="h5"
+                sx={{ fontSize: { xs: "1.15rem", sm: "1.35rem" }, lineHeight: 1 }}
+              >
                 {site.name}
               </Typography>
             </Stack>
@@ -192,6 +202,7 @@ export function Header() {
                 href={item.href}
                 onClick={() => setMobileOpen(false)}
                 variant="h6"
+                sx={{ fontSize: "1.22rem" }}
               >
                 {item.label}
               </Typography>

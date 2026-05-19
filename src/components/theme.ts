@@ -31,28 +31,39 @@ export const theme = createTheme({
     fontFamily: "var(--font-sans), sans-serif",
     h1: {
       fontFamily: "var(--font-serif), serif",
-      fontWeight: 500,
+      fontWeight: 400,
       lineHeight: 0.96,
-      letterSpacing: "-0.04em"
+      letterSpacing: "-0.055em"
     },
     h2: {
       fontFamily: "var(--font-serif), serif",
-      fontWeight: 500,
-      lineHeight: 1,
-      letterSpacing: "-0.03em"
+      fontWeight: 400,
+      lineHeight: 0.98,
+      letterSpacing: "-0.045em"
     },
     h3: {
       fontFamily: "var(--font-serif), serif",
-      fontWeight: 500,
-      lineHeight: 1.08,
-      letterSpacing: "-0.02em"
+      fontWeight: 400,
+      lineHeight: 1.02,
+      letterSpacing: "-0.04em"
     },
     h4: {
-      fontWeight: 600,
-      letterSpacing: "-0.02em"
+      fontFamily: "var(--font-serif), serif",
+      fontWeight: 400,
+      lineHeight: 1.08,
+      letterSpacing: "-0.035em"
     },
     h5: {
-      fontWeight: 600
+      fontFamily: "var(--font-serif), serif",
+      fontWeight: 400,
+      lineHeight: 1.12,
+      letterSpacing: "-0.025em"
+    },
+    h6: {
+      fontFamily: "var(--font-serif), serif",
+      fontWeight: 400,
+      lineHeight: 1.16,
+      letterSpacing: "-0.02em"
     },
     body1: {
       fontSize: "1.05rem",
@@ -64,8 +75,8 @@ export const theme = createTheme({
     },
     button: {
       textTransform: "none",
-      fontWeight: 600,
-      letterSpacing: "-0.01em"
+      fontWeight: 650,
+      letterSpacing: "-0.015em"
     }
   },
   components: {

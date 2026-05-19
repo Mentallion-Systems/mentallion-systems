@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
-import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
+import PublicOutlinedIcon from "@mui/icons-material/PublicOutlined";
 import {
   Box,
   Button,
@@ -16,20 +16,66 @@ import {
   Stack,
   Typography
 } from "@mui/material";
+import { StructuredData } from "@/components/structured-data";
 import { SiteShell } from "@/components/site-shell";
 import { SectionReveal } from "@/components/section-reveal";
 import { ContactForm } from "@/components/contact-form";
 import { site } from "@/content/site";
+import { absoluteUrl } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Contact",
   description:
-    "Tell us what you're working on. We'll read it, think about it, and get back to you honestly."
+    "Tell us what you're working on. We'll read it, think about it, and get back to you honestly.",
+  alternates: {
+    canonical: "/contact"
+  },
+  openGraph: {
+    title: "Contact Mentallion Systems",
+    description:
+      "Reach out about AI systems, workflow automation, SaaS builds, or custom software. Start the conversation with Mentallion Systems.",
+    url: absoluteUrl("/contact"),
+    type: "website",
+    images: [absoluteUrl(site.ogImage)]
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Contact Mentallion Systems",
+    description:
+      "Reach out about AI systems, workflow automation, SaaS builds, or custom software. Start the conversation with Mentallion Systems.",
+    images: [absoluteUrl(site.ogImage)]
+  }
 };
 
 export default function ContactPage() {
+  const contactPageSchema = {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    name: "Contact Mentallion Systems",
+    url: absoluteUrl("/contact"),
+    description: metadata.description,
+    mainEntity: {
+      "@type": "Organization",
+      name: site.name,
+      email: site.emails.hello,
+      contactPoint: [
+        {
+          "@type": "ContactPoint",
+          contactType: "sales",
+          email: site.emails.inquiry
+        },
+        {
+          "@type": "ContactPoint",
+          contactType: "customer support",
+          email: site.emails.support
+        }
+      ]
+    }
+  };
+
   return (
     <SiteShell>
+      <StructuredData id="contact-page-schema" data={contactPageSchema} />
       <Box
         sx={{
           position: "relative",
@@ -141,7 +187,6 @@ export default function ContactPage() {
                             variant="h5"
                             sx={{
                               mb: 0.8,
-                              fontWeight: 800,
                               letterSpacing: "-0.03em"
                             }}
                           >
@@ -176,7 +221,7 @@ export default function ContactPage() {
                                 Project inquiries
                               </Typography>
                               <Typography color="text.secondary" sx={{ mt: 0.35 }}>
-                                {site.emails.inquiries}
+                                {site.emails.inquiry}
                               </Typography>
                             </Box>
                           </Stack>
@@ -192,14 +237,15 @@ export default function ContactPage() {
                                 flexShrink: 0
                               }}
                             >
-                              <LocationOnOutlinedIcon color="primary" fontSize="small" />
+                              <PublicOutlinedIcon color="primary" fontSize="small" />
                             </Box>
                             <Box sx={{ pt: "0.02rem" }}>
                               <Typography sx={{ fontWeight: 700, lineHeight: 1.35 }}>
-                                Location
+                                Coverage
                               </Typography>
                               <Typography color="text.secondary" sx={{ mt: 0.35 }}>
-                                {site.location} | UTC+5
+                                Serving businesses globally across industries,
+                                including the US, UK, and Gulf.
                               </Typography>
                             </Box>
                           </Stack>
@@ -249,7 +295,6 @@ export default function ContactPage() {
                       variant="h4"
                       sx={{
                         maxWidth: 360,
-                        fontWeight: 800,
                         letterSpacing: "-0.04em",
                         lineHeight: 1.08,
                         color: "primary.main"
@@ -271,7 +316,7 @@ export default function ContactPage() {
                       <Typography color="text.secondary">
                         Project inquiries:{" "}
                         <Box component="span" sx={{ color: "text.primary", wordBreak: "break-word" }}>
-                          {site.emails.inquiries}
+                          {site.emails.inquiry}
                         </Box>
                       </Typography>
 

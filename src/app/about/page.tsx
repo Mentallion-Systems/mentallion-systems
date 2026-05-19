@@ -10,14 +10,34 @@ import {
   Stack,
   Typography
 } from "@mui/material";
+import { StructuredData } from "@/components/structured-data";
 import { SiteShell } from "@/components/site-shell";
 import { SectionReveal } from "@/components/section-reveal";
 import { site } from "@/content/site";
+import { absoluteUrl } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "About",
   description:
-    "Mentallion Systems is an engineering team building AI systems, automation workflows, SaaS platforms, and reliable digital products for businesses that need software to work in the real world."
+    "Mentallion Systems is an engineering team building AI systems, automation workflows, SaaS platforms, and reliable digital products for businesses that need software to work in the real world.",
+  alternates: {
+    canonical: "/about"
+  },
+  openGraph: {
+    title: "About Mentallion Systems",
+    description:
+      "Meet the engineering team behind Mentallion Systems and how we think about AI systems, workflow automation, and production software.",
+    url: absoluteUrl("/about"),
+    type: "website",
+    images: [absoluteUrl(site.ogImage)]
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "About Mentallion Systems",
+    description:
+      "Meet the engineering team behind Mentallion Systems and how we think about AI systems, workflow automation, and production software.",
+    images: [absoluteUrl(site.ogImage)]
+  }
 };
 
 const beliefs = [
@@ -69,8 +89,23 @@ const principles = [
 ];
 
 export default function AboutPage() {
+  const aboutPageSchema = {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    name: "About Mentallion Systems",
+    url: absoluteUrl("/about"),
+    description: metadata.description,
+    mainEntity: {
+      "@type": "Organization",
+      name: site.name,
+      url: site.url,
+      description: site.description
+    }
+  };
+
   return (
     <SiteShell>
+      <StructuredData id="about-page-schema" data={aboutPageSchema} />
       <Box
         sx={{
           position: "relative",
@@ -173,9 +208,7 @@ export default function AboutPage() {
                     <Typography
                       variant="h4"
                       sx={{
-                        mb: 2,
-                        fontWeight: 800,
-                        letterSpacing: "-0.04em"
+                        mb: 2
                       }}
                     >
                       Built around engineering depth, not agency noise.
@@ -288,7 +321,6 @@ export default function AboutPage() {
                   sx={{
                     mb: 2,
                     maxWidth: 780,
-                    fontWeight: 800,
                     letterSpacing: "-0.045em",
                     lineHeight: 1.05
                   }}
@@ -326,8 +358,7 @@ export default function AboutPage() {
                           variant="h5"
                           sx={{
                             mb: 1,
-                            color: "primary.contrastText",
-                            fontWeight: 800
+                            color: "primary.contrastText"
                           }}
                         >
                           {principle.label}
@@ -397,7 +428,6 @@ export default function AboutPage() {
                             variant="h5"
                             sx={{
                               mb: 1.25,
-                              fontWeight: 800,
                               letterSpacing: "-0.03em",
                               lineHeight: 1.15
                             }}
@@ -435,7 +465,6 @@ export default function AboutPage() {
                     <Typography
                       variant="h3"
                       sx={{
-                        fontWeight: 800,
                         letterSpacing: "-0.045em",
                         lineHeight: 1.05,
                         maxWidth: 460
@@ -447,10 +476,10 @@ export default function AboutPage() {
 
                   <Grid size={{ xs: 12, md: 7 }}>
                     <Typography color="text.secondary" sx={{ lineHeight: 1.85 }}>
-                      We are based in {site.location} and work with clients across
-                      multiple time zones, including the United States, the United
-                      Kingdom, and the Gulf. Our process is designed around clear
-                      communication, fast feedback, and practical delivery.
+                      Serving businesses globally across industries, including
+                      the US, UK, and Gulf. Our process is designed around
+                      clear communication, fast feedback, and practical
+                      delivery.
                     </Typography>
 
                     <Typography color="text.secondary" sx={{ mt: 2, lineHeight: 1.85 }}>

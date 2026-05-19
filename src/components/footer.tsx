@@ -4,6 +4,8 @@ import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
 import { site } from "@/content/site";
 
 export function Footer() {
+  const copyrightYear = new Date().getFullYear();
+
   return (
     <Box component="footer" sx={{ py: { xs: 8, md: 10 } }}>
       <Container maxWidth="lg">
@@ -41,9 +43,9 @@ export function Footer() {
                   }}
                 />
                 <Typography
+                  variant="h5"
                   sx={{
-                    fontWeight: 800,
-                    letterSpacing: "-0.02em",
+                    lineHeight: 1,
                     color: "#101413"
                   }}
                 >
@@ -54,7 +56,33 @@ export function Footer() {
                 We build AI systems that replace manual work.
               </Typography>
               <Typography color="text.secondary" sx={{ maxWidth: 540 }}>
-                Based in {site.location}. Working with clients across the US, UK, Gulf, and Pakistan.
+                Serving businesses globally across industries, including the US, UK, and Gulf.
+              </Typography>
+              <Typography
+                component={Link}
+                href={`mailto:${site.emails.hello}`}
+                sx={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  mt: 1.4,
+                  px: 1.35,
+                  py: 0.75,
+                  borderRadius: 999,
+                  border: "1px solid rgba(28,58,47,0.12)",
+                  bgcolor: "rgba(255,255,255,0.5)",
+                  color: "text.secondary",
+                  textDecoration: "none",
+                  fontSize: "0.92rem",
+                  lineHeight: 1,
+                  transition: "all 0.2s ease",
+                  "&:hover": {
+                    color: "primary.main",
+                    borderColor: "rgba(28,58,47,0.22)",
+                    bgcolor: "rgba(255,255,255,0.74)"
+                  }
+                }}
+              >
+                {site.emails.hello}
               </Typography>
             </Box>
             <Button
@@ -74,11 +102,21 @@ export function Footer() {
             sx={{ mt: 5, pt: 3, borderTop: "1px solid", borderColor: "divider" }}
           >
             <Typography color="text.secondary">
-              {site.availability}
+              Copyright {copyrightYear} {site.name}. All rights reserved.
             </Typography>
             <Stack direction="row" spacing={2.5} flexWrap="wrap" useFlexGap>
               {site.nav.map((item) => (
-                <Typography key={item.href} component={Link} href={item.href} color="text.secondary">
+                <Typography
+                  key={item.href}
+                  component={Link}
+                  href={item.href}
+                  color="text.secondary"
+                  sx={{
+                    fontFamily: "var(--font-serif), serif",
+                    fontSize: "1.02rem",
+                    lineHeight: 1.1
+                  }}
+                >
                   {item.label}
                 </Typography>
               ))}
