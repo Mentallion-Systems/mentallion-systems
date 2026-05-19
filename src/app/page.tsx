@@ -43,7 +43,8 @@ export const metadata: Metadata = {
 export default function HomePage() {
   const selectedCaseStudies = caseStudies.slice(0, 6);
   const marketRowLoopCount = 6;
-  const globalMarketRows = [
+  type MarketCard = readonly [string, string];
+  const globalMarketRows: readonly MarketCard[][] = [
     [
       ["us", "United States"],
       ["gb", "United Kingdom"],
@@ -63,7 +64,7 @@ export default function HomePage() {
       ["om", "Oman"],
       ["qa", "Qatar"]
     ]
-  ] as const;
+  ];
   const homePageSchema = {
     "@context": "https://schema.org",
     "@type": "WebPage",
