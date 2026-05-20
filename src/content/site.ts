@@ -53,8 +53,7 @@ export const site = {
   location: "Remote",
   email: emails.hello,
   emails,
-  whatsapp: "https://wa.me/923001234567",
-  availability: "Taking new projects - May 2026",
+  availability: "Available for selected AI systems and automation builds",
   heroImageUrl:
     "https://images.pexels.com/photos/4623354/pexels-photo-4623354.jpeg?cs=srgb&dl=pexels-ketut-subiyanto-4623354.jpg&fm=jpg",
   nav: [
@@ -63,7 +62,8 @@ export const site = {
     { href: "/about", label: "About" },
     { href: "/contact", label: "Contact" }
   ] satisfies NavItem[],
-  trustStrip: "Serving businesses globally across industries, including the US, UK, and Gulf.",
+  trustStrip:
+    "Building practical AI systems for teams that need reliable execution, not experiments.",
   hero: {
     title: "Your team is spending hours every week on work that software could handle in seconds.",
     body:

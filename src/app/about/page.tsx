@@ -476,8 +476,8 @@ export default function AboutPage() {
 
                   <Grid size={{ xs: 12, md: 7 }}>
                     <Typography color="text.secondary" sx={{ lineHeight: 1.85 }}>
-                      Serving businesses globally across industries, including
-                      the US, UK, and Gulf. Our process is designed around
+                      Building practical AI systems for teams that need reliable
+                      execution, not experiments. Our process is designed around
                       clear communication, fast feedback, and practical
                       delivery.
                     </Typography>

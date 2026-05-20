@@ -22,13 +22,12 @@ export function CaseStudyMobileHeroFocus({
       }
 
       const rect = target.getBoundingClientRect();
-      const headerOffset = 86;
-      const centeredTop =
-        window.scrollY + rect.top - (window.innerHeight - rect.height) / 2 - headerOffset / 2;
+      const headerOffset = 94;
+      const topAlignedPosition = window.scrollY + rect.top - headerOffset;
 
       window.scrollTo({
-        top: Math.max(0, centeredTop),
-        behavior: "instant"
+        top: Math.max(0, topAlignedPosition),
+        behavior: "auto"
       });
     };
 

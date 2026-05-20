@@ -4,7 +4,15 @@ import * as React from "react";
 import Link from "next/link";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import { Box, Button, IconButton, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  IconButton,
+  Typography
+} from "@mui/material";
+import type { Swiper as SwiperType } from "swiper";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
 
 type RelatedStudyItem = {
   slug: string;
@@ -23,120 +31,76 @@ type RelatedCaseStudiesCarouselProps = {
 export function RelatedCaseStudiesCarousel({
   items
 }: RelatedCaseStudiesCarouselProps) {
-  const trackRef = React.useRef<HTMLDivElement | null>(null);
-  const [canScrollLeft, setCanScrollLeft] = React.useState(false);
-  const [canScrollRight, setCanScrollRight] = React.useState(items.length > 1);
-  const [hasOverflow, setHasOverflow] = React.useState(items.length > 1);
+  const [swiper, setSwiper] = React.useState<SwiperType | null>(null);
+  const [isBeginning, setIsBeginning] = React.useState(true);
+  const [isEnd, setIsEnd] = React.useState(items.length <= 1);
 
-  const updateScrollState = React.useCallback(() => {
-    const track = trackRef.current;
-
-    if (!track) {
-      return;
-    }
-
-    const maxScrollLeft = track.scrollWidth - track.clientWidth;
-    setHasOverflow(maxScrollLeft > 8);
-    setCanScrollLeft(track.scrollLeft > 8);
-    setCanScrollRight(track.scrollLeft < maxScrollLeft - 8);
-  }, []);
-
-  React.useEffect(() => {
-    updateScrollState();
-
-    const track = trackRef.current;
-
-    if (!track) {
-      return;
-    }
-
-    const handleResize = () => updateScrollState();
-    window.addEventListener("resize", handleResize);
-
-    return () => window.removeEventListener("resize", handleResize);
-  }, [updateScrollState]);
-
-  const scrollByAmount = React.useCallback((direction: 1 | -1) => {
-    const track = trackRef.current;
-
-    if (!track) {
-      return;
-    }
-
-    const amount = Math.max(track.clientWidth * 0.82, 280) * direction;
-
-    track.scrollBy({
-      left: amount,
-      behavior: "smooth"
-    });
+  const handleSlideState = React.useCallback((instance: SwiperType) => {
+    setIsBeginning(instance.isBeginning);
+    setIsEnd(instance.isEnd);
   }, []);
 
   return (
-    <Box sx={{ position: "relative" }}>
-      <Box sx={{ position: "relative" }}>
-        <IconButton
-          aria-label="Scroll related case studies left"
-          onClick={() => scrollByAmount(-1)}
-          disabled={!hasOverflow || !canScrollLeft}
-          sx={{
-            ...sideControlSx,
-            left: { xs: 6, sm: 10, md: -18, lg: -26 }
-          }}
-        >
-          <ArrowBackIcon fontSize="small" />
-        </IconButton>
+    <Box
+      sx={{
+        position: "relative",
+        width: "100%",
+        py: 1,
+        "& .swiper": {
+          overflow: "visible"
+        },
+        "& .swiper-slide": {
+          height: "auto"
+        }
+      }}
+    >
+      <IconButton
+        aria-label="Previous related case studies"
+        onClick={() => swiper?.slidePrev()}
+        disabled={isBeginning}
+        sx={{
+          ...sideControlSx,
+          left: { xs: -8, sm: 10, md: -18, lg: -26 }
+        }}
+      >
+        <ArrowBackIcon fontSize="small" />
+      </IconButton>
 
-        <Box
-          ref={trackRef}
-          onScroll={updateScrollState}
-          onWheel={(event) => {
-            const track = trackRef.current;
-
-            if (!track) {
-              return;
-            }
-
-            if (Math.abs(event.deltaY) > Math.abs(event.deltaX)) {
-              event.preventDefault();
-              track.scrollBy({
-                left: event.deltaY,
-                behavior: "auto"
-              });
-            }
-          }}
-          sx={{
-            display: "flex",
-            gap: 2.4,
-            overflowX: "auto",
-            overflowY: "hidden",
-            justifyContent: {
-              xs: "flex-start",
-              md: hasOverflow ? "flex-start" : "center"
-            },
-            scrollSnapType: "x proximity",
-            scrollBehavior: "smooth",
-            pb: 1,
-            px: { xs: 6.5, sm: 7.5, md: hasOverflow ? 0.5 : 0 },
-            msOverflowStyle: "none",
-            scrollbarWidth: "none",
-            "&::-webkit-scrollbar": {
-              display: "none"
-            }
-          }}
-        >
-          {items.map((item) => (
+      <Swiper
+        spaceBetween={0}
+        slidesPerView={1}
+        onSwiper={(instance) => {
+          setSwiper(instance);
+          handleSlideState(instance);
+        }}
+        onSlideChange={handleSlideState}
+        onResize={handleSlideState}
+        breakpoints={{
+          600: {
+            slidesPerView: 1.05,
+            spaceBetween: 18
+          },
+          900: {
+            slidesPerView: 2,
+            spaceBetween: 20
+          },
+          1200: {
+            slidesPerView: 3,
+            spaceBetween: 24
+          }
+        }}
+        style={{ padding: "4px 2px 16px" }}
+      >
+        {items.map((item) => (
+          <SwiperSlide key={item.slug}>
             <Box
-              key={item.slug}
               component={Link}
               href={`/case-studies/${item.slug}`}
               sx={{
-                width: { xs: "84vw", sm: 340, md: 360 },
-                minWidth: { xs: "84vw", sm: 340, md: 360 },
-                maxWidth: { xs: "84vw", sm: 340, md: 360 },
+                width: "100%",
                 minHeight: 370,
                 display: "flex",
                 flexDirection: "column",
-                scrollSnapAlign: "start",
                 textDecoration: "none",
                 color: "inherit",
                 bgcolor: "#FFFDF8",
@@ -236,7 +200,7 @@ export function RelatedCaseStudiesCarousel({
                   endIcon={<ArrowForwardIcon />}
                   sx={{
                     mt: 1.1,
-                    alignSelf: "flex-start",
+                    alignSelf: "flex-end",
                     px: 0,
                     minHeight: 0,
                     color: "#101413",
@@ -256,21 +220,21 @@ export function RelatedCaseStudiesCarousel({
                 </Button>
               </Box>
             </Box>
-          ))}
-        </Box>
+          </SwiperSlide>
+        ))}
+      </Swiper>
 
-        <IconButton
-          aria-label="Scroll related case studies right"
-          onClick={() => scrollByAmount(1)}
-          disabled={!hasOverflow || !canScrollRight}
-          sx={{
-            ...sideControlSx,
-            right: { xs: 6, sm: 10, md: -18, lg: -26 }
-          }}
-        >
-          <ArrowForwardIcon fontSize="small" />
-        </IconButton>
-      </Box>
+      <IconButton
+        aria-label="Next related case studies"
+        onClick={() => swiper?.slideNext()}
+        disabled={isEnd}
+        sx={{
+          ...sideControlSx,
+          right: { xs: -8, sm: 10, md: -18, lg: -26 }
+        }}
+      >
+        <ArrowForwardIcon fontSize="small" />
+      </IconButton>
     </Box>
   );
 }

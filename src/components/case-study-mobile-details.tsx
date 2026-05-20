@@ -160,9 +160,9 @@ export function CaseStudyMobileDetails({
                   minHeight: 78,
                   display: "flex",
                   flexDirection: "column",
-                  alignItems: "center",
+                  alignItems: "flex-start",
                   justifyContent: "center",
-                  textAlign: "center"
+                  textAlign: "left"
                 }}
               >
                 <Typography
@@ -170,7 +170,7 @@ export function CaseStudyMobileDetails({
                     fontSize: "1rem",
                     fontWeight: 850,
                     lineHeight: 1.1,
-                    textAlign: "center",
+                    textAlign: "left",
                     display: "-webkit-box",
                     WebkitLineClamp: 1,
                     WebkitBoxOrient: "vertical",
@@ -186,7 +186,7 @@ export function CaseStudyMobileDetails({
                     color: "text.secondary",
                     fontSize: "0.69rem",
                     lineHeight: 1.28,
-                    textAlign: "center",
+                    textAlign: "left",
                     display: "-webkit-box",
                     WebkitLineClamp: 2,
                     WebkitBoxOrient: "vertical",
@@ -206,7 +206,8 @@ export function CaseStudyMobileDetails({
               pl: 2.1,
               display: "grid",
               gap: 0.5,
-              color: "#1C3A2F"
+              color: "#1C3A2F",
+              textAlign: "left"
             }}
           >
             {mainPoints.slice(0, 3).map((point) => (
@@ -226,6 +227,7 @@ export function CaseStudyMobileDetails({
                     color: "text.secondary",
                     lineHeight: 1.45,
                     fontSize: "0.82rem",
+                    textAlign: "left",
                     display: "-webkit-box",
                     WebkitLineClamp: 2,
                     WebkitBoxOrient: "vertical",

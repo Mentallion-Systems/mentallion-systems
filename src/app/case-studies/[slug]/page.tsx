@@ -127,9 +127,9 @@ export default async function CaseStudyDetailPage({ params }: PageProps) {
         <Box
           sx={{
             position: "relative",
-            minHeight: { xs: 560, md: 760 },
+            minHeight: { xs: 420, sm: 500, md: 760 },
             display: "flex",
-            alignItems: "flex-end",
+            alignItems: { xs: "flex-start", md: "flex-end" },
             overflow: "hidden",
             bgcolor: "#0F1413"
           }}
@@ -141,25 +141,50 @@ export default async function CaseStudyDetailPage({ params }: PageProps) {
               display: "flex",
               alignItems: "center",
               justifyContent: { xs: "center", lg: "flex-end" },
-              px: { xs: 2, md: 4, lg: 6 },
-              py: { xs: 5, md: 5 }
+              px: { xs: 0, md: 4, lg: 6 },
+              py: { xs: 0, md: 5 },
+              overflow: "hidden"
             }}
           >
+            <Box
+              component="img"
+              src={study.bannerImageUrl}
+              alt=""
+              aria-hidden="true"
+              sx={{
+                display: { xs: "block", md: "none" },
+                position: "absolute",
+                inset: 0,
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                objectPosition: "center center",
+                transform: "scale(1.08)",
+                filter: "blur(14px)",
+                opacity: 0.48
+              }}
+            />
+
             <Box
               component="img"
               src={study.bannerImageUrl}
               alt={study.title}
               sx={{
                 width: "100%",
-                maxWidth: { xs: 620, md: 760, lg: 880 },
-                height: { xs: "72%", md: "78%" },
-                objectFit: "contain",
-                objectPosition: study.imagePosition,
+                maxWidth: { xs: "none", md: 760, lg: 880 },
+                height: { xs: "100%", md: "78%" },
+                minHeight: { xs: "100%", md: "auto" },
+                objectFit: { xs: "contain", md: "contain" },
+                objectPosition: { xs: "center center", md: study.imagePosition || "center center" },
                 display: "block",
                 ml: { lg: "auto" },
-                opacity: 0.94,
-                filter:
-                  "drop-shadow(0 18px 48px rgba(0,0,0,0.2))"
+                px: { xs: 1.5, sm: 2, md: 0 },
+                py: { xs: 1.5, sm: 2, md: 0 },
+                opacity: { xs: 0.82, md: 0.94 },
+                filter: {
+                  xs: "none",
+                  md: "drop-shadow(0 18px 48px rgba(0,0,0,0.2))"
+                }
               }}
             />
           </Box>
@@ -170,7 +195,7 @@ export default async function CaseStudyDetailPage({ params }: PageProps) {
               inset: 0,
               background:
                 {
-                  xs: "linear-gradient(90deg, rgba(8,12,11,0.76) 0%, rgba(8,12,11,0.52) 36%, rgba(8,12,11,0.18) 66%, rgba(8,12,11,0.04) 100%), linear-gradient(180deg, rgba(8,12,11,0.08) 0%, rgba(8,12,11,0.28) 58%, rgba(8,12,11,0.58) 100%)",
+                  xs: "linear-gradient(180deg, rgba(8,12,11,0.34) 0%, rgba(8,12,11,0.52) 38%, rgba(8,12,11,0.88) 100%), linear-gradient(90deg, rgba(8,12,11,0.82) 0%, rgba(8,12,11,0.46) 42%, rgba(8,12,11,0.16) 100%)",
                   md: "linear-gradient(90deg, rgba(8,12,11,0.84) 0%, rgba(8,12,11,0.6) 34%, rgba(8,12,11,0.22) 62%, rgba(8,12,11,0.06) 100%), linear-gradient(180deg, rgba(8,12,11,0.1) 0%, rgba(8,12,11,0.34) 58%, rgba(8,12,11,0.68) 100%)"
                 }
             }}
@@ -181,12 +206,21 @@ export default async function CaseStudyDetailPage({ params }: PageProps) {
             sx={{
               position: "relative",
               zIndex: 1,
-              py: { xs: 7, md: 0 },
-              pb: { xs: 7, md: 9 }
+              py: { xs: 0, md: 0 },
+              pt: { xs: 6.75, sm: 7.5, md: 0 },
+              pb: { xs: 3.5, md: 9 }
             }}
           >
             <SectionReveal>
-              <Box id="case-study-hero-content" sx={{ maxWidth: 880 }}>
+              <Box
+                id="case-study-hero-content"
+                sx={{
+                  maxWidth: 880,
+                  pt: { xs: 0, md: 8 },
+                  pr: { xs: 1.5, sm: 0, md: 0 },
+                  pb: { xs: 1, md: 0 }
+                }}
+              >
                 <BackToCaseStudiesButton />
 
                 <Stack
@@ -220,7 +254,7 @@ export default async function CaseStudyDetailPage({ params }: PageProps) {
                   variant="h1"
                   component="h1"
                   sx={{
-                    fontSize: { xs: "2.45rem", sm: "3.8rem", md: "6.3rem" },
+                    fontSize: { xs: "2.05rem", sm: "3.8rem", md: "6.3rem" },
                     lineHeight: 0.9,
                     letterSpacing: "-0.075em",
                     maxWidth: 940
@@ -231,11 +265,11 @@ export default async function CaseStudyDetailPage({ params }: PageProps) {
 
                 <Typography
                   sx={{
-                    mt: 3,
+                    mt: 1.8,
                     maxWidth: 720,
                     color: "rgba(255,253,248,0.78)",
-                    fontSize: { xs: "1.05rem", md: "1.22rem" },
-                    lineHeight: 1.7
+                    fontSize: { xs: "1rem", md: "1.22rem" },
+                    lineHeight: { xs: 1.6, md: 1.7 }
                   }}
                 >
                   {study.summary}
@@ -285,8 +319,8 @@ export default async function CaseStudyDetailPage({ params }: PageProps) {
                 <Box
                   sx={{
                     display: "grid",
-                    gridTemplateColumns: { xs: "1fr", sm: "repeat(2, 1fr)" },
-                    gap: 1.4,
+                    gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+                    gap: { xs: 1, md: 1.4 },
                     my: { xs: 4, md: 5 },
                     maxWidth: 780
                   }}
@@ -299,13 +333,13 @@ export default async function CaseStudyDetailPage({ params }: PageProps) {
                         borderBottom: "4px solid",
                         borderBottomColor: "secondary.main",
                         borderRadius: "18px",
-                        p: { xs: 2, md: 2.4 },
+                        p: { xs: 1.5, md: 2.4 },
                         bgcolor: "#FFFFFF"
                       }}
                     >
                       <Typography
                         sx={{
-                          fontSize: { xs: "1.55rem", md: "1.9rem" },
+                          fontSize: { xs: "1.35rem", md: "1.9rem" },
                           fontWeight: 900,
                           letterSpacing: "-0.04em",
                           lineHeight: 1
@@ -316,9 +350,9 @@ export default async function CaseStudyDetailPage({ params }: PageProps) {
 
                       <Typography
                         sx={{
-                          mt: 0.8,
+                          mt: 0.6,
                           color: "text.secondary",
-                          fontSize: "0.9rem",
+                          fontSize: { xs: "0.82rem", md: "0.9rem" },
                           lineHeight: 1.45
                         }}
                       >
@@ -479,36 +513,24 @@ export default async function CaseStudyDetailPage({ params }: PageProps) {
 
       {relatedStudies.length > 0 ? (
         <Box sx={{ bgcolor: "#F6F4EF" }}>
-          <Container maxWidth="xl" sx={{ py: { xs: 6, md: 9 } }}>
+          <Container maxWidth="xl" sx={{ py: { xs: 4.5, md: 9 } }}>
             <SectionReveal>
               <Stack
-                direction={{ xs: "column", md: "row" }}
+                direction="row"
                 justifyContent="space-between"
-                alignItems={{ xs: "flex-start", md: "flex-end" }}
+                alignItems="flex-end"
                 spacing={2}
-                sx={{ mb: 3.5 }}
+                sx={{ mb: { xs: 2.1, md: 3.5 }, gap: 1.5 }}
               >
-                <Box>
-                  <Typography
-                    sx={{
-                      fontSize: "0.78rem",
-                      letterSpacing: "0.12em",
-                      textTransform: "uppercase",
-                      color: "text.secondary",
-                      fontWeight: 900,
-                      mb: 1
-                    }}
-                  >
-                    More work
-                  </Typography>
-
+                <Box sx={{ minWidth: 0, flex: 1 }}>
                   <Typography
                     variant="h2"
                     component="h2"
                     sx={{
-                      fontSize: { xs: "2rem", md: "3rem" },
+                      fontSize: { xs: "1.65rem", sm: "2rem", md: "3rem" },
                       lineHeight: 1,
                       letterSpacing: "-0.055em",
+                      whiteSpace: "nowrap"
                     }}
                   >
                     Related case studies
@@ -524,13 +546,17 @@ export default async function CaseStudyDetailPage({ params }: PageProps) {
                     textTransform: "none",
                     fontWeight: 850,
                     px: 0,
+                    minWidth: "auto",
+                    flexShrink: 0,
+                    fontSize: { xs: "0.92rem", md: "1rem" },
+                    whiteSpace: "nowrap",
                     "&:hover": {
                       bgcolor: "transparent",
                       color: "#1C3A2F"
                     }
                   }}
                 >
-                  View all case studies
+                  All case studies
                 </Button>
               </Stack>
             </SectionReveal>

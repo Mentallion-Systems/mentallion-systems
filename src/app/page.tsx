@@ -17,6 +17,7 @@ import {
 import { StructuredData } from "@/components/structured-data";
 import { SiteShell } from "@/components/site-shell";
 import { SectionReveal } from "@/components/section-reveal";
+import { HomeCaseStudiesSlider } from "@/components/home-case-studies-slider";
 import { caseStudies, getCaseStudyVisual } from "@/content/case-studies";
 import { site } from "@/content/site";
 import { absoluteUrl, seo } from "@/lib/seo";
@@ -74,6 +75,15 @@ export default function HomePage() {
     about: site.services.map((service) => service.title),
     primaryImageOfPage: absoluteUrl(site.ogImage)
   };
+  const selectedCaseStudySlides = selectedCaseStudies.map((item) => ({
+    slug: item.slug,
+    title: item.title,
+    summary: item.summary,
+    metric: item.metric,
+    outcome: item.outcome,
+    category: item.category,
+    image: getCaseStudyVisual(item)
+  }));
 
   return (
     <SiteShell>
@@ -225,8 +235,7 @@ export default function HomePage() {
                       color: "rgba(247,245,242,0.78)"
                     }}
                   >
-                    No commitment. We&apos;ll tell you honestly if we&apos;re
-                    the right fit.
+                    Clear next steps, practical guidance, and a serious team to build with.
                   </Typography>
                 </Stack>
               </Grid>
@@ -366,9 +375,6 @@ export default function HomePage() {
               "100%": {
                 transform: "translate3d(0, 0, 0)"
               }
-            },
-            "&:hover .global-flags-track": {
-              animationPlayState: "paused"
             }
           }}
         >
@@ -410,8 +416,8 @@ export default function HomePage() {
                     sx={{
                       position: "relative",
                       overflow: "hidden",
-                      mx: { xs: -2, md: -4 },
-                      px: { xs: 2, md: 4 },
+                      width: "100%",
+                      px: { xs: 0, md: 0 },
                       borderRadius: { md: "999px" },
                       "&::before, &::after": {
                         content: '""',
@@ -480,28 +486,20 @@ export default function HomePage() {
                             sx={{
                               width: { xs: 28, md: 34 },
                               height: { xs: 28, md: 34 },
-                              borderRadius: "50%",
-                              display: "grid",
-                              placeItems: "center",
-                              bgcolor: "rgba(28,58,47,0.05)",
-                              border: "1px solid rgba(28,58,47,0.06)",
                               flexShrink: 0,
-                              overflow: "hidden"
+                              overflow: "hidden",
+                              borderRadius: "50%",
+                              bgcolor: "#FFFFFF",
+                              backgroundImage: `url(https://flagcdn.com/w40/${countryCode}.png)`,
+                              backgroundSize: "contain",
+                              backgroundPosition: "center",
+                              backgroundRepeat: "no-repeat",
+                              boxShadow: "inset 0 0 0 1px rgba(16,20,19,0.08)",
+                              clipPath: "circle(50%)"
                             }}
-                          >
-                            <Box
-                              component="img"
-                              src={`https://flagcdn.com/w40/${countryCode}.png`}
-                              alt={`${label} flag`}
-                              loading="lazy"
-                              sx={{
-                                width: "100%",
-                                height: "100%",
-                                objectFit: "cover",
-                                display: "block"
-                              }}
-                            />
-                          </Box>
+                            aria-label={`${label} flag`}
+                            role="img"
+                          />
                           <Typography
                             sx={{
                               fontSize: { xs: "0.82rem", md: "0.93rem" },
@@ -595,8 +593,9 @@ export default function HomePage() {
         <SectionReveal>
           <Box sx={{ mt: { xs: 8, md: 12 } }}>
             <Stack
-              direction={{ xs: "column", md: "row" }}
+              direction={{ xs: "column", sm: "row" }}
               justifyContent="space-between"
+              alignItems={{ xs: "flex-start", sm: "center" }}
               spacing={2}
               sx={{ mb: 4 }}
             >
@@ -618,7 +617,8 @@ export default function HomePage() {
                 href="/case-studies"
                 endIcon={<NorthEastIcon fontSize="small" />}
                 sx={{
-                  alignSelf: "flex-start",
+                  alignSelf: { xs: "flex-end", sm: "center" },
+                  ml: { sm: "auto" },
                   px: 1.6,
                   py: 0.8,
                   minWidth: "auto",
@@ -633,246 +633,7 @@ export default function HomePage() {
               </Button>
             </Stack>
 
-            <Box
-              sx={{
-                position: "relative",
-                overflow: "hidden",
-                mx: { xs: -2, md: -4 },
-                px: { xs: 2, md: 4 },
-                py: 1,
-                "&::before, &::after": {
-                  content: '""',
-                  position: "absolute",
-                  top: 0,
-                  zIndex: 2,
-                  width: { xs: 42, md: 110 },
-                  height: "100%",
-                  pointerEvents: "none"
-                },
-                "&::before": {
-                  left: 0,
-                  background:
-                    "linear-gradient(90deg, #F7F5F2 0%, rgba(247,245,242,0) 100%)"
-                },
-                "&::after": {
-                  right: 0,
-                  background:
-                    "linear-gradient(270deg, #F7F5F2 0%, rgba(247,245,242,0) 100%)"
-                },
-                "@keyframes caseStudyMarquee": {
-                  "0%": {
-                    transform: "translateX(0)"
-                  },
-                  "100%": {
-                    transform: "translateX(-50%)"
-                  }
-                },
-                "&:hover .case-study-track": {
-                  animationPlayState: "paused"
-                }
-              }}
-            >
-              <Box
-                className="case-study-track"
-                sx={{
-                  display: "flex",
-                  alignItems: "stretch",
-                  width: "max-content",
-                  gap: { xs: 2, md: 2.5 },
-                  animation: "caseStudyMarquee 42s linear infinite"
-                }}
-              >
-                {[...selectedCaseStudies, ...selectedCaseStudies].map(
-                  (item, index) => {
-                    const image = getCaseStudyVisual(item);
-
-                    return (
-                      <Card
-                        key={`${item.slug}-${index}`}
-                        component={Link}
-                        href={`/case-studies/${item.slug}`}
-                        sx={{
-                          width: { xs: 238, sm: 278, md: 300 },
-                          minWidth: { xs: 238, sm: 278, md: 300 },
-                          maxWidth: { xs: 238, sm: 278, md: 300 },
-                          height: { xs: 396, md: 420 },
-                          minHeight: { xs: 396, md: 420 },
-                          maxHeight: { xs: 396, md: 420 },
-                          flex: "0 0 auto",
-                          display: "flex",
-                          flexDirection: "column",
-                          borderRadius: 1,
-                          overflow: "hidden",
-                          textDecoration: "none",
-                          border: "1px solid rgba(20, 28, 25, 0.1)",
-                          bgcolor: "#FFFDF8",
-                          boxShadow: "0 16px 45px rgba(18, 24, 22, 0.08)",
-                          transition:
-                            "transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease",
-                          "&:hover": {
-                            transform: "translateY(-5px)",
-                            borderColor: "primary.main",
-                            boxShadow:
-                              "0 24px 70px rgba(18, 24, 22, 0.14)"
-                          }
-                        }}
-                      >
-                        <Box
-                          sx={{
-                            position: "relative",
-                            width: "100%",
-                            height: { xs: 124, md: 138 },
-                            minHeight: { xs: 124, md: 138 },
-                            maxHeight: { xs: 124, md: 138 },
-                            flex: { xs: "0 0 124px", md: "0 0 138px" },
-                            overflow: "hidden",
-                            bgcolor: "rgba(28,58,47,0.06)"
-                          }}
-                        >
-                          {image.src ? (
-                            <Box
-                              component="img"
-                              src={image.src}
-                              alt={item.title}
-                              loading="lazy"
-                              sx={{
-                                position: "absolute",
-                                inset: 0,
-                                width: "100%",
-                                height: "100%",
-                                display: "block",
-                                objectFit: "contain",
-                                objectPosition: image.position
-                              }}
-                            />
-                          ) : null}
-
-                          <Box
-                            sx={{
-                              position: "absolute",
-                              inset: 0,
-                              background:
-                                "linear-gradient(180deg, rgba(0,0,0,0.02) 0%, rgba(0,0,0,0.12) 44%, rgba(0,0,0,0.56) 100%)"
-                            }}
-                          />
-
-                          <Chip
-                            label={item.category}
-                            size="small"
-                            sx={{
-                              position: "absolute",
-                              left: 12,
-                              bottom: 12,
-                              height: 24,
-                              maxWidth: "calc(100% - 24px)",
-                              borderRadius: 999,
-                              bgcolor: "rgba(255,253,249,0.94)",
-                              color: "#101413",
-                              fontSize: "0.62rem",
-                              fontWeight: 850,
-                              "& .MuiChip-label": {
-                                px: 1,
-                                overflow: "hidden",
-                                textOverflow: "ellipsis"
-                              }
-                            }}
-                          />
-                        </Box>
-
-                        <CardContent
-                          sx={{
-                            p: 2.35,
-                            height: { xs: 272, md: 282 },
-                            minHeight: { xs: 272, md: 282 },
-                            maxHeight: { xs: 272, md: 282 },
-                            flex: "1 1 auto",
-                            display: "flex",
-                            flexDirection: "column",
-                            overflow: "hidden"
-                          }}
-                        >
-                          <Typography
-                            variant="h4"
-                            sx={{
-                              mb: 1,
-                              fontSize: { xs: "1.13rem", md: "1.22rem" },
-                              lineHeight: 1.12,
-                              letterSpacing: "-0.035em",
-                              color: "#101413",
-                              display: "-webkit-box",
-                              WebkitLineClamp: 2,
-                              WebkitBoxOrient: "vertical",
-                              overflow: "hidden"
-                            }}
-                          >
-                            {item.title}
-                          </Typography>
-
-                          <Typography
-                            color="text.secondary"
-                            sx={{
-                              mb: 1.7,
-                              fontSize: "0.81rem",
-                              lineHeight: 1.5,
-                              display: "-webkit-box",
-                              WebkitLineClamp: 3,
-                              WebkitBoxOrient: "vertical",
-                              overflow: "hidden"
-                            }}
-                          >
-                            {item.summary}
-                          </Typography>
-
-                          <Box
-                            sx={{
-                              mt: "auto",
-                              p: 1.35,
-                              height: { xs: 92, md: 96 },
-                              minHeight: { xs: 92, md: 96 },
-                              maxHeight: { xs: 92, md: 96 },
-                              borderRadius: 1,
-                              bgcolor: "rgba(28,58,47,0.045)",
-                              border: "1px solid rgba(28,58,47,0.1)",
-                              overflow: "hidden"
-                            }}
-                          >
-                            <Typography
-                              variant="h3"
-                              sx={{
-                                fontSize: "1.48rem",
-                                lineHeight: 1.05,
-                                color: "primary.main",
-                                mb: 0.4,
-                                display: "-webkit-box",
-                                WebkitLineClamp: 1,
-                                WebkitBoxOrient: "vertical",
-                                overflow: "hidden"
-                              }}
-                            >
-                              {item.metric}
-                            </Typography>
-
-                            <Typography
-                              color="text.secondary"
-                              sx={{
-                                fontSize: "0.75rem",
-                                lineHeight: 1.35,
-                                display: "-webkit-box",
-                                WebkitLineClamp: 2,
-                                WebkitBoxOrient: "vertical",
-                                overflow: "hidden"
-                              }}
-                            >
-                              {item.outcome}
-                            </Typography>
-                          </Box>
-                        </CardContent>
-                      </Card>
-                    );
-                  }
-                )}
-              </Box>
-            </Box>
+            <HomeCaseStudiesSlider items={selectedCaseStudySlides} />
           </Box>
         </SectionReveal>
 

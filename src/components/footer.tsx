@@ -7,11 +7,11 @@ export function Footer() {
   const copyrightYear = new Date().getFullYear();
 
   return (
-    <Box component="footer" sx={{ py: { xs: 8, md: 10 } }}>
+    <Box component="footer" sx={{ pt: { xs: 4, md: 5 }, pb: { xs: 5, md: 6 } }}>
       <Container maxWidth="lg">
         <Box
           sx={{
-            p: { xs: 4, md: 5 },
+            p: { xs: 3, md: 4 },
             borderRadius: 1.5,
             border: "1px solid",
             borderColor: "divider",
@@ -25,38 +25,11 @@ export function Footer() {
             alignItems={{ xs: "flex-start", md: "center" }}
           >
             <Box>
-              <Stack
-                direction="row"
-                spacing={1.2}
-                alignItems="center"
-                sx={{ mb: 1.6 }}
-              >
-                <Box
-                  component="img"
-                  src="/images/logo/logo-v2.png"
-                  alt={`${site.name} logo`}
-                  sx={{
-                    width: 34,
-                    height: 34,
-                    objectFit: "contain",
-                    flexShrink: 0
-                  }}
-                />
-                <Typography
-                  variant="h5"
-                  sx={{
-                    lineHeight: 1,
-                    color: "#101413"
-                  }}
-                >
-                  {site.name}
-                </Typography>
-              </Stack>
-              <Typography variant="h3" sx={{ mb: 1.5, maxWidth: 520 }}>
+              <Typography variant="h3" sx={{ mb: 1.25, maxWidth: 520 }}>
                 We build AI systems that replace manual work.
               </Typography>
               <Typography color="text.secondary" sx={{ maxWidth: 540 }}>
-                Serving businesses globally across industries, including the US, UK, and Gulf.
+                {site.trustStrip}
               </Typography>
               <Typography
                 component={Link}
@@ -99,10 +72,10 @@ export function Footer() {
             direction={{ xs: "column", md: "row" }}
             justifyContent="space-between"
             spacing={2}
-            sx={{ mt: 5, pt: 3, borderTop: "1px solid", borderColor: "divider" }}
+            sx={{ mt: 4, pt: 2.5, borderTop: "1px solid", borderColor: "divider" }}
           >
             <Typography color="text.secondary">
-              © 2026 Mentallion Systems. All rights reserved.
+              © {copyrightYear} Mentallion Systems. All rights reserved.
             </Typography>
             <Stack direction="row" spacing={2.5} flexWrap="wrap" useFlexGap>
               {site.nav.map((item) => (

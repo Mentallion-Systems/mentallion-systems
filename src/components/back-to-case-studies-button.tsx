@@ -27,7 +27,8 @@ export function BackToCaseStudiesButton() {
         color: "rgba(255,253,248,0.8)",
         textTransform: "none",
         px: 0,
-        mb: 3,
+        mb: { xs: 2.2, md: 3 },
+        alignSelf: "flex-start",
         fontWeight: 700,
         "&:hover": {
           bgcolor: "transparent",

@@ -8,6 +8,7 @@ const fromEmail =
   process.env.CONTACT_FROM_EMAIL || "Mentallion Systems <hello@mentallionsystems.com>";
 
 const resend = resendApiKey ? new Resend(resendApiKey) : null;
+const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export async function POST(request: Request) {
   if (!resend) {
@@ -31,6 +32,13 @@ export async function POST(request: Request) {
     if (!name || !email || !brief) {
       return NextResponse.json(
         { error: "Please fill in all required fields." },
+        { status: 400 }
+      );
+    }
+
+    if (!emailPattern.test(email)) {
+      return NextResponse.json(
+        { error: "Please enter a valid email address." },
         { status: 400 }
       );
     }

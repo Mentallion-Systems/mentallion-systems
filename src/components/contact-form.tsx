@@ -2,26 +2,107 @@
 
 import * as React from "react";
 import SendOutlinedIcon from "@mui/icons-material/SendOutlined";
-import { Box, Button, Grid, Stack, TextField, Typography, alpha } from "@mui/material";
-import { site } from "@/content/site";
+import {
+  Alert,
+  Box,
+  Button,
+  Grid,
+  Snackbar,
+  Stack,
+  TextField,
+  Typography,
+  alpha
+} from "@mui/material";
+
+type FormState = {
+  name: string;
+  email: string;
+  brief: string;
+};
+
+type FormErrors = Partial<Record<keyof FormState, string>>;
+type ToastState = {
+  type: "success" | "error";
+  message: string;
+};
+
+const initialForm: FormState = {
+  name: "",
+  email: "",
+  brief: ""
+};
 
 export function ContactForm() {
-  const [form, setForm] = React.useState({
-    name: "",
-    email: "",
-    brief: ""
-  });
+  const [form, setForm] = React.useState<FormState>(initialForm);
+  const [errors, setErrors] = React.useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = React.useState(false);
-  const [status, setStatus] = React.useState<{
-    type: "success" | "error";
-    message: string;
-  } | null>(null);
+  const [toast, setToast] = React.useState<ToastState | null>(null);
+  const [snackbarOpen, setSnackbarOpen] = React.useState(false);
+
+  const validateForm = React.useCallback((values: FormState) => {
+    const nextErrors: FormErrors = {};
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!values.name.trim()) {
+      nextErrors.name = "Please enter your name.";
+    }
+
+    if (!values.email.trim()) {
+      nextErrors.email = "Please enter your email address.";
+    } else if (!emailPattern.test(values.email.trim())) {
+      nextErrors.email = "Please enter a valid email address.";
+    }
+
+    if (!values.brief.trim()) {
+      nextErrors.brief = "Please tell us a little about the project.";
+    }
+
+    return nextErrors;
+  }, []);
+
+  const handleFieldChange =
+    (field: keyof FormState) => (event: React.ChangeEvent<HTMLInputElement>) => {
+      const nextValue = event.target.value;
+
+      setForm((current) => ({
+        ...current,
+        [field]: nextValue
+      }));
+
+      setErrors((current) => {
+        if (!current[field]) {
+          return current;
+        }
+
+        const nextErrors = validateForm({
+          ...form,
+          [field]: nextValue
+        });
+
+        return {
+          ...current,
+          [field]: nextErrors[field]
+        };
+      });
+    };
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+    const nextErrors = validateForm(form);
+
+    if (Object.keys(nextErrors).length > 0) {
+      setErrors(nextErrors);
+      setToast({
+        type: "error",
+        message: "Please complete the required fields before sending."
+      });
+      setSnackbarOpen(true);
+      return;
+    }
+
     setIsSubmitting(true);
-    setStatus(null);
+    setErrors({});
 
     try {
       const response = await fetch("/api/contact", {
@@ -38,23 +119,21 @@ export function ContactForm() {
         throw new Error(data.error || "Something went wrong.");
       }
 
-      setForm({
-        name: "",
-        email: "",
-        brief: ""
-      });
-      setStatus({
+      setForm(initialForm);
+      setToast({
         type: "success",
-        message: `Your message was sent to ${site.emails.inquiry}.`
+        message: "Thanks, we'll get back to you shortly."
       });
+      setSnackbarOpen(true);
     } catch (error) {
-      setStatus({
+      setToast({
         type: "error",
         message:
           error instanceof Error
             ? error.message
             : "Something went wrong while sending your message."
       });
+      setSnackbarOpen(true);
     } finally {
       setIsSubmitting(false);
     }
@@ -79,7 +158,11 @@ export function ContactForm() {
       component="form"
       id="contact-form"
       onSubmit={onSubmit}
-      sx={{ height: "100%" }}
+      noValidate
+      sx={{
+        height: "100%",
+        scrollMarginTop: { xs: "96px", md: "120px" }
+      }}
     >
       <Stack spacing={3} sx={{ height: "100%" }}>
         <Box>
@@ -115,12 +198,9 @@ export function ContactForm() {
                 fullWidth
                 disabled={isSubmitting}
                 value={form.name}
-                onChange={(event) =>
-                  setForm((current) => ({
-                    ...current,
-                    name: event.target.value
-                  }))
-                }
+                onChange={handleFieldChange("name")}
+                error={Boolean(errors.name)}
+                helperText={errors.name}
                 sx={fieldSx}
               />
             </Stack>
@@ -144,12 +224,9 @@ export function ContactForm() {
                 fullWidth
                 disabled={isSubmitting}
                 value={form.email}
-                onChange={(event) =>
-                  setForm((current) => ({
-                    ...current,
-                    email: event.target.value
-                  }))
-                }
+                onChange={handleFieldChange("email")}
+                error={Boolean(errors.email)}
+                helperText={errors.email}
                 sx={fieldSx}
               />
             </Stack>
@@ -174,12 +251,9 @@ export function ContactForm() {
                 minRows={7}
                 disabled={isSubmitting}
                 value={form.brief}
-                onChange={(event) =>
-                  setForm((current) => ({
-                    ...current,
-                    brief: event.target.value
-                  }))
-                }
+                onChange={handleFieldChange("brief")}
+                error={Boolean(errors.brief)}
+                helperText={errors.brief}
                 sx={{
                   ...fieldSx,
                   "& .MuiOutlinedInput-root": {
@@ -231,18 +305,6 @@ export function ContactForm() {
             We reply within a few hours. Usually faster.
           </Typography>
         </Stack>
-
-        {status ? (
-          <Typography
-            sx={{
-              color: status.type === "success" ? "primary.main" : "error.main",
-              fontSize: "0.95rem",
-              lineHeight: 1.6
-            }}
-          >
-            {status.message}
-          </Typography>
-        ) : null}
 
         <Box
           sx={{
@@ -304,6 +366,53 @@ export function ContactForm() {
           </Grid>
         </Box>
       </Stack>
+
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={4500}
+        onClose={(_, reason) => {
+          if (reason === "clickaway") {
+            return;
+          }
+
+          setSnackbarOpen(false);
+        }}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        ContentProps={{
+          sx: {
+            width: {
+              xs: "calc(100vw - 32px)",
+              sm: 420
+            }
+          }
+        }}
+        sx={{
+          position: "fixed",
+          top: {
+            xs: "88px !important",
+            md: "96px !important"
+          },
+          left: "50% !important",
+          right: "auto !important",
+          transform: "translateX(-50%)",
+          zIndex: (theme) => theme.zIndex.snackbar
+        }}
+      >
+        {toast ? (
+          <Alert
+            onClose={() => setSnackbarOpen(false)}
+            severity={toast.type}
+            variant="filled"
+            sx={{
+              width: "100%",
+              borderRadius: 2,
+              boxShadow: "0 18px 45px rgba(0,0,0,0.22)"
+            }}
+          >
+            {toast.message}
+          </Alert>
+        ) : undefined}
+      </Snackbar>
     </Box>
   );
 }

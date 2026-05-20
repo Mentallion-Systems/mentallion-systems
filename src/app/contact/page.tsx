@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
-import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import PublicOutlinedIcon from "@mui/icons-material/PublicOutlined";
 import {
   Box,
@@ -77,10 +76,12 @@ export default function ContactPage() {
     <SiteShell>
       <StructuredData id="contact-page-schema" data={contactPageSchema} />
       <Box
+        id="contact-page-top"
         sx={{
           position: "relative",
           overflow: "hidden",
           bgcolor: "background.default",
+          scrollMarginTop: { xs: "96px", md: "120px" },
           "&:before": {
             content: '""',
             position: "absolute",
@@ -112,11 +113,12 @@ export default function ContactPage() {
           sx={{
             position: "relative",
             zIndex: 1,
-            py: { xs: 7, md: 11 }
+            pt: { xs: 3.5, md: 8 },
+            pb: { xs: 4, md: 5 }
           }}
         >
           <SectionReveal>
-            <Grid container spacing={{ xs: 4, md: 5 }} alignItems="stretch">
+            <Grid container spacing={{ xs: 3, md: 5 }} alignItems="stretch">
               <Grid size={{ xs: 12, md: 5.1 }}>
                 <Stack
                   spacing={3}
@@ -244,8 +246,8 @@ export default function ContactPage() {
                                 Coverage
                               </Typography>
                               <Typography color="text.secondary" sx={{ mt: 0.35 }}>
-                                Serving businesses globally across industries,
-                                including the US, UK, and Gulf.
+                                Building practical AI systems for teams that need
+                                reliable execution, not experiments.
                               </Typography>
                             </Box>
                           </Stack>
@@ -279,7 +281,7 @@ export default function ContactPage() {
           <SectionReveal>
             <Card
               sx={{
-                mt: { xs: 4, md: 5 },
+                mt: { xs: 3, md: 4 },
                 borderRadius: 1.5,
                 overflow: "hidden",
                 border: "1px solid",
@@ -341,11 +343,8 @@ export default function ContactPage() {
                     >
                       <Button
                         component={Link}
-                        href={site.whatsapp}
-                        target="_blank"
-                        rel="noreferrer"
+                        href={`mailto:${site.emails.inquiry}`}
                         variant="outlined"
-                        startIcon={<WhatsAppIcon fontSize="small" />}
                         endIcon={<ArrowOutwardIcon fontSize="small" />}
                         sx={{
                           borderRadius: 999,
@@ -363,7 +362,7 @@ export default function ContactPage() {
                           }
                         }}
                       >
-                        WhatsApp us
+                        Email project details
                       </Button>
 
                       <Typography color="text.secondary" sx={{ lineHeight: 1.75 }}>

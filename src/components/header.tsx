@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import MenuIcon from "@mui/icons-material/Menu";
 import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
 import CloseIcon from "@mui/icons-material/Close";
@@ -21,6 +22,8 @@ import { site } from "@/content/site";
 export function Header() {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [solid, setSolid] = React.useState(false);
+  const pathname = usePathname();
+  const router = useRouter();
 
   React.useEffect(() => {
     const onScroll = () => {
@@ -32,6 +35,36 @@ export function Header() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  const navigateToContactSection = React.useCallback(() => {
+    const scrollToContactSection = () => {
+      const element = document.getElementById("contact-page-top");
+
+      if (!element) {
+        return;
+      }
+
+      const headerOffset = window.innerWidth < 900 ? 96 : 120;
+      const y = element.getBoundingClientRect().top + window.scrollY - headerOffset;
+
+      window.scrollTo({
+        top: Math.max(0, y),
+        behavior: "smooth"
+      });
+    };
+
+    setMobileOpen(false);
+
+    window.setTimeout(() => {
+      if (pathname === "/contact") {
+        window.history.replaceState(null, "", "/contact#contact-page-top");
+        scrollToContactSection();
+        return;
+      }
+
+      router.push("/contact#contact-page-top");
+    }, 180);
+  }, [pathname, router]);
 
   return (
     <>
@@ -125,7 +158,7 @@ export function Header() {
               ))}
               <Button
                 component={Link}
-                href="/contact#contact-form"
+                href="/contact#contact-page-top"
                 variant="contained"
                 endIcon={<ArrowOutwardIcon fontSize="small" />}
                 sx={{
@@ -208,11 +241,10 @@ export function Header() {
               </Typography>
             ))}
             <Button
-              component={Link}
-              href="/contact#contact-form"
+              type="button"
               variant="contained"
               endIcon={<ArrowOutwardIcon fontSize="small" />}
-              onClick={() => setMobileOpen(false)}
+              onClick={navigateToContactSection}
               sx={{
                 mt: 1,
                 bgcolor: "primary.main",
