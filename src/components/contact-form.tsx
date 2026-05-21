@@ -126,12 +126,16 @@ export function ContactForm() {
       });
       setSnackbarOpen(true);
     } catch (error) {
+      const message =
+        error instanceof Error
+          ? error.message
+          : "Something went wrong while sending your message.";
+
       setToast({
         type: "error",
-        message:
-          error instanceof Error
-            ? error.message
-            : "Something went wrong while sending your message."
+        message: message.includes("Email service is not configured")
+          ? "Contact form is temporarily unavailable. Please email us directly and we’ll get back to you shortly."
+          : message
       });
       setSnackbarOpen(true);
     } finally {
@@ -378,35 +382,40 @@ export function ContactForm() {
           setSnackbarOpen(false);
         }}
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
-        ContentProps={{
-          sx: {
-            width: {
-              xs: "calc(100vw - 32px)",
-              sm: 420
-            }
-          }
-        }}
         sx={{
-          position: "fixed",
-          top: {
-            xs: "88px !important",
-            md: "96px !important"
-          },
-          left: "50% !important",
-          right: "auto !important",
+          top: { xs: "82px", md: "92px" },
+          zIndex: (theme) => theme.zIndex.snackbar + 10,
+          left: "50%",
+          right: "auto",
           transform: "translateX(-50%)",
-          zIndex: (theme) => theme.zIndex.snackbar
+          width: "min(calc(100vw - 24px), 680px)"
         }}
       >
         {toast ? (
           <Alert
             onClose={() => setSnackbarOpen(false)}
             severity={toast.type}
-            variant="filled"
+            variant="standard"
             sx={{
               width: "100%",
+              alignItems: "flex-start",
               borderRadius: 2,
-              boxShadow: "0 18px 45px rgba(0,0,0,0.22)"
+              px: 1.25,
+              py: 0.35,
+              boxShadow: "0 16px 38px rgba(16,20,19,0.14)",
+              "& .MuiAlert-message": {
+                minWidth: 0,
+                whiteSpace: "normal",
+                wordBreak: "break-word",
+                lineHeight: 1.5,
+                fontSize: "0.95rem"
+              },
+              "& .MuiAlert-icon": {
+                pt: "2px"
+              },
+              "& .MuiAlert-action": {
+                pt: "2px"
+              }
             }}
           >
             {toast.message}
