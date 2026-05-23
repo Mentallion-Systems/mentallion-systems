@@ -18,6 +18,23 @@ export function SectionReveal({ children }: SectionRevealProps) {
       return;
     }
 
+    const revealIfInView = () => {
+      const rect = node.getBoundingClientRect();
+      const viewportHeight =
+        window.innerHeight || document.documentElement.clientHeight;
+
+      if (rect.top <= viewportHeight * 0.92 && rect.bottom >= 0) {
+        setVisible(true);
+        return true;
+      }
+
+      return false;
+    };
+
+    if (revealIfInView()) {
+      return;
+    }
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -25,12 +42,24 @@ export function SectionReveal({ children }: SectionRevealProps) {
           observer.disconnect();
         }
       },
-      { threshold: 0.14 }
+      {
+        threshold: 0.01,
+        rootMargin: "0px 0px -8% 0px"
+      }
     );
 
     observer.observe(node);
 
-    return () => observer.disconnect();
+    const frame = window.requestAnimationFrame(() => {
+      if (revealIfInView()) {
+        observer.disconnect();
+      }
+    });
+
+    return () => {
+      window.cancelAnimationFrame(frame);
+      observer.disconnect();
+    };
   }, []);
 
   return (
