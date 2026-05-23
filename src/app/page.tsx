@@ -43,29 +43,28 @@ export const metadata: Metadata = {
 
 export default function HomePage() {
   const selectedCaseStudies = caseStudies.slice(0, 6);
-  const marketRowLoopCount = 6;
   type MarketCard = readonly [string, string];
+  const marketRowLoopCount = 4;
   const globalMarketRows: readonly MarketCard[][] = [
     [
       ["us", "United States"],
       ["gb", "United Kingdom"],
       ["sa", "Saudi Arabia"],
-      ["ae", "UAE"]
-    ],
-    [
+      ["ae", "UAE"],
       ["sg", "Singapore"],
       ["fr", "France"],
-      ["pt", "Portugal"],
-      ["de", "Germany"],
-      ["id", "Indonesia"]
+      ["pt", "Portugal"]
     ],
     [
+      ["de", "Germany"],
+      ["id", "Indonesia"],
       ["hu", "Hungary"],
       ["za", "South Africa"],
       ["om", "Oman"],
       ["qa", "Qatar"]
     ]
   ];
+  const desktopMarketRow = globalMarketRows.flat();
   const homePageSchema = {
     "@context": "https://schema.org",
     "@type": "WebPage",
@@ -340,7 +339,7 @@ export default function HomePage() {
             borderTop: "1px solid rgba(28,58,47,0.08)",
             borderBottom: "1px solid rgba(28,58,47,0.08)",
             bgcolor: "rgba(127,191,142,0.12)",
-            py: { xs: 2.2, md: 2.8 },
+            py: { xs: 2.5, md: 3.1 },
             "&::before, &::after": {
               content: '""',
               position: "absolute",
@@ -380,7 +379,7 @@ export default function HomePage() {
         >
           <Box sx={{ position: "relative", zIndex: 1, width: "100%" }}>
             <Container maxWidth="lg">
-              <Box sx={{ px: { xs: 0.5, md: 0.75 }, pb: 1.1 }}>
+              <Box sx={{ px: { xs: 0.5, md: 0.75 }, pb: { xs: 1.5, md: 1.8 } }}>
                 <Typography
                   sx={{
                     color: "primary.main",
@@ -408,114 +407,160 @@ export default function HomePage() {
               </Box>
             </Container>
 
-            <Container maxWidth="lg">
-              <Stack spacing={{ xs: 1.35, md: 1.55 }}>
+            <Container maxWidth="lg" sx={{ display: { xs: "block", md: "none" } }}>
+              <Stack spacing={{ xs: 1.1, md: 1.3 }}>
                 {globalMarketRows.map((row, rowIndex) => (
                   <Box
                     key={`market-row-${rowIndex}`}
                     sx={{
                       position: "relative",
                       overflow: "hidden",
-                      width: "100%",
-                      px: { xs: 0, md: 0 },
-                      borderRadius: { md: "999px" },
-                      "&::before, &::after": {
-                        content: '""',
-                        position: "absolute",
-                        top: 0,
-                        zIndex: 2,
-                        width: { xs: 54, md: 128 },
-                        height: "100%",
-                        pointerEvents: "none"
-                      },
-                      "&::before": {
-                        left: 0,
-                        background:
-                          "linear-gradient(90deg, rgba(236,246,238,1) 0%, rgba(236,246,238,0.98) 18%, rgba(236,246,238,0.88) 36%, rgba(236,246,238,0.62) 58%, rgba(236,246,238,0.24) 78%, rgba(236,246,238,0) 100%)"
-                      },
-                      "&::after": {
-                        right: 0,
-                        background:
-                          "linear-gradient(270deg, rgba(236,246,238,1) 0%, rgba(236,246,238,0.98) 18%, rgba(236,246,238,0.88) 36%, rgba(236,246,238,0.62) 58%, rgba(236,246,238,0.24) 78%, rgba(236,246,238,0) 100%)"
-                      }
+                      width: "100%"
                     }}
                   >
                     <Box
-                      className="global-flags-track"
                       sx={{
                         display: "flex",
                         alignItems: "center",
                         width: "max-content",
-                        gap: { xs: 1.1, md: 1.7 },
+                        gap: { xs: 0.9, md: 1.2 },
                         willChange: "transform",
                         transform: "translate3d(0, 0, 0)",
                         backfaceVisibility: "hidden",
-                        opacity: rowIndex === 1 ? 1 : 0.92,
+                        opacity: rowIndex === 1 ? 1 : 0.94,
                         animation:
                           rowIndex === 0
-                            ? "globalFlagsMarqueeA 40s linear infinite"
-                            : rowIndex === 1
-                              ? "globalFlagsMarqueeB 40s linear infinite"
-                              : "globalFlagsMarqueeA 40s linear infinite"
+                            ? "globalFlagsMarqueeA 34s linear infinite"
+                            : "globalFlagsMarqueeB 30s linear infinite"
                       }}
                     >
-                      {Array.from({ length: marketRowLoopCount }).flatMap(() => row).map(([countryCode, label], index) => (
-                        <Stack
-                          key={`${label}-${index}`}
-                          direction="row"
-                          spacing={1}
-                          alignItems="center"
-                          sx={{
-                            flex: "0 0 auto",
-                            px: { xs: 1.4, md: 1.9 },
-                            py: { xs: 0.86, md: 0.98 },
-                            borderRadius: 999,
-                            bgcolor:
-                              rowIndex === 1
-                                ? "rgba(255,255,255,0.9)"
-                                : "rgba(255,255,255,0.84)",
-                            border: "1px solid rgba(28,58,47,0.07)",
-                            boxShadow:
-                              rowIndex === 1
-                                ? "0 10px 24px rgba(16,20,19,0.05)"
-                                : "0 9px 22px rgba(16,20,19,0.045)",
-                            backdropFilter: "blur(10px)"
-                          }}
-                        >
-                          <Box
+                      {Array.from({ length: marketRowLoopCount })
+                        .flatMap(() => row)
+                        .map(([countryCode, label], index) => (
+                          <Stack
+                            key={`${label}-${index}`}
+                            direction="row"
+                            spacing={{ xs: 0.85, md: 0.95 }}
+                            alignItems="center"
                             sx={{
-                              width: { xs: 28, md: 34 },
-                              height: { xs: 28, md: 34 },
-                              flexShrink: 0,
-                              overflow: "hidden",
-                              borderRadius: "50%",
-                              bgcolor: "#FFFFFF",
-                              backgroundImage: `url(https://flagcdn.com/w40/${countryCode}.png)`,
-                              backgroundSize: "contain",
-                              backgroundPosition: "center",
-                              backgroundRepeat: "no-repeat",
-                              boxShadow: "inset 0 0 0 1px rgba(16,20,19,0.08)",
-                              clipPath: "circle(50%)"
-                            }}
-                            aria-label={`${label} flag`}
-                            role="img"
-                          />
-                          <Typography
-                            sx={{
-                              fontSize: { xs: "0.82rem", md: "0.93rem" },
-                              color: "text.primary",
-                              fontWeight: 600,
-                              whiteSpace: "nowrap"
+                              flex: "0 0 auto",
+                              px: { xs: 1.15, md: 1.45 },
+                              py: { xs: 0.8, md: 0.92 },
+                              borderRadius: 999,
+                              bgcolor: "rgba(255,255,255,0.88)",
+                              border: "1px solid rgba(28,58,47,0.07)",
+                              boxShadow: "0 9px 22px rgba(16,20,19,0.045)",
+                              backdropFilter: "blur(10px)"
                             }}
                           >
-                            {label}
-                          </Typography>
-                        </Stack>
-                      ))}
+                            <Box
+                              sx={{
+                                width: { xs: 26, md: 30 },
+                                height: { xs: 26, md: 30 },
+                                flexShrink: 0,
+                                overflow: "hidden",
+                                borderRadius: "50%",
+                                bgcolor: "#FFFFFF",
+                                backgroundImage: `url(https://flagcdn.com/w40/${countryCode}.png)`,
+                                backgroundSize: "contain",
+                                backgroundPosition: "center",
+                                backgroundRepeat: "no-repeat",
+                                boxShadow: "inset 0 0 0 1px rgba(16,20,19,0.08)",
+                                clipPath: "circle(50%)"
+                              }}
+                              aria-label={`${label} flag`}
+                              role="img"
+                            />
+                            <Typography
+                              sx={{
+                                fontSize: { xs: "0.82rem", md: "0.92rem" },
+                                color: "text.primary",
+                                fontWeight: 600,
+                                whiteSpace: "nowrap"
+                              }}
+                            >
+                              {label}
+                            </Typography>
+                          </Stack>
+                        ))}
                     </Box>
                   </Box>
                 ))}
               </Stack>
+            </Container>
+
+            <Container maxWidth="lg" sx={{ display: { xs: "none", md: "block" } }}>
+              <Box
+                sx={{
+                  position: "relative",
+                  overflow: "hidden",
+                  width: "100%"
+                }}
+              >
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    width: "max-content",
+                    gap: 1.2,
+                    willChange: "transform",
+                    transform: "translate3d(0, 0, 0)",
+                    backfaceVisibility: "hidden",
+                    opacity: 0.96,
+                    animation: "globalFlagsMarqueeA 38s linear infinite"
+                  }}
+                >
+                  {Array.from({ length: marketRowLoopCount - 1 })
+                    .flatMap(() => desktopMarketRow)
+                    .map(([countryCode, label], index) => (
+                      <Stack
+                        key={`${label}-desktop-${index}`}
+                        direction="row"
+                        spacing={0.95}
+                        alignItems="center"
+                        sx={{
+                          flex: "0 0 auto",
+                          px: 1.45,
+                          py: 0.92,
+                          borderRadius: 999,
+                          bgcolor: "rgba(255,255,255,0.88)",
+                          border: "1px solid rgba(28,58,47,0.07)",
+                          boxShadow: "0 9px 22px rgba(16,20,19,0.045)",
+                          backdropFilter: "blur(10px)"
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            width: 30,
+                            height: 30,
+                            flexShrink: 0,
+                            overflow: "hidden",
+                            borderRadius: "50%",
+                            bgcolor: "#FFFFFF",
+                            backgroundImage: `url(https://flagcdn.com/w40/${countryCode}.png)`,
+                            backgroundSize: "contain",
+                            backgroundPosition: "center",
+                            backgroundRepeat: "no-repeat",
+                            boxShadow: "inset 0 0 0 1px rgba(16,20,19,0.08)",
+                            clipPath: "circle(50%)"
+                          }}
+                          aria-label={`${label} flag`}
+                          role="img"
+                        />
+                        <Typography
+                          sx={{
+                            fontSize: "0.92rem",
+                            color: "text.primary",
+                            fontWeight: 600,
+                            whiteSpace: "nowrap"
+                          }}
+                        >
+                          {label}
+                        </Typography>
+                      </Stack>
+                    ))}
+                </Box>
+              </Box>
             </Container>
           </Box>
         </Box>
