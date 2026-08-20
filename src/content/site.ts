@@ -18,6 +18,7 @@ export type Stat = {
 };
 
 export type Service = {
+  slug: string;
   title: string;
   audience: string;
   build: string;
@@ -73,11 +74,12 @@ export const site = {
     { value: "19+", label: "Production systems live" },
     { value: "$10M+", label: "Funded clients served" },
     { value: "7+", label: "Industries automated" },
-    { value: "95%", label: "Average manual work reduced" }
+    { value: "95%", label: "Peak time reduction delivered" }
   ] satisfies Stat[],
   caseStudies,
   services: [
     {
+      slug: "business-process-automation",
       title: "Business Process Automation",
       audience:
         "For teams buried in data entry, document processing, approvals, and repetitive work that should not depend on a person doing the same task all day.",
@@ -93,6 +95,7 @@ export const site = {
       tags: ["Legacy rescue", "Greenfield automation", "AI layer on existing system"]
     },
     {
+      slug: "ai-agent-development",
       title: "AI Agent Systems",
       audience:
         "For teams that need software to research, analyze, summarize, or support decisions instead of just following fixed rules.",
@@ -108,6 +111,7 @@ export const site = {
       tags: ["Greenfield build", "AI layer on existing product"]
     },
     {
+      slug: "custom-saas-development",
       title: "Custom SaaS and Software Products",
       audience:
         "For founders and operators who need a product that matches their exact workflow or who inherited a codebase they no longer trust.",
@@ -123,6 +127,7 @@ export const site = {
       tags: ["Greenfield build", "Legacy rescue", "SaaS product"]
     },
     {
+      slug: "ai-integration",
       title: "Adding AI to Existing Systems",
       audience:
         "For teams with a working product that needs smarter search, automation, recommendations, or processing without a six-month rebuild.",

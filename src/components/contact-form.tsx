@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import SendOutlinedIcon from "@mui/icons-material/SendOutlined";
 import {
   Alert,
@@ -18,6 +19,7 @@ type FormState = {
   name: string;
   email: string;
   brief: string;
+  website: string;
 };
 
 type FormErrors = Partial<Record<keyof FormState, string>>;
@@ -29,7 +31,8 @@ type ToastState = {
 const initialForm: FormState = {
   name: "",
   email: "",
-  brief: ""
+  brief: "",
+  website: ""
 };
 
 export function ContactForm() {
@@ -38,6 +41,11 @@ export function ContactForm() {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [toast, setToast] = React.useState<ToastState | null>(null);
   const [snackbarOpen, setSnackbarOpen] = React.useState(false);
+  const startedAt = React.useRef(0);
+
+  React.useEffect(() => {
+    startedAt.current = Date.now();
+  }, []);
 
   const validateForm = React.useCallback((values: FormState) => {
     const nextErrors: FormErrors = {};
@@ -45,6 +53,8 @@ export function ContactForm() {
 
     if (!values.name.trim()) {
       nextErrors.name = "Please enter your name.";
+    } else if (values.name.trim().length < 2) {
+      nextErrors.name = "Please enter at least two characters.";
     }
 
     if (!values.email.trim()) {
@@ -55,6 +65,10 @@ export function ContactForm() {
 
     if (!values.brief.trim()) {
       nextErrors.brief = "Please tell us a little about the project.";
+    } else if (values.brief.trim().length < 20) {
+      nextErrors.brief = "Please add a little more detail so we can help.";
+    } else if (values.brief.trim().length > 10000) {
+      nextErrors.brief = "Please keep the project description under 10,000 characters.";
     }
 
     return nextErrors;
@@ -103,31 +117,61 @@ export function ContactForm() {
 
     setIsSubmitting(true);
     setErrors({});
+    const abortController = new AbortController();
+    const timeoutId = window.setTimeout(() => abortController.abort(), 15_000);
 
     try {
+      const query = new URLSearchParams(window.location.search);
+      const attribution = {
+        landingPage: window.location.pathname,
+        referrer: document.referrer,
+        utmSource: query.get("utm_source") || "",
+        utmMedium: query.get("utm_medium") || "",
+        utmCampaign: query.get("utm_campaign") || "",
+        requestedService: query.get("service") || ""
+      };
       const response = await fetch("/api/contact", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify(form)
+        body: JSON.stringify({
+          ...form,
+          startedAt: startedAt.current,
+          attribution
+        }),
+        signal: abortController.signal
       });
 
-      const data = (await response.json()) as { error?: string };
+      const data = (await response.json().catch(() => ({}))) as {
+        error?: string;
+      };
 
       if (!response.ok) {
         throw new Error(data.error || "Something went wrong.");
       }
 
       setForm(initialForm);
+      startedAt.current = Date.now();
+      const trackingWindow = window as typeof window & {
+        clarity?: (...args: unknown[]) => void;
+        gtag?: (...args: unknown[]) => void;
+      };
+
+      trackingWindow.clarity?.("event", "contact_form_submitted");
+      trackingWindow.gtag?.("event", "generate_lead", {
+        form_name: "contact",
+        service: attribution.requestedService || "unspecified"
+      });
       setToast({
         type: "success",
         message: "Thanks, we'll get back to you shortly."
       });
       setSnackbarOpen(true);
     } catch (error) {
-      const message =
-        error instanceof Error
+      const message = abortController.signal.aborted
+        ? "The request took too long. Please check your connection and try again."
+        : error instanceof Error
           ? error.message
           : "Something went wrong while sending your message.";
 
@@ -139,6 +183,7 @@ export function ContactForm() {
       });
       setSnackbarOpen(true);
     } finally {
+      window.clearTimeout(timeoutId);
       setIsSubmitting(false);
     }
   };
@@ -197,14 +242,17 @@ export function ContactForm() {
 
               <TextField
                 id="contact-name"
+                name="name"
                 placeholder="Who should we be talking to?"
                 required
                 fullWidth
+                autoComplete="name"
                 disabled={isSubmitting}
                 value={form.name}
                 onChange={handleFieldChange("name")}
                 error={Boolean(errors.name)}
                 helperText={errors.name}
+                slotProps={{ htmlInput: { maxLength: 120 } }}
                 sx={fieldSx}
               />
             </Stack>
@@ -222,15 +270,18 @@ export function ContactForm() {
 
               <TextField
                 id="contact-email"
+                name="email"
                 type="email"
                 placeholder="Where can we reach you?"
                 required
                 fullWidth
+                autoComplete="email"
                 disabled={isSubmitting}
                 value={form.email}
                 onChange={handleFieldChange("email")}
                 error={Boolean(errors.email)}
                 helperText={errors.email}
+                slotProps={{ htmlInput: { maxLength: 254 } }}
                 sx={fieldSx}
               />
             </Stack>
@@ -248,6 +299,7 @@ export function ContactForm() {
 
               <TextField
                 id="contact-brief"
+                name="brief"
                 placeholder="A rough description is fine. Tell us the problem, goal, timeline, or any current blockers."
                 required
                 fullWidth
@@ -258,6 +310,7 @@ export function ContactForm() {
                 onChange={handleFieldChange("brief")}
                 error={Boolean(errors.brief)}
                 helperText={errors.brief}
+                slotProps={{ htmlInput: { maxLength: 10000 } }}
                 sx={{
                   ...fieldSx,
                   "& .MuiOutlinedInput-root": {
@@ -271,6 +324,23 @@ export function ContactForm() {
             </Stack>
           </Grid>
         </Grid>
+
+        <TextField
+          name="website"
+          value={form.website}
+          onChange={handleFieldChange("website")}
+          autoComplete="off"
+          tabIndex={-1}
+          aria-hidden="true"
+          sx={{
+            position: "absolute",
+            width: 1,
+            height: 1,
+            overflow: "hidden",
+            clip: "rect(0 0 0 0)",
+            clipPath: "inset(50%)"
+          }}
+        />
 
         <Stack
           direction={{ xs: "column", sm: "row" }}
@@ -309,6 +379,28 @@ export function ContactForm() {
             We reply within a few hours. Usually faster.
           </Typography>
         </Stack>
+
+        <Typography
+          color="text.secondary"
+          sx={{ mt: -1.4, fontSize: "0.82rem", lineHeight: 1.6 }}
+        >
+          By submitting this form, you agree that we may use your information to
+          respond to your inquiry as described in our{" "}
+          <Typography
+            component={Link}
+            href="/privacy"
+            sx={{
+              color: "primary.main",
+              fontSize: "inherit",
+              fontWeight: 700,
+              textDecoration: "underline",
+              textUnderlineOffset: "0.16em"
+            }}
+          >
+            Privacy Policy
+          </Typography>
+          .
+        </Typography>
 
         <Box
           sx={{

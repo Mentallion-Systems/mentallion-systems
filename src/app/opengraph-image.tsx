@@ -1,14 +1,23 @@
 import { ImageResponse } from "next/og";
+import { readFile } from "node:fs/promises";
+import { join } from "node:path";
 import { seo } from "@/lib/seo";
 
-export const alt = "Mentallion Systems";
+export const alt = "Mentallion Systems AI automation and software engineering";
+export const runtime = "nodejs";
 export const size = {
   width: 1200,
   height: 630
 };
 export const contentType = "image/png";
 
-export default function OpenGraphImage() {
+export default async function OpenGraphImage() {
+  const logoData = await readFile(
+    join(process.cwd(), "public/favicon.png"),
+    "base64"
+  );
+  const logoSrc = `data:image/png;base64,${logoData}`;
+
   return new ImageResponse(
     (
       <div
@@ -36,13 +45,30 @@ export default function OpenGraphImage() {
           <div
             style={{
               display: "flex",
-              fontSize: 26,
-              letterSpacing: "0.2em",
-              textTransform: "uppercase",
-              opacity: 0.78
+              alignItems: "center",
+              gap: "18px"
             }}
           >
-            Mentallion Systems
+            {/* ImageResponse requires a plain image element for embedded data URLs. */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={logoSrc}
+              alt=""
+              width={84}
+              height={84}
+              style={{ objectFit: "contain" }}
+            />
+            <div
+              style={{
+                display: "flex",
+                fontSize: 26,
+                letterSpacing: "0.2em",
+                textTransform: "uppercase",
+                opacity: 0.86
+              }}
+            >
+              Mentallion Systems
+            </div>
           </div>
           <div
             style={{

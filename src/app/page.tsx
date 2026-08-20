@@ -7,7 +7,6 @@ import {
   Button,
   Card,
   CardContent,
-  Chip,
   Container,
   Divider,
   Grid,
@@ -17,10 +16,41 @@ import {
 import { StructuredData } from "@/components/structured-data";
 import { SiteShell } from "@/components/site-shell";
 import { SectionReveal } from "@/components/section-reveal";
+import { HeroVideo } from "@/components/hero-video";
 import { HomeCaseStudiesSlider } from "@/components/home-case-studies-slider";
 import { caseStudies, getCaseStudyVisual } from "@/content/case-studies";
 import { site } from "@/content/site";
 import { absoluteUrl, seo } from "@/lib/seo";
+
+const originalHomepageCaseStudyImages: Record<
+  string,
+  { src: string; position: string }
+> = {
+  "legaltech-research-pipeline": {
+    src: "/images/legaltech-research-pipeline.jpg",
+    position: "center"
+  },
+  "retail-record-digitization": {
+    src: "/images/retail-record-digitization.jpg",
+    position: "center"
+  },
+  "edtech-grading-automation": {
+    src: "/images/edtech-grading-automation.jpg",
+    position: "center"
+  },
+  "healthcare-hipaa-platform": {
+    src: "/images/healthcare-hipaa-platform.jpg",
+    position: "center"
+  },
+  "hotel-booking-optimization": {
+    src: "/images/hotel-booking-optimization.jpg",
+    position: "center"
+  },
+  "personality-saas-rescue": {
+    src: "/images/personality-saas-rescue.jpg",
+    position: "center"
+  }
+};
 
 export const metadata: Metadata = {
   alternates: {
@@ -72,7 +102,10 @@ export default function HomePage() {
     url: seo.siteUrl,
     description: site.description,
     about: site.services.map((service) => service.title),
-    primaryImageOfPage: absoluteUrl(site.ogImage)
+    primaryImageOfPage: absoluteUrl(site.ogImage),
+    mainEntity: {
+      "@id": `${absoluteUrl("/")}#organization`
+    }
   };
   const selectedCaseStudySlides = selectedCaseStudies.map((item) => ({
     slug: item.slug,
@@ -81,7 +114,8 @@ export default function HomePage() {
     metric: item.metric,
     outcome: item.outcome,
     category: item.category,
-    image: getCaseStudyVisual(item)
+    image:
+      originalHomepageCaseStudyImages[item.slug] ?? getCaseStudyVisual(item)
   }));
 
   return (
@@ -97,26 +131,11 @@ export default function HomePage() {
             },
             display: "flex",
             alignItems: "stretch",
-            overflow: "hidden"
+            overflow: "hidden",
+            bgcolor: "#0f1413"
           }}
         >
-          <Box
-            component="video"
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="auto"
-            sx={{
-              position: "absolute",
-              inset: 0,
-              width: "100%",
-              height: "100%",
-              objectFit: "cover"
-            }}
-          >
-            <source src="/videos/Gen AI Pg 5.mp4" type="video/mp4" />
-          </Box>
+          <HeroVideo />
 
           {/* <Box
             component="video"
@@ -208,25 +227,29 @@ export default function HomePage() {
                   spacing={2}
                   sx={{ mt: 4 }}
                 >
-                  <Button
-                    component={Link}
+                  <Link
                     href="/contact#contact-form"
-                    variant="contained"
-                    endIcon={<ArrowOutwardIcon fontSize="small" />}
-                    sx={{
-                      bgcolor: "primary.main",
-                      color: "#fff !important",
-                      "&:hover": {
-                        bgcolor: "primary.dark"
-                      },
-                      "& .MuiButton-startIcon, & .MuiButton-endIcon, & .MuiSvgIcon-root":
-                        {
-                          color: "#fff !important"
-                        }
-                    }}
+                    style={{ display: "inline-flex" }}
                   >
-                    Tell us what you&apos;re building
-                  </Button>
+                    <Button
+                      component="span"
+                      variant="contained"
+                      endIcon={<ArrowOutwardIcon fontSize="small" />}
+                      sx={{
+                        bgcolor: "primary.main",
+                        color: "#fff !important",
+                        "&:hover": {
+                          bgcolor: "primary.dark"
+                        },
+                        "& .MuiButton-startIcon, & .MuiButton-endIcon, & .MuiSvgIcon-root":
+                          {
+                            color: "#fff !important"
+                          }
+                      }}
+                    >
+                      Tell us what you&apos;re building
+                    </Button>
+                  </Link>
 
                   <Typography
                     sx={{
@@ -657,25 +680,28 @@ export default function HomePage() {
                 </Typography>
               </Box>
 
-              <Button
-                component={Link}
+              <Link
                 href="/case-studies"
-                endIcon={<NorthEastIcon fontSize="small" />}
-                sx={{
-                  alignSelf: { xs: "flex-end", sm: "center" },
-                  ml: { sm: "auto" },
-                  px: 1.6,
-                  py: 0.8,
-                  minWidth: "auto",
-                  borderRadius: 1.5,
-                  textTransform: "none",
-                  "&:hover": {
-                    borderRadius: 1.5
-                  }
-                }}
+                style={{ display: "inline-flex", marginLeft: "auto" }}
               >
-                View all case studies
-              </Button>
+                <Button
+                  component="span"
+                  endIcon={<NorthEastIcon fontSize="small" />}
+                  sx={{
+                    alignSelf: { xs: "flex-end", sm: "center" },
+                    px: 1.6,
+                    py: 0.8,
+                    minWidth: "auto",
+                    borderRadius: 1.5,
+                    textTransform: "none",
+                    "&:hover": {
+                      borderRadius: 1.5
+                    }
+                  }}
+                >
+                  View all case studies
+                </Button>
+              </Link>
             </Stack>
 
             <HomeCaseStudiesSlider items={selectedCaseStudySlides} />
@@ -791,15 +817,19 @@ export default function HomePage() {
               spacing={2}
               alignItems={{ xs: "flex-start", sm: "center" }}
             >
-              <Button
-                component={Link}
+              <Link
                 href="/contact#contact-form"
-                variant="contained"
-                color="secondary"
-                endIcon={<ArrowOutwardIcon fontSize="small" />}
+                style={{ display: "inline-flex" }}
               >
-                Start the conversation
-              </Button>
+                <Button
+                  component="span"
+                  variant="contained"
+                  color="secondary"
+                  endIcon={<ArrowOutwardIcon fontSize="small" />}
+                >
+                  Start the conversation
+                </Button>
+              </Link>
 
               <Typography sx={{ color: "rgba(247,245,242,0.72)" }}>
                 We reply within a few hours. Usually faster.

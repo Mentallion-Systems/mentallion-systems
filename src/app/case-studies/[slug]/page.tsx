@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import {
   Box,
   Button,
@@ -48,8 +49,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   return {
-    title: `${study.title} | Mentallion Systems`,
+    title: `${study.title} Case Study`,
     description: study.summary,
+    keywords: [
+      study.industry,
+      study.domain,
+      study.category,
+      ...study.services,
+      ...(study.tags ?? [])
+    ],
     alternates: {
       canonical: `/case-studies/${study.slug}`
     },
@@ -94,29 +102,60 @@ export default async function CaseStudyDetailPage({ params }: PageProps) {
   const caseStudySchema = {
     "@context": "https://schema.org",
     "@type": "Article",
+    "@id": `${absoluteUrl(`/case-studies/${study.slug}`)}#article`,
     headline: study.title,
     description: study.summary,
     url: absoluteUrl(`/case-studies/${study.slug}`),
+    mainEntityOfPage: absoluteUrl(`/case-studies/${study.slug}`),
     image: absoluteUrl(study.bannerImageUrl),
     author: {
-      "@type": "Organization",
-      name: "Mentallion Systems"
+      "@id": `${absoluteUrl("/")}#organization`
     },
     publisher: {
-      "@type": "Organization",
-      name: "Mentallion Systems",
-      logo: {
-        "@type": "ImageObject",
-        url: absoluteUrl("/images/logo/logo-v2.png")
-      }
+      "@id": `${absoluteUrl("/")}#organization`
     },
+    dateModified: "2026-07-29",
     about: [study.industry, study.domain, ...study.services],
-    articleSection: "Case Studies"
+    articleSection: "Case Studies",
+    inLanguage: "en",
+    isPartOf: {
+      "@type": "CollectionPage",
+      "@id": `${absoluteUrl("/case-studies")}#collection`,
+      name: "Mentallion Systems Case Studies",
+      url: absoluteUrl("/case-studies")
+    }
+  };
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: absoluteUrl("/")
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Case Studies",
+        item: absoluteUrl("/case-studies")
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: study.title,
+        item: absoluteUrl(`/case-studies/${study.slug}`)
+      }
+    ]
   };
 
   return (
     <SiteShell>
-      <StructuredData id={`case-study-schema-${study.slug}`} data={caseStudySchema} />
+      <StructuredData
+        id={`case-study-schema-${study.slug}`}
+        data={[caseStudySchema, breadcrumbSchema]}
+      />
       <CaseStudyMobileHeroFocus targetId="case-study-hero-content" />
       <Box
         sx={{
@@ -147,36 +186,35 @@ export default async function CaseStudyDetailPage({ params }: PageProps) {
             }}
           >
             <Box
-              component="img"
-              src={study.bannerImageUrl}
-              alt=""
-              aria-hidden="true"
               sx={{
-                display: { xs: "block", md: "none" },
                 position: "absolute",
                 inset: 0,
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-                objectPosition: "center center",
+                display: { xs: "block", md: "none" },
                 transform: "scale(1.08)",
                 filter: "blur(14px)",
-                opacity: 0.48
+                opacity: 0.48,
+                "& img": {
+                  objectFit: "cover",
+                  objectPosition: "center center"
+                }
               }}
-            />
+            >
+              <Image
+                src={study.bannerImageUrl}
+                alt=""
+                aria-hidden="true"
+                fill
+                sizes="100vw"
+              />
+            </Box>
 
             <Box
-              component="img"
-              src={study.bannerImageUrl}
-              alt={study.title}
               sx={{
+                position: "relative",
                 width: "100%",
                 maxWidth: { xs: "none", md: 760, lg: 880 },
                 height: { xs: "100%", md: "78%" },
                 minHeight: { xs: "100%", md: "auto" },
-                objectFit: { xs: "contain", md: "contain" },
-                objectPosition: { xs: "center center", md: study.imagePosition || "center center" },
-                display: "block",
                 ml: { lg: "auto" },
                 px: { xs: 1.5, sm: 2, md: 0 },
                 py: { xs: 1.5, sm: 2, md: 0 },
@@ -186,7 +224,19 @@ export default async function CaseStudyDetailPage({ params }: PageProps) {
                   md: "drop-shadow(0 18px 48px rgba(0,0,0,0.2))"
                 }
               }}
-            />
+            >
+              <Image
+                src={study.bannerImageUrl}
+                alt={study.title}
+                fill
+                priority
+                sizes="(max-width: 900px) 100vw, 60vw"
+                style={{
+                  objectFit: "contain",
+                  objectPosition: study.imagePosition || "center center"
+                }}
+              />
+            </Box>
           </Box>
 
           <Box
@@ -481,30 +531,34 @@ export default async function CaseStudyDetailPage({ params }: PageProps) {
                   ))}
                 </Stack>
 
-                <Button
-                  component={Link}
+                <Link
                   href="/contact"
-                  fullWidth
-                  endIcon={<ArrowForwardIcon />}
-                  sx={{
-                    mt: 3,
-                    height: 48,
-                    borderRadius: 999,
-                    bgcolor: "primary.main",
-                    color: "#fff !important",
-                    textTransform: "none",
-                    fontWeight: 850,
-                    "& .MuiButton-endIcon, & .MuiSvgIcon-root": {
-                      color: "#fff !important"
-                    },
-                    "&:hover": {
-                      bgcolor: "primary.dark",
-                      color: "#fff !important"
-                    }
-                  }}
+                  style={{ display: "block", width: "100%" }}
                 >
-                  Discuss a similar project
-                </Button>
+                  <Button
+                    component="span"
+                    fullWidth
+                    endIcon={<ArrowForwardIcon />}
+                    sx={{
+                      mt: 3,
+                      height: 48,
+                      borderRadius: 999,
+                      bgcolor: "primary.main",
+                      color: "#fff !important",
+                      textTransform: "none",
+                      fontWeight: 850,
+                      "& .MuiButton-endIcon, & .MuiSvgIcon-root": {
+                        color: "#fff !important"
+                      },
+                      "&:hover": {
+                        bgcolor: "primary.dark",
+                        color: "#fff !important"
+                      }
+                    }}
+                  >
+                    Discuss a similar project
+                  </Button>
+                </Link>
               </Box>
             </SectionReveal>
           </Box>
@@ -537,27 +591,31 @@ export default async function CaseStudyDetailPage({ params }: PageProps) {
                   </Typography>
                 </Box>
 
-                <Button
-                  component={Link}
+                <Link
                   href="/case-studies"
-                  endIcon={<ArrowForwardIcon />}
-                  sx={{
-                    color: "#101413",
-                    textTransform: "none",
-                    fontWeight: 850,
-                    px: 0,
-                    minWidth: "auto",
-                    flexShrink: 0,
-                    fontSize: { xs: "0.92rem", md: "1rem" },
-                    whiteSpace: "nowrap",
-                    "&:hover": {
-                      bgcolor: "transparent",
-                      color: "#1C3A2F"
-                    }
-                  }}
+                  style={{ display: "inline-flex", flexShrink: 0 }}
                 >
-                  All case studies
-                </Button>
+                  <Button
+                    component="span"
+                    endIcon={<ArrowForwardIcon />}
+                    sx={{
+                      color: "#101413",
+                      textTransform: "none",
+                      fontWeight: 850,
+                      px: 0,
+                      minWidth: "auto",
+                      flexShrink: 0,
+                      fontSize: { xs: "0.92rem", md: "1rem" },
+                      whiteSpace: "nowrap",
+                      "&:hover": {
+                        bgcolor: "transparent",
+                        color: "#1C3A2F"
+                      }
+                    }}
+                  >
+                    All case studies
+                  </Button>
+                </Link>
               </Stack>
             </SectionReveal>
 

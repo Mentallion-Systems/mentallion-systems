@@ -20,9 +20,9 @@ import { site } from "@/content/site";
 import { absoluteUrl } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Services",
+  title: "AI Automation & Software Development Services",
   description:
-    "Business process automation, AI agent systems, custom SaaS, and AI integration. Built for production, not proof of concept.",
+    "Explore business process automation, AI agent development, custom SaaS development, and AI integration services built for production.",
   alternates: {
     canonical: "/services"
   },
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
   }
 };
 
-const servicesBannerImage = "/images/service-banner.webp";
+const servicesBannerImage = "/images/service-banner.avif";
 
 const serviceHighlights = [
   ["Automation", "Workflows, OCR, approvals, and operational pipelines"],
@@ -120,16 +120,16 @@ export default function ServicesPage() {
     description: metadata.description,
     hasPart: site.services.map((service) => ({
       "@type": "Service",
+      "@id": `${absoluteUrl(`/services/${service.slug}`)}#service`,
       name: service.title,
+      url: absoluteUrl(`/services/${service.slug}`),
       description: service.outcome,
       audience: {
         "@type": "Audience",
         audienceType: service.audience
       },
       provider: {
-        "@type": "Organization",
-        name: site.name,
-        url: site.url
+        "@id": `${absoluteUrl("/")}#organization`
       }
     }))
   };
@@ -257,24 +257,28 @@ export default function ServicesPage() {
                     sx={{ mt: 4 }}
                     alignItems={{ xs: "flex-start", sm: "center" }}
                   >
-                    <Button
-                      component={Link}
+                    <Link
                       href="/contact#contact-form"
-                      variant="contained"
-                      endIcon={<ArrowForwardIcon fontSize="small" />}
-                      sx={{
-                        bgcolor: "primary.main",
-                        color: "#fff !important",
-                        "&:hover": {
-                          bgcolor: "primary.dark"
-                        },
-                        "& .MuiButton-endIcon, & .MuiSvgIcon-root": {
-                          color: "#fff !important"
-                        }
-                      }}
+                      style={{ display: "inline-flex" }}
                     >
-                      Talk through your project
-                    </Button>
+                      <Button
+                        component="span"
+                        variant="contained"
+                        endIcon={<ArrowForwardIcon fontSize="small" />}
+                        sx={{
+                          bgcolor: "primary.main",
+                          color: "#fff !important",
+                          "&:hover": {
+                            bgcolor: "primary.dark"
+                          },
+                          "& .MuiButton-endIcon, & .MuiSvgIcon-root": {
+                            color: "#fff !important"
+                          }
+                        }}
+                      >
+                        Talk through your project
+                      </Button>
+                    </Link>
 
                     <Typography
                       sx={{
@@ -829,6 +833,22 @@ export default function ServicesPage() {
                             />
                           ))}
                         </Stack>
+
+                        <Link
+                          href={`/services/${service.slug}`}
+                          style={{ display: "inline-flex", marginTop: 20 }}
+                        >
+                          <Button
+                            component="span"
+                            endIcon={<ArrowForwardIcon fontSize="small" />}
+                            sx={{
+                              px: 0,
+                              color: accent.chipColor
+                            }}
+                          >
+                            Explore {service.title}
+                          </Button>
+                        </Link>
                       </CardContent>
                     </Card>
                   </Grid>
@@ -1044,25 +1064,29 @@ export default function ServicesPage() {
                   </Stack>
                 </Box>
 
-                <Button
-                  component={Link}
+                <Link
                   href="/contact#contact-form"
-                  variant="contained"
-                  endIcon={<ArrowForwardIcon fontSize="small" />}
-                  sx={{
-                    bgcolor: "primary.main",
-                    color: "#fff !important",
-                    minWidth: 220,
-                    "&:hover": {
-                      bgcolor: "primary.dark"
-                    },
-                    "& .MuiButton-endIcon, & .MuiSvgIcon-root": {
-                      color: "#fff !important"
-                    }
-                  }}
+                  style={{ display: "inline-flex" }}
                 >
-                  Start the conversation
-                </Button>
+                  <Button
+                    component="span"
+                    variant="contained"
+                    endIcon={<ArrowForwardIcon fontSize="small" />}
+                    sx={{
+                      bgcolor: "primary.main",
+                      color: "#fff !important",
+                      minWidth: 220,
+                      "&:hover": {
+                        bgcolor: "primary.dark"
+                      },
+                      "& .MuiButton-endIcon, & .MuiSvgIcon-root": {
+                        color: "#fff !important"
+                      }
+                    }}
+                  >
+                    Start the conversation
+                  </Button>
+                </Link>
               </Stack>
             </Box>
           </SectionReveal>

@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
 import { DM_Serif_Display, Plus_Jakarta_Sans } from "next/font/google";
-import Script from "next/script";
+import { AnalyticsConsent } from "@/components/analytics-consent";
+import { StructuredData } from "@/components/structured-data";
 import { ThemeRegistry } from "@/components/theme-registry";
 import { site } from "@/content/site";
 import { absoluteUrl, seo } from "@/lib/seo";
 import "./globals.css";
 
 const clarityProjectId = process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID;
+const googleAnalyticsId = process.env.NEXT_PUBLIC_GA_ID;
 
 const serif = DM_Serif_Display({
   variable: "--font-serif",
@@ -33,12 +35,33 @@ export const metadata: Metadata = {
   publisher: seo.siteName,
   category: "technology",
   referrer: "origin-when-cross-origin",
+  manifest: "/manifest.webmanifest",
+  formatDetection: {
+    telephone: false,
+    address: false,
+    email: false
+  },
+  verification: {
+    ...(process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
+      ? { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION }
+      : {}),
+    ...(process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION
+      ? {
+          other: {
+            "msvalidate.01": process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION
+          }
+        }
+      : {})
+  },
   alternates: {
     canonical: "/"
   },
   icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon.ico",
+    icon: {
+      url: "/favicon.png",
+      type: "image/png",
+      sizes: "512x512"
+    },
     apple: "/apple-touch-icon.png"
   },
   robots: {
@@ -80,10 +103,36 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   const organizationSchema = {
     "@context": "https://schema.org",
     "@type": "Organization",
+    "@id": `${seo.siteUrl}/#organization`,
     name: site.name,
     url: seo.siteUrl,
-    logo: absoluteUrl("/images/logo/logo-v2.png"),
+    description: site.description,
+    slogan: site.tagline,
+    logo: {
+      "@type": "ImageObject",
+      url: absoluteUrl("/images/logo/mentallion-mark.png"),
+      width: 1024,
+      height: 1024
+    },
     email: site.emails.hello,
+    knowsAbout: [
+      "Business process automation",
+      "AI agent development",
+      "Custom SaaS development",
+      "AI integration",
+      "Document intelligence",
+      "Knowledge retrieval systems",
+      "Retrieval augmented generation",
+      "AI-powered search",
+      "AI-powered chatbots",
+      "AI-powered virtual assistants",
+      "AI Voice assistants",
+      "AI-powered customer support",
+      "AI-powered content generation",
+      "AI Automation",
+      "AI-powered business process automation",
+      "AI-powered workflow automation",
+    ],
     contactPoint: [
       {
         "@type": "ContactPoint",
@@ -104,27 +153,34 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   const websiteSchema = {
     "@context": "https://schema.org",
     "@type": "WebSite",
+    "@id": `${seo.siteUrl}/#website`,
     name: site.name,
     url: seo.siteUrl,
-    description: site.description
+    description: site.description,
+    inLanguage: "en",
+    publisher: {
+      "@id": `${seo.siteUrl}/#organization`
+    }
   };
 
   return (
-    <html lang="en" className={`${serif.variable} ${sans.variable}`}>
+    <html
+      lang="en"
+      className={`${serif.variable} ${sans.variable}`}
+      data-scroll-behavior="smooth"
+    >
       <body>
-        <Script
+        <StructuredData
           id="site-structured-data"
-          type="application/ld+json"
-          strategy="afterInteractive"
-        >
-          {JSON.stringify([organizationSchema, websiteSchema])}
-        </Script>
-        {clarityProjectId ? (
-          <Script id="microsoft-clarity" strategy="afterInteractive">
-            {`(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window, document, "clarity", "script", "${clarityProjectId}");`}
-          </Script>
-        ) : null}
-        <ThemeRegistry>{children}</ThemeRegistry>
+          data={[organizationSchema, websiteSchema]}
+        />
+        <ThemeRegistry>
+          {children}
+          <AnalyticsConsent
+            clarityProjectId={clarityProjectId}
+            googleAnalyticsId={googleAnalyticsId}
+          />
+        </ThemeRegistry>
       </body>
     </html>
   );

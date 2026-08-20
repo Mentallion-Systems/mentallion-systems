@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Box, Button, Chip, Stack, Typography } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import {
@@ -172,22 +173,13 @@ export function CaseStudiesGrid() {
                 }}
               >
                 {image.src ? (
-                  <Box
-                    component="img"
+                  <Image
                     src={image.src}
                     alt={item.title}
-                    loading="lazy"
-                    sx={{
-                      position: "absolute",
-                      inset: 0,
+                    fill
+                    sizes="(max-width: 900px) 100vw, 50vw"
+                    style={{
                       zIndex: 1,
-                      width: "100% !important",
-                      height: "100% !important",
-                      minWidth: "100%",
-                      minHeight: "100%",
-                      maxWidth: "100%",
-                      maxHeight: "100%",
-                      display: "block",
                       objectFit: "cover",
                       objectPosition: image.position,
                       transform: "scale(1.01)"

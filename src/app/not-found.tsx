@@ -22,9 +22,15 @@ export default function NotFound() {
           <Typography color="text.secondary" sx={{ mb: 4, maxWidth: 560 }}>
             But if you&apos;re looking for a team that can find the right solution to your problem, you&apos;re in the right place.
           </Typography>
-          <Button component={Link} href="/" variant="contained" startIcon={<ArrowBackIcon fontSize="small" />}>
-            Back to home
-          </Button>
+          <Link href="/" style={{ display: "inline-flex" }}>
+            <Button
+              component="span"
+              variant="contained"
+              startIcon={<ArrowBackIcon fontSize="small" />}
+            >
+              Back to home
+            </Button>
+          </Link>
         </Box>
       </Container>
     </SiteShell>

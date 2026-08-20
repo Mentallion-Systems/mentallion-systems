@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import PublicOutlinedIcon from "@mui/icons-material/PublicOutlined";
@@ -23,9 +22,9 @@ import { site } from "@/content/site";
 import { absoluteUrl } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Contact",
+  title: "Contact Our AI & Software Engineering Team",
   description:
-    "Tell us what you're working on. We'll read it, think about it, and get back to you honestly.",
+    "Discuss an AI system, workflow automation, custom SaaS product, or software problem with the Mentallion Systems engineering team.",
   alternates: {
     canonical: "/contact"
   },
@@ -54,21 +53,7 @@ export default function ContactPage() {
     url: absoluteUrl("/contact"),
     description: metadata.description,
     mainEntity: {
-      "@type": "Organization",
-      name: site.name,
-      email: site.emails.hello,
-      contactPoint: [
-        {
-          "@type": "ContactPoint",
-          contactType: "sales",
-          email: site.emails.inquiry
-        },
-        {
-          "@type": "ContactPoint",
-          contactType: "customer support",
-          email: site.emails.support
-        }
-      ]
+      "@id": `${absoluteUrl("/")}#organization`
     }
   };
 
@@ -342,7 +327,7 @@ export default function ContactPage() {
                       }}
                     >
                       <Button
-                        component={Link}
+                        component="a"
                         href={`mailto:${site.emails.inquiry}`}
                         variant="outlined"
                         endIcon={<ArrowOutwardIcon fontSize="small" />}

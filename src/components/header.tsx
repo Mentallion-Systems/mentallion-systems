@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import MenuIcon from "@mui/icons-material/Menu";
 import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
@@ -87,7 +88,7 @@ export function Header() {
               component={Link}
               href="/"
               direction="row"
-              spacing={1.4}
+              spacing={1.7}
               alignItems="center"
               sx={{
                 color: "inherit",
@@ -97,16 +98,22 @@ export function Header() {
               }}
             >
               <Box
-                component="img"
-                src="/images/logo/logo-v2.png"
-                alt={`${site.name} logo`}
                 sx={{
-                  width: { xs: 42, md: 46 },
-                  height: { xs: 42, md: 46 },
-                  objectFit: "contain",
+                  position: "relative",
+                  width: { xs: 56, md: 64 },
+                  height: { xs: 56, md: 64 },
                   flexShrink: 0
                 }}
-              />
+              >
+                <Image
+                  src="/images/logo/mentallion-mark.png"
+                  alt={`${site.name} logo`}
+                  fill
+                  priority
+                  sizes="64px"
+                  style={{ objectFit: "contain" }}
+                />
+              </Box>
               <Typography
                 variant="h4"
                 sx={{
@@ -201,21 +208,26 @@ export function Header() {
               component={Link}
               href="/"
               direction="row"
-              spacing={1.2}
+              spacing={1.4}
               alignItems="center"
               sx={{ color: "inherit", textDecoration: "none", minWidth: 0, flex: 1 }}
             >
               <Box
-                component="img"
-                src="/images/logo/logo-v2.png"
-                alt={`${site.name} logo`}
                 sx={{
-                  width: 38,
-                  height: 38,
-                  objectFit: "contain",
+                  position: "relative",
+                  width: 52,
+                  height: 52,
                   flexShrink: 0
                 }}
-              />
+              >
+                <Image
+                  src="/images/logo/mentallion-mark.png"
+                  alt={`${site.name} logo`}
+                  fill
+                  sizes="52px"
+                  style={{ objectFit: "contain" }}
+                />
+              </Box>
               <Typography
                 variant="h5"
                 sx={{ fontSize: { xs: "1.15rem", sm: "1.35rem" }, lineHeight: 1 }}

@@ -629,7 +629,10 @@ const serviceByCategory: Record<CaseStudyCategory, string[]> = {
 };
 
 function getImageUrl(study: SourceCaseStudy) {
-  return `${caseStudyImageBasePath}/${study.slug}.webp`;
+  const extension =
+    study.slug === "digital-twin-persona-system" ? "png" : "jpg";
+
+  return `${caseStudyImageBasePath}/${study.slug}.${extension}`;
 }
 
 function getImagePosition(study: SourceCaseStudy) {

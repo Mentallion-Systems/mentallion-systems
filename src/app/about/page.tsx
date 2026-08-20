@@ -17,7 +17,7 @@ import { site } from "@/content/site";
 import { absoluteUrl } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "About",
+  title: "About Our AI & Software Engineering Team",
   description:
     "Mentallion Systems is an engineering team building AI systems, automation workflows, SaaS platforms, and reliable digital products for businesses that need software to work in the real world.",
   alternates: {
@@ -96,10 +96,7 @@ export default function AboutPage() {
     url: absoluteUrl("/about"),
     description: metadata.description,
     mainEntity: {
-      "@type": "Organization",
-      name: site.name,
-      url: site.url,
-      description: site.description
+      "@id": `${absoluteUrl("/")}#organization`
     }
   };
 

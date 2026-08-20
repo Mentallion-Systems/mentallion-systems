@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import {
@@ -127,19 +128,14 @@ export function RelatedCaseStudiesCarousel({
                   bgcolor: "rgba(28,58,47,0.06)"
                 }}
               >
-                <Box
-                  component="img"
+                <Image
                   src={item.image.src}
                   alt={item.title}
-                  loading="lazy"
-                  sx={{
-                    position: "absolute",
-                    inset: 0,
-                    width: "100%",
-                    height: "100%",
+                  fill
+                  sizes="(max-width: 900px) 86vw, 360px"
+                  style={{
                     objectFit: "cover",
-                    objectPosition: item.image.position,
-                    display: "block"
+                    objectPosition: item.image.position
                   }}
                 />
 

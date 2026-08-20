@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import {
   Box,
   Button,
@@ -19,7 +20,7 @@ import { site } from "@/content/site";
 import { absoluteUrl } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Case Studies | Mentallion Systems",
+  title: "AI, Automation & SaaS Case Studies",
   description:
     "Explore Mentallion Systems case studies across AI agents, automation workflows, SaaS platforms, document intelligence, marketplaces, and custom software systems.",
   alternates: {
@@ -53,6 +54,7 @@ export default function CaseStudiesPage() {
   const caseStudiesPageSchema = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
+    "@id": `${absoluteUrl("/case-studies")}#collection`,
     name: "Case Studies | Mentallion Systems",
     url: absoluteUrl("/case-studies"),
     description: metadata.description,
@@ -171,7 +173,7 @@ export default function CaseStudiesPage() {
               >
                 <Box
                   component="img"
-                  src="/images/case-studies-banner.webp"
+                  src="/images/case-studies-banner.avif"
                   alt="Mentallion Systems case studies banner"
                   sx={{
                     position: "absolute",
@@ -369,24 +371,15 @@ export default function CaseStudiesPage() {
                       }}
                     >
                       {image?.src ? (
-                        <Box
-                          component="img"
+                        <Image
                           src={image.src}
                           alt={study.title}
-                          loading="lazy"
-                          sx={{
-                            position: "absolute",
-                            inset: 0,
+                          fill
+                          sizes="(max-width: 900px) 100vw, (max-width: 1536px) 50vw, 33vw"
+                          style={{
                             zIndex: 1,
-                            width: "100% !important",
-                            height: "100% !important",
-                            minWidth: "100%",
-                            minHeight: "100%",
-                            maxWidth: "100%",
-                            maxHeight: "100%",
                             objectFit: "cover",
                             objectPosition: image.position,
-                            display: "block",
                             transform: "scale(1.01)"
                           }}
                         />
@@ -597,27 +590,36 @@ export default function CaseStudiesPage() {
                         ))}
                       </Box>
 
-                      <Button
-                        component={Link}
-                        href={`/case-studies/${study.slug}`}
-                        endIcon={<ArrowForwardIcon />}
+                      <Box
                         sx={{
-                          display: { xs: "none", md: "inline-flex" },
+                          display: { xs: "none", md: "block" },
                           mt: "auto",
-                          alignSelf: "flex-start",
-                          px: 0,
-                          color: "#101413",
-                          fontWeight: 850,
-                          textTransform: "none",
-                          letterSpacing: "-0.01em",
-                          "&:hover": {
-                            bgcolor: "transparent",
-                            color: "#1C3A2F"
-                          }
+                          alignSelf: "flex-start"
                         }}
                       >
-                        Read case study
-                      </Button>
+                        <Link
+                          href={`/case-studies/${study.slug}`}
+                          style={{ display: "inline-flex" }}
+                        >
+                          <Button
+                            component="span"
+                            endIcon={<ArrowForwardIcon />}
+                            sx={{
+                              px: 0,
+                              color: "#101413",
+                              fontWeight: 850,
+                              textTransform: "none",
+                              letterSpacing: "-0.01em",
+                              "&:hover": {
+                                bgcolor: "transparent",
+                                color: "#1C3A2F"
+                              }
+                            }}
+                          >
+                            Read case study
+                          </Button>
+                        </Link>
+                      </Box>
                     </Box>
                   </Box>
                 </SectionReveal>
