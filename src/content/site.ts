@@ -45,6 +45,7 @@ const emails = {
 
 export const site = {
   name: "Mentallion Systems",
+  logoImage: "/images/logo/logo-v1.png",
   tagline: "We automate the work. You run the business.",
   description:
     "Mentallion Systems builds AI automation systems, workflow software, and production-grade platforms for businesses that want real results, not demos.",

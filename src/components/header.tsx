@@ -98,7 +98,7 @@ export function Header() {
             >
               <Box
                 component="img"
-                src="/images/logo/logo-v2.png"
+                src={site.logoImage}
                 alt={`${site.name} logo`}
                 sx={{
                   width: { xs: 42, md: 46 },
@@ -207,7 +207,7 @@ export function Header() {
             >
               <Box
                 component="img"
-                src="/images/logo/logo-v2.png"
+                src={site.logoImage}
                 alt={`${site.name} logo`}
                 sx={{
                   width: 38,
