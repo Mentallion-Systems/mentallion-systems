@@ -22,7 +22,8 @@ import {
   caseStudies,
   getCaseStudyVisual,
   getCaseStudyBySlug,
-  getRelatedCaseStudies
+  getRelatedCaseStudies,
+  site
 } from "@/content/site";
 
 type PageProps = {
@@ -107,7 +108,7 @@ export default async function CaseStudyDetailPage({ params }: PageProps) {
       name: "Mentallion Systems",
       logo: {
         "@type": "ImageObject",
-        url: absoluteUrl("/images/logo/logo-v2.png")
+        url: absoluteUrl(site.logoImage)
       }
     },
     about: [study.industry, study.domain, ...study.services],

@@ -82,7 +82,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     "@type": "Organization",
     name: site.name,
     url: seo.siteUrl,
-    logo: absoluteUrl("/images/logo/logo-v2.png"),
+    logo: absoluteUrl(site.logoImage),
     email: site.emails.hello,
     contactPoint: [
       {
